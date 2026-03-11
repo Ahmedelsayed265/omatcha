@@ -1,0 +1,55 @@
+<div class="shipping-select-wrapper">
+  <select id="shipping-city" class="shipping-city-select form-select">
+    {% for city in shipping_options %}
+      <option 
+        value="{{ city.title }}" 
+        data-subtitle="{{ city.subtitle | escape }}"
+        {% if loop.first %}selected{% endif %}
+      >
+        {{ city.title }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <div id="city-subtitle" class="city-subtitle">
+    {% set first_option = shipping_options | first %}
+    {{ first_option.subtitle if first_option and first_option.subtitle else '' }}
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const wrapper = document.querySelector(".shipping-select-wrapper");
+  const select = document.querySelector("#shipping-city");
+  const subtitleDiv = document.querySelector("#city-subtitle");
+
+  if (!wrapper || !select || !subtitleDiv) return;
+
+  if (select.options.length === 0) {
+    wrapper.style.display = "none";
+    return;
+  }
+
+  function updateShippingSubtitle() {
+    setTimeout(() => {
+      const priceText = document.querySelector(".product-formatted-price")?.textContent || "0";
+      const price = parseFloat(priceText.replace(/[^\d.]/g, "")) || 0;
+      const selectedOption = select.options[select.selectedIndex];
+      const subtitle = selectedOption.getAttribute("data-subtitle");
+      if (price >= 399) {
+        subtitleDiv.innerHTML = subtitle
+          ? `${subtitle} • <span>${window.locals.free_shipping}</span>`
+          : `<span>${window.locals.free_shipping}</span>`;
+      } else {
+        subtitleDiv.textContent = subtitle || "";
+      }
+    }, 50);
+  }
+
+  updateShippingSubtitle();
+  select.addEventListener("change", updateShippingSubtitle);
+
+  window.updateShippingSubtitle = updateShippingSubtitle;
+});
+</script>
+

@@ -1,0 +1,84 @@
+<div class="tp-product-details-review-rating-list" data-rating-5="{{ product.rating.ratings_5.count if product.rating.ratings_5 else 0 }}" data-rating-4="{{ product.rating.ratings_4.count if product.rating.ratings_4 else 0 }}" data-rating-3="{{ product.rating.ratings_3.count if product.rating.ratings_3 else 0 }}" data-rating-2="{{ product.rating.ratings_2.count if product.rating.ratings_2 else 0 }}" data-rating-1="{{ product.rating.ratings_1.count if product.rating.ratings_1 else 0 }}">
+	<div class="tp-product-details-review-rating-item" data-stars="5">
+		<span class="rating_count_5">{{ product.rating.ratings_5.count if product.rating.ratings_5.count else 0 }}</span>
+		<div class="progress">
+			<div class="progress-bar"></div>
+		</div>
+		<p>
+			<span class="icon-star1"></span>
+			5
+		</p>
+	</div>
+	<div class="tp-product-details-review-rating-item" data-stars="4">
+		<span class="rating_count_4">{{ product.rating.ratings_4.count if product.rating.ratings_4.count else 0 }}</span>
+		<div class="progress">
+			<div class="progress-bar"></div>
+		</div>
+		<p>
+			<span class="icon-star1"></span>
+			4
+		</p>
+	</div>
+	<div class="tp-product-details-review-rating-item" data-stars="3">
+		<span class="rating_count_3">{{ product.rating.ratings_3.count if product.rating.ratings_3.count else 0 }}</span>
+		<div class="progress">
+			<div class="progress-bar"></div>
+		</div>
+		<p>
+			<span class="icon-star1"></span>
+			3
+		</p>
+	</div>
+	<div class="tp-product-details-review-rating-item" data-stars="2">
+		<span class="rating_count_2">{{ product.rating.ratings_2.count if product.rating.ratings_2.count else 0 }}</span>
+		<div class="progress">
+			<div class="progress-bar"></div>
+		</div>
+		<p>
+			<span class="icon-star1"></span>
+			2
+		</p>
+	</div>
+	<div class="tp-product-details-review-rating-item" data-stars="1">
+		<span class="rating_count_1">{{ product.rating.ratings_1.count if product.rating.ratings_1.count else 0 }}</span>
+		<div class="progress">
+			<div class="progress-bar"></div>
+		</div>
+		<p>
+			<span class="icon-star1"></span>
+			1
+		</p>
+	</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const container = document.querySelector(
+    ".tp-product-details-review-rating-list"
+  );
+  if (!container) return;
+
+  const ratings = {
+    5: parseInt(container.getAttribute("data-rating-5")) || 0,
+    4: parseInt(container.getAttribute("data-rating-4")) || 0,
+    3: parseInt(container.getAttribute("data-rating-3")) || 0,
+    2: parseInt(container.getAttribute("data-rating-2")) || 0,
+    1: parseInt(container.getAttribute("data-rating-1")) || 0,
+  };
+
+  const total = Object.values(ratings).reduce((sum, val) => sum + val, 0);
+  if (total === 0) return;
+
+  document
+    .querySelectorAll(".tp-product-details-review-rating-item")
+    .forEach((item) => {
+      const stars = item.dataset.stars;
+      const count = ratings[stars];
+      const percent = (count / total) * 100;
+      const bar = item.querySelector(".progress-bar");
+      if (bar) {
+        bar.style.width = percent + "%";
+      }
+    });
+});
+</script>

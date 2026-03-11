@@ -1,0 +1,62 @@
+{
+  "name": {
+    "ar": "الاسئلة الشائعة ",
+    "en": "Faqs | Bunches App"
+  },
+  "icon": "fal fa-presentation",
+  "template": "sections/home-faqs-section.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "details_title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "details_desc",
+      "label": {
+        "ar": "الوصف",
+        "en": "Description"
+      }
+    },
+    {
+      "type": "list",
+      "id": "faqs_store_features",
+      "label": {
+        "ar": "السؤال",
+        "en": "Question"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "السؤال",
+            "en": "Question"
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": {
+            "ar": "الجواب",
+            "en": "Answer"
+          }
+        }
+      ]
+    }
+  ]
+}

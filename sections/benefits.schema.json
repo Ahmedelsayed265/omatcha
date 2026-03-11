@@ -1,0 +1,78 @@
+{
+  "name": {
+    "ar": "الفوائد",
+    "en": "Benefits"
+  },
+  "icon": "fal fa-images",
+  "template": "sections/benefits.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "benefits",
+      "label": {
+        "ar": "عنصر",
+        "en": "Item"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "image",
+          "id": "image_before",
+          "label": {
+            "ar": "الصورة قبل",
+            "en": "Image before"
+          }
+        },
+        {
+          "type": "image",
+          "id": "image_after",
+          "label": {
+            "ar": "الصورة بعد",
+            "en": "Image after"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": {
+            "ar": "عنوان فرعي",
+            "en": "Sub title"
+          }
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": {
+            "ar": "المنتج",
+            "en": "Product"
+          }
+        }
+      ]
+    }
+  ]
+}

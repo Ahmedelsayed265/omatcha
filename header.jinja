@@ -1,0 +1,315 @@
+<header section-id="{{ sectionId }}" class='header-nav {% if transparent_header %}bg-header-transparent{% endif %}' id="fixed-header">
+	{% include 'vitrin:shared/store_messages.jinja' %}
+	{% set ab_settings=settings %}{% include 'components/header-announcement-bar.jinja' %}
+  {% set multiple_countries = store.countries | length > 1 %}
+  {% set multiple_languages = store.languages | length > 1 %}
+	<div class="bg-header">
+		<div class="container">
+      {% set header=settings %}{% include 'components/header-search-header.jinja' %}
+		</div>
+	</div>
+</header>
+
+{% set menu_settings=settings %}{% include 'components/header-sliding-menu.jinja' %}
+
+	<div class="search-modal">
+		<div class="search-width">
+			<div class="search-content">
+				<div class="search-input">
+					<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+						<path d="M17.5 17.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+						<path d="M20 11C20 6.02944 15.9706 2 11 2C6.02944 2 2 6.02944 2 11C2 15.9706 6.02944 20 11 20C15.9706 20 20 15.9706 20 11Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+					</svg>
+					<input type="text" aria-label="Search" data-cat-id="{{ category.id if category is defined else '' }}" class="search-input-input" placeholder="{{ _('Search') }}">
+				</div>
+			</div>
+			<div class="suggestions-container">
+				<div class="suggestions-box">
+					<h3>{{ _('Popular Search') }}</h3>
+					<ul id="suggestions-data" style="display:none">
+						{% for menu in store.settings.menus.main_menu.items %}
+							<li data-url="{{ menu.url }}" data-image="{{ menu.image_thumbnail or '' }}" data-level="main">
+								{{ menu.label }}
+							</li>
+							{% if menu.items | length > 0 %}
+								{% for menu_sub in menu.items %}
+									<li data-url="{{ menu_sub.url }}" data-image="{{ menu_sub.image_thumbnail or '' }}" data-level="sub">
+										{{ menu_sub.label }}
+									</li>
+									{% if menu_sub.items | length > 0 %}
+										{% for menu_sub_sub in menu_sub.items %}
+											<li data-url="{{ menu_sub_sub.url }}" data-image="{{ menu_sub_sub.image_thumbnail or '' }}" data-level="subsub">
+												{{ menu_sub_sub.label }}
+											</li>
+										{% endfor %}
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						{% endfor %}
+					</ul>
+					<ul class="suggestions"></ul>
+				</div>
+				<div class="random-catg-container">
+					{% for item in (catgs_search or []) %}
+						<div class="random-catg-item">
+							<a href="{% if item.url %}{{ item.url }}{% else %}javascript:;{% endif %}">
+								{% if item.image %}
+									<img loading="lazy" src="{{ image_url(item.image) }}" loading="lazy" alt="{{ item.title }}">
+								{% endif %}
+								{% if item.title %}
+									<p>{{ item.title }}</p>
+								{% endif %}
+							</a>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			<ul class="autocomplete-items"></ul>
+		</div>
+	</div>
+	<span class="overlay-search"></span>
+
+<aside data-empty="{{ _('Cart is empty') }}" class="offcanvas offcanvas-end block-side-cart" tabindex="-1" id="side-cart"
+    aria-labelledby="offcanvasLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasLabel">{{ _('Cart') }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="cart-container">
+        <div class="cart-list">
+            {# تنبيه إصدارات مختلفة في السلة الجانبية #}
+            <div id="side-cart-versions-alert" class="alert alert-warning d-none" role="alert" style="margin-bottom: 15px; border-right: 4px solid #ffc107; border-radius: 10px; background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 50%, #fff3cd 100%);">
+                {% if session.lang == 'ar' %}
+                    <strong style="color: #856404;">تنبيه:</strong> فلتر الكبسولات وفلتر شيفت لا تتوافق مع بعض عند التركيب. هل انت متأكد من اتمام الطلب؟
+                {% else %}
+                    <strong style="color: #856404;">Warning:</strong> Capsule filter and Shift filter are not compatible when installed together. Are you sure you want to complete the order?
+                {% endif %}
+            </div>
+            <div class="empty-cart-box" id="additional-cart"></div>
+            <div class="min-cart-progress cart-rules"></div>
+            <ul class="item-inside-cart show side-cart-items d-none"></ul>
+        </div>
+        
+        <div class="mini-cart-products">
+            {% if mini_cart_title %}
+            <h3 class="mini-cart-title">{{ mini_cart_title }}</h3>
+            {% endif %}
+
+            <div class="mini-cart-products-list" id="mini-cart-products-list"
+                data-products='{{ products_list | tojson | e }}'>
+            </div>
+        </div>
+      </div>
+      <div class="loading-cart">
+          <span class="loader-cart"></span>
+      </div>
+
+      <div class="footer-side-cart d-none w-100">
+          <div class="coupon-form">
+              <form>
+                  <div class="form-group">
+                      <h4>{{ _('Coupon') }}</h4>
+                      <div class="d-flex">
+                          <input class="form-control send-coupon" type="text"
+                              placeholder="{{ _('Enter coupon code') }}" />
+                          <button type="button" class="tp-btn tp-btn-primary-outline" onclick="sendCoupon(this)">
+                              <img loading="lazy" class="send-coupon-progress d-none" src="{{ 'spinner.gif' | asset_url }}"
+                                  width="15" height="15" />
+                              {{ _('Apply') }}
+                          </button>
+                      </div>
+                  </div>
+              </form>
+              {% if cart is defined and cart and cart.coupon and cart.coupon.message %}
+              <div class="message-coupon" role="alert">
+                  <span>{{ cart.coupon.message }}</span>&nbsp;
+                  <a onclick="deleteCoupon(this)">
+                      <span class="icon-trash-alt"></span>
+                      <img loading="lazy" class="delete-coupon-progress d-none" src="{{ 'spinner.gif' | asset_url }}"
+                          width="15" height="15" />
+                  </a>
+              </div>
+              {% endif %}
+          </div>
+          <ul class="cart-side-totals" id="cart-side-totals"></ul>
+          <div class="btn-side-cart">
+              <a class="tp-btn tp-btn-primary-outline" href="/cart/view">{{ _('Cart') }}</a>
+              <a zid-visible-customer="true" href="/checkout/choose-address-and-shipping"
+                  class="tp-btn tp-btn-primary">
+                  {{ _('Continue shopping') }}
+              </a>
+              <a zid-visible-guest="true" href="/auth/login?redirect_to=/checkout/choose-address-and-shipping"
+                  class="tp-btn tp-btn-primary">
+                  {{ _('Continue shopping') }}
+              </a>
+          </div>
+      </div>
+    </div>
+</aside>
+
+    <script>
+const allItems = [];
+
+document.querySelectorAll("#suggestions-data li").forEach((el) => {
+  const item = {
+    name: el.textContent.trim(),
+    url: el.getAttribute("data-url"),
+    image: el.getAttribute("data-image") || "",
+    level: el.getAttribute("data-level"),
+  };
+
+  allItems.push(item);
+});
+
+function getRandomItems(arr, count) {
+  return arr.sort(() => Math.random() - 0.5).slice(0, count);
+}
+
+const randomSuggestions = getRandomItems(allItems, 6);
+const suggestionsContainer = document.querySelector(".suggestions");
+randomSuggestions.forEach((item) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<a href="${item.url}">${item.name}</a>`;
+  suggestionsContainer.appendChild(li);
+});
+document.getElementById("suggestions-data").remove();
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+  const container = document.getElementById("mini-cart-products-list");
+  if (!container) return;
+  const productsData = JSON.parse(container.dataset.products || "[]");
+  if (!Array.isArray(productsData) || productsData.length === 0) return;
+
+  for (const item of productsData) {
+    const productId = item.product_item?.id;
+    if (!productId) continue;
+
+    try {
+      let product = null;
+      if (window.zid && window.zid.products && typeof window.zid.products.get === 'function') {
+        const response = await window.zid.products.get(productId);
+        product = response?.data?.product || response?.product || (response?.data && response.data.id ? response.data : null) || (response && response.id ? response : null);
+      } else if (typeof zid !== 'undefined' && zid.store && zid.store.product && typeof zid.store.product.fetch === 'function') {
+        const response = await zid.store.product.fetch(productId);
+        product = response?.data?.product;
+      }
+
+      const cardWrapper = document.createElement("div");
+      cardWrapper.className = "prod-col";
+
+      if (!product) {
+        var name = (item.product_item && item.product_item.name) ? item.product_item.name : '';
+        var safeName = (name + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        var imgSrc = (typeof window.asset_url === 'function') ? (window.asset_url('product-img.svg') || '') : ((window.asset_url || '') + 'product-img.svg');
+        if (!imgSrc) imgSrc = '/themes/assets/product-img.svg';
+        cardWrapper.innerHTML = '<div class="card-product-style-2 product-box"><div class="tp-product-container"><div class="img-and-btns"><a href="/products/' + productId + '" class="tp-image-product"><div class="box-img-product"><img loading="lazy" width="200" height="300" src="' + imgSrc.replace(/"/g, '&quot;') + '" alt="' + safeName + '"></div></a></div><div class="tp-content-wrapper"><a href="/products/' + productId + '" class="tp-content-product"><h2>' + safeName + '</h2></a></div></div></div>';
+        container.appendChild(cardWrapper);
+        continue;
+      }
+
+      cardWrapper.innerHTML = `
+        <div class="card-product-style-2 product-box ${!product.is_infinite && product.quantity <= 0 ? 'product-item-out-of-stock' : ''}">
+          <div class="tp-product-container">
+            <div class="img-and-btns">
+              <a href="/products/${product.slug}" class="tp-image-product">
+                <div class="box-img-product">
+                  <img loading="lazy" width="200" height="300" src="${product.images?.[0]?.image?.large || '/images/placeholder.png'}" alt="${product.name}">
+                </div>
+                ${product.sale_price ? `<span class="discount">-${product.discount_percentage}%</span>` : ''}
+                ${(!product.is_infinite && product.quantity <= 0) ? `<small class="out-of-stock">غير متوفر</small>` : ''}
+              </a>
+            </div>
+            <div class="tp-content-wrapper">
+              <a href="/products/${product.slug}" class="tp-content-product">
+                <h2>${product.name}</h2>
+              </a>
+              <div class="price-cart-btns">
+                <div class="price-part">
+                  ${product.sale_price ? `
+                    <div class="tp-price-product">
+                      <p class="price-new">${product.sale_price} ${product.currency_symbol}</p>
+                      <div class="price-wafar">
+                        <span class="price-old">${product.price} ${product.currency_symbol}</span>
+                      </div>
+                    </div>` : `
+                    <div class="tp-price-product">
+                      <p class="price-new">${product.price} ${product.currency_symbol}</p>
+                    </div>`}
+                </div>
+                <div class="footer-btns">
+                  ${
+                    (!product.is_infinite && product.quantity <= 0)
+                      ? `
+                        <a class="btn-product-card-out-of-stock" disabled>
+                          <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30887 6.75001C7.66846 4.48301 9.63185 2.75 12 2.75C14.3682 2.75 16.3315 4.48301 16.6911 6.75L7.30887 6.75001ZM5.79454 6.75001C6.16505 3.65183 8.80204 1.25 12 1.25C15.198 1.25 17.8349 3.65183 18.2055 6.75L19.4646 6.75H19.4646C19.9568 6.74994 20.4052 6.74989 20.7642 6.80237C21.1588 6.86006 21.5792 6.99805 21.8925 7.38056C22.2023 7.75888 22.2601 8.19716 22.2487 8.59566C22.2381 8.96381 22.1625 9.41437 22.0784 9.9159L21.7082 12.124C21.6397 12.5325 21.2531 12.8082 20.8445 12.7397C20.436 12.6712 20.1604 12.2845 20.2289 11.876L20.591 9.71583C20.6857 9.15105 20.742 8.80447 20.7493 8.5526C20.7526 8.43547 20.7434 8.37446 20.7362 8.34587C20.7346 8.33942 20.7332 8.33514 20.7323 8.33265L20.728 8.33053C20.7076 8.3211 20.6563 8.30255 20.5472 8.28659C20.3099 8.25191 19.9735 8.25001 19.4144 8.25001L4.58563 8.25001C4.02651 8.25001 3.69004 8.25191 3.4528 8.28659C3.34365 8.30255 3.29237 8.3211 3.27203 8.33053L3.26767 8.33265C3.26677 8.33514 3.26538 8.33941 3.26376 8.34587C3.25658 8.37445 3.24735 8.43547 3.25071 8.5526C3.25795 8.80447 3.31432 9.15105 3.409 9.71583L4.61257 16.8954C4.81513 18.1038 4.95715 18.9432 5.14282 19.5725C5.32307 20.1836 5.52009 20.5053 5.77674 20.7276C6.03112 20.948 6.36621 21.0901 6.97393 21.1679C7.60407 21.2486 8.42816 21.25 9.62181 21.25H11.5C11.9142 21.25 12.25 21.5858 12.25 22C12.25 22.4142 11.9142 22.75 11.5 22.75H9.57149C8.44034 22.75 7.51991 22.75 6.78342 22.6557C6.01361 22.5572 5.35455 22.3465 4.79455 21.8613C4.23682 21.3781 3.92692 20.7522 3.70412 19.997C3.48969 19.2701 3.33385 18.3404 3.1412 17.1911L1.92964 9.96382L1.92161 9.91593C1.83748 9.41439 1.76191 8.96382 1.75133 8.59566C1.73988 8.19716 1.79764 7.75888 2.10749 7.38055C2.42076 6.99805 2.84115 6.86006 3.23581 6.80237C3.59476 6.74989 4.04321 6.74994 4.53542 6.75H4.53543L4.58563 6.75001L5.79454 6.75001ZM22.0303 14.4697C22.3232 14.7626 22.3232 15.2374 22.0303 15.5303L19.0607 18.5L22.0303 21.4697C22.3232 21.7626 22.3232 22.2374 22.0303 22.5303C21.7374 22.8232 21.2626 22.8232 20.9697 22.5303L18 19.5607L15.0303 22.5303C14.7374 22.8232 14.2626 22.8232 13.9697 22.5303C13.6768 22.2374 13.6768 21.7626 13.9697 21.4697L16.9393 18.5L13.9697 15.5303C13.6768 15.2374 13.6768 14.7626 13.9697 14.4697C14.2626 14.1768 14.7374 14.1768 15.0303 14.4697L18 17.4393L20.9697 14.4697C21.2626 14.1768 21.7374 14.1768 22.0303 14.4697Z" fill="currentColor"/>
+                          </svg>
+                        </a>
+                      `
+                      : (product.has_options || product.has_fields)
+                        ? `
+                          <a class="btn-product-card-select-variant" href="/products/${product.slug}">
+                            <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30887 6.75001C7.66846 4.48301 9.63185 2.75 12 2.75C14.3682 2.75 16.3315 4.48301 16.6911 6.75L7.30887 6.75001ZM5.79454 6.75001C6.16505 3.65183 8.80204 1.25 12 1.25C15.198 1.25 17.8349 3.65183 18.2055 6.75L19.4646 6.75H19.4646C19.9568 6.74994 20.4052 6.74989 20.7642 6.80237C21.1588 6.86006 21.5792 6.99805 21.8925 7.38056C22.2023 7.75888 22.2601 8.19716 22.2487 8.59566C22.2381 8.96381 22.1625 9.41437 22.0784 9.9159L21.792 11.624C21.7236 12.0325 21.3369 12.3082 20.9284 12.2397C20.5198 12.1712 20.2442 11.7845 20.3127 11.376L20.591 9.71583C20.6857 9.15105 20.742 8.80447 20.7493 8.5526C20.7526 8.43547 20.7434 8.37446 20.7362 8.34587C20.7346 8.33942 20.7332 8.33514 20.7323 8.33265L20.728 8.33053C20.7076 8.3211 20.6563 8.30255 20.5472 8.28659C20.3099 8.25191 19.9735 8.25001 19.4144 8.25001H4.58563C4.02651 8.25001 3.69004 8.25191 3.4528 8.28659C3.34365 8.30255 3.29237 8.3211 3.27203 8.33053L3.26767 8.33265C3.26677 8.33514 3.26538 8.33941 3.26376 8.34587C3.25658 8.37445 3.24735 8.43547 3.25071 8.5526C3.25795 8.80447 3.31432 9.15105 3.409 9.71583L4.61257 16.8954C4.81513 18.1038 4.95715 18.9432 5.14282 19.5725C5.32307 20.1836 5.52009 20.5053 5.77674 20.7276C6.03112 20.948 6.36621 21.0901 6.97393 21.1679C7.60407 21.2486 8.42816 21.25 9.62181 21.25H12C12.4142 21.25 12.75 21.5858 12.75 22C12.75 22.4142 12.4142 22.75 12 22.75H9.57149C8.44034 22.75 7.51991 22.75 6.78342 22.6557C6.01361 22.5572 5.35455 22.3465 4.79455 21.8613C4.23682 21.3781 3.92692 20.7522 3.70412 19.997C3.48969 19.2701 3.33385 18.3404 3.1412 17.1911L1.92964 9.96382L1.92161 9.91593C1.83748 9.41439 1.76191 8.96382 1.75133 8.59566C1.73988 8.19716 1.79764 7.75888 2.10749 7.38055C2.42076 6.99805 2.84115 6.86006 3.23581 6.80237C3.59476 6.74989 4.04321 6.74994 4.53542 6.75H4.53543L4.58563 6.75001L5.79454 6.75001ZM18 13.25C18.4142 13.25 18.75 13.5858 18.75 14V17.25H22C22.4142 17.25 22.75 17.5858 22.75 18C22.75 18.4142 22.4142 18.75 22 18.75H18.75V22C18.75 22.4142 18.4142 22.75 18 22.75C17.5858 22.75 17.25 22.4142 17.25 22V18.75H14C13.5858 18.75 13.25 18.4142 13.25 18C13.25 17.5858 13.5858 17.25 14 17.25H17.25V14C17.25 13.5858 17.5858 13.25 18 13.25Z" fill="currentColor"/>
+                            </svg>
+                          </a>
+                        `
+                        : `
+                          <button type="button"
+                                  class="product-card-add-to-cart"
+                                  onclick="productCartAddToCart(this,'${product.id}')">
+                            <img loading="lazy" style="display: inline" class="add-to-cart-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="20" height="20"/>
+                            <svg width="24" height="24" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" clip-rule="evenodd" d="M7.30887 6.75001C7.66846 4.48301 9.63185 2.75 12 2.75C14.3682 2.75 16.3315 4.48301 16.6911 6.75L7.30887 6.75001ZM5.79454 6.75001C6.16505 3.65183 8.80204 1.25 12 1.25C15.198 1.25 17.8349 3.65183 18.2055 6.75L19.4646 6.75H19.4646C19.9568 6.74994 20.4052 6.74989 20.7642 6.80237C21.1588 6.86006 21.5792 6.99805 21.8925 7.38056C22.2023 7.75888 22.2601 8.19716 22.2487 8.59566C22.2381 8.96381 22.1625 9.41437 22.0784 9.9159L20.8588 17.191L20.8588 17.1911C20.6661 18.3404 20.5103 19.2701 20.2959 19.997C20.0731 20.7522 19.7632 21.3781 19.2054 21.8613C18.6454 22.3465 17.9864 22.5572 17.2166 22.6557C16.4801 22.75 15.5596 22.75 14.4285 22.75H9.57149C8.44034 22.75 7.51991 22.75 6.78342 22.6557C6.01361 22.5572 5.35455 22.3465 4.79455 21.8613C4.23682 21.3781 3.92692 20.7522 3.70412 19.997C3.48969 19.2701 3.33385 18.3404 3.1412 17.1911L1.92964 9.96382L1.92161 9.91593C1.83748 9.41439 1.76191 8.96382 1.75133 8.59566C1.73988 8.19716 1.79764 7.75888 2.10749 7.38055C2.42076 6.99805 2.84115 6.86006 3.23581 6.80237C3.59476 6.74989 4.04321 6.74994 4.53542 6.75H4.53543L4.58563 6.75001L5.79454 6.75001ZM3.26376 8.34587C3.26538 8.33941 3.26677 8.33514 3.26767 8.33265L3.27203 8.33053C3.29237 8.3211 3.34365 8.30255 3.4528 8.28659C3.69004 8.25191 4.02651 8.25001 4.58563 8.25001L19.4144 8.25001C19.9735 8.25001 20.3099 8.25191 20.5472 8.28659C20.6563 8.30255 20.7076 8.3211 20.728 8.33053L20.7323 8.33265C20.7332 8.33514 20.7346 8.33942 20.7362 8.34587C20.7434 8.37446 20.7526 8.43547 20.7493 8.5526C20.742 8.80447 20.6857 9.15105 20.591 9.71583L19.3874 16.8954C19.1849 18.1038 19.0428 18.9432 18.8572 19.5725C18.6769 20.1836 18.4799 20.5053 18.2232 20.7276C17.9689 20.948 17.6338 21.0901 17.0261 21.1679C16.3959 21.2486 15.5718 21.25 14.3782 21.25H9.62181C8.42816 21.25 7.60407 21.2486 6.97393 21.1679C6.36621 21.0901 6.03112 20.948 5.77674 20.7276C5.52009 20.5053 5.32307 20.1836 5.14282 19.5725C4.95715 18.9432 4.81513 18.1038 4.61257 16.8954L3.409 9.71583C3.31432 9.15105 3.25795 8.80447 3.25071 8.5526C3.24735 8.43547 3.25658 8.37445 3.26376 8.34587Z" fill="currentColor"/>
+                            </svg>
+                          </button>
+                        `
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(cardWrapper);
+    } catch (err) {}
+  }
+
+  setTimeout(() => {
+    const arrowNextClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_right' : 'icon-keyboard_arrow_left';
+    const arrowPrevClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_left' : 'icon-keyboard_arrow_right';
+
+    const $slider = $('.mini-cart-products-list');
+    if (!$slider.length || $slider.find('.prod-col').length === 0) return;
+    if ($slider.hasClass('slick-initialized')) {
+      try { $slider.slick('unslick'); } catch (e) {}
+    }
+    $slider.slick({
+        slidesToShow: 2,
+        slidesToScroll: 1,
+        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: false,
+        dots: false,
+        rtl: !(window.appDirection === 'ltr'),
+        nextArrow: `<button class="slick-next slick-arrow" aria-label="Next" type="button"><span class="${arrowNextClass}"></span></button>`,
+        prevArrow: `<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="${arrowPrevClass}"></span></button>`
+      });
+      $slider.on('afterChange', function(event, slick, currentSlide){
+        const totalSlides = slick.slideCount;
+        const slidesToShow = slick.options.slidesToShow;
+        if (currentSlide >= totalSlides - slidesToShow) {
+          setTimeout(() => {
+            $slider.slick('slickGoTo', 0);
+          }, 3000);
+        }
+      });
+  }, 500);
+});
+</script>

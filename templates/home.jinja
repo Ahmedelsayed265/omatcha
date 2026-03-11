@@ -1,0 +1,16 @@
+{% extends "layout.jinja" %}
+
+
+{% block header %} {% include 'header.jinja' %} {% endblock %}
+
+{% block main_content %}
+
+    <div class="tp-home">
+        {% template_components %}
+    </div>
+
+{% endblock %}
+
+{% block footer %} {% include 'footer.jinja' %} {% endblock %}
+
+{% block footer_scripts %}{% endblock %}

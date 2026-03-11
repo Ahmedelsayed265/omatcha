@@ -1,0 +1,160 @@
+{% if not settings.hide_element %}
+<section class="tp-tabs-products s-block" section-id="{{ sectionId }}">
+  <div class="container">
+    <div class="tp-title-section">
+      {% if settings.title %}
+        <h3 >{{ settings.title }}</h3>
+      {% endif %}
+    </div>
+
+    <div class="tp-tabs">
+      <ul class="tp-tabs-list">
+        {% for tab in (settings.tabs or []) %}
+          <li class="tp-tab-item {% if loop.first %}active{% endif %}" data-tab="tab-{{ sectionId }}-{{ loop.index }}">
+            {{ tab.label }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="tp-tabs-content">
+      {% for tab in (settings.tabs or []) %}
+        {# دعم كلٍ من category.products.results و category.products، مع حد ثابت 12 مثل special-taps #}
+        {% set tab_products = safeget(tab, "category.products.results", []) or safeget(tab, "category.products", []) %}
+        <div class="tp-tab-content {% if loop.first %}active{% endif %}" data-tab-content="tab-{{ sectionId }}-{{ loop.index }}" style="{% if not loop.first %}display: none;{% endif %}">
+          <div class="tp-products-swiper">
+              {% for product in tab_products[:12] %}
+                <div class="swiper-slide">
+                  {% set index = loop.index0 %}
+                  {% include 'components/product-card.jinja' %}
+                </div>
+              {% endfor %}
+          </div>
+          {% if tab.category and tab.category.url %}
+            <a class="href" href="{{ tab.category.url }}">
+            {{ _('View all') }}
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+            <g fill="none" class="stroke-current" stroke-width="1.5" stroke-linejoin="round" stroke-miterlimit="10">
+              <circle class="arrow-icon--circle" cx="16" cy="16" r="15.12"></circle>
+              <path class="arrow-icon--arrow" d="M16.14 9.93L22.21 16l-6.07 6.07M8.23 16h13.98"></path>
+            </g>
+          </svg>
+        </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var section = document.querySelector('[section-id="{{ sectionId }}"]');
+  if (!section) return;
+
+  const arrowNextClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_right' : 'icon-keyboard_arrow_left';
+  const arrowPrevClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_left' : 'icon-keyboard_arrow_right';
+
+  function initSlickSlider(slider) {
+    if (!slider || slider.querySelectorAll('.product-box').length === 0) return;
+
+    const $slider = $(slider);
+
+    if ($slider.hasClass("slick-initialized")) {
+      $slider.slick("unslick");
+    }
+
+    var twoRows = {{ 'true' if settings.display_two_rows else 'false' }} === true;
+
+    setTimeout(function () {
+      if (!slider || slider.querySelectorAll('.product-box').length === 0) return;
+
+      $slider.slick({
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+        dots: true,
+        rtl: !(window.appDirection === 'ltr'),
+        nextArrow: '<button class="slick-next slick-arrow" aria-label="Next" type="button"><span class="' + arrowNextClass + '"></span></button>',
+        prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="' + arrowPrevClass + '"></span></button>',
+        responsive: [
+          { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3 } },
+          { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 2, rows: twoRows ? 2 : 1 } },
+          { breakpoint: 350, settings: { slidesToShow: 1, slidesToScroll: 1, rows: twoRows ? 2 : 1 } }
+        ]
+      });
+
+      $slider.off('afterChange').on('afterChange', function (event, slick, currentSlide) {
+        const totalSlides = slick.slideCount;
+        const slidesToShow = slick.options.slidesToShow;
+
+        if (currentSlide >= totalSlides - slidesToShow) {
+          setTimeout(function () {
+            $slider.slick('slickGoTo', 0);
+          }, 3000);
+        }
+      });
+    }, 100);
+  }
+
+  function attachTabsBehavior() {
+    const tabs = section.querySelectorAll(".tp-tab-item");
+    const tabContents = section.querySelectorAll(".tp-tab-content");
+
+    // تهيئة السليك لأول تاب
+    const firstSlider = section.querySelector(".tp-tab-content.active .tp-products-swiper");
+    if (firstSlider) {
+      initSlickSlider(firstSlider);
+    }
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        const target = this.getAttribute("data-tab");
+
+        tabs.forEach(function (t) { t.classList.remove("active"); });
+        tabContents.forEach(function (c) {
+          c.classList.remove("active");
+          c.style.display = "none";
+        });
+
+        this.classList.add("active");
+        const targetContent = section.querySelector('[data-tab-content="' + target + '"]');
+        if (targetContent) {
+          targetContent.style.display = "block";
+          requestAnimationFrame(function () {
+            targetContent.classList.add("active");
+            const slider = targetContent.querySelector(".tp-products-swiper");
+            if (slider) {
+              if (!$(slider).hasClass("slick-initialized")) {
+                initSlickSlider(slider);
+              } else {
+                $(slider).slick("setPosition");
+              }
+            }
+          });
+        }
+      });
+    });
+  }
+
+  var forceImmediate = {{ 'true' if store.editing_mode else 'false' }};
+
+  if (!forceImmediate && 'IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          attachTabsBehavior();
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    observer.observe(section);
+  } else {
+    attachTabsBehavior();
+  }
+});
+</script>
+</section>
+{% endif %}

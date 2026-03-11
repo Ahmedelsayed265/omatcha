@@ -1,0 +1,121 @@
+  {% if not settings.hide_element %}
+  <section class="tp-slider-banners s-block full-container {% if settings.show_in_app_only %}d-none{% endif %}" section-id="{{ sectionId }}">
+    <style>
+    [section-id="{{ sectionId }}"] .swiper-slide .slide-title {
+      font-size: var(--title-size-desktop);
+    }
+    [section-id="{{ sectionId }}"] .swiper-slide .slide-subtitle {
+      font-size: var(--subtitle-size-desktop);
+    }
+
+    @media (max-width: 767px) {
+      [section-id="{{ sectionId }}"] .swiper-slide .slide-title {
+        font-size: var(--title-size-mobile);
+      }
+      [section-id="{{ sectionId }}"] .swiper-slide .slide-subtitle {
+        font-size: var(--subtitle-size-mobile);
+      }
+    }
+    </style>
+    <div class="container">
+      <div class="tp-banners-swiper">
+          {% for slide in settings.slider %}
+              <div class="swiper-slide"
+              style="
+                        --title-size-desktop: {{ slide.fsize_title }}px;
+                        --subtitle-size-desktop: {{ slide.fsize_subtitle }}px;
+                        --title-size-mobile: {{ slide.fsize_title_mobile }}px;
+                        --subtitle-size-mobile: {{ slide.fsize_subtitle_mobile }}px;
+                      "
+              >
+                <a class="postion-text-{{ slide.text_place }}" href="{% if slide.url %}{{ slide.url }}{% else %}javascript:;{% endif %}" aria-label="banner">
+                  {% if slide.video %}
+                    <video width="1670" height="670" class="slide-video" autoplay muted loop playsinline>
+                      <source src="{{ slide.video }}" type="video/mp4">
+                      متصفحك لا يدعم عرض الفيديو.
+                    </video>
+                  {% elif slide.image or slide.image_mobile %}
+                    <picture>
+                      {% if slide.image_mobile %}
+                      <source media="(max-width: 767px)" srcset="{{ image_url(slide.image_mobile) }}">
+                      {% endif %}
+                      {% if slide.image %}
+                      <source media="(min-width: 768px)" srcset="{{ image_url(slide.image) }}">
+                      {% endif %}
+                      <img loading="lazy" width="1670" height="670" data-src="{{ image_url(slide.image) }}" alt="banner">
+                    </picture>
+                  {% endif %}
+                  {% if slide.title %}
+                    <div class="box-text-info" style="color: {{ slide.text_color }}">
+                      <h3 class="slide-title" data-swiper-parallax="-500">{{ slide.title }}</h3>
+                      <p class="slide-subtitle" data-swiper-parallax="-300">{{ slide.des }}</p>
+                      {% if slide.btn_text %}
+                        <button class="tp-btn tp-btn-primary" data-swiper-parallax="-100">{{slide.btn_text}}</button>
+                      {% endif %}
+                    </div>
+                  {% endif %}
+                </a>
+              </div>
+          {% endfor %}
+      </div>
+    </div>
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function(){
+    var section = document.querySelector('[section-id="{{ sectionId }}"]');
+    if (!section) return;
+
+    var arrowNextClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_right' : 'icon-keyboard_arrow_left';
+    var arrowPrevClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_left' : 'icon-keyboard_arrow_right';
+
+    function initSlider() {
+      var slider = section.querySelector('.tp-banners-swiper');
+      if (!slider) return;
+      var $slider = $(slider);
+      if ($slider.hasClass('slick-initialized')) return;
+
+      $slider.slick({
+        slidesToScroll: 1,
+        slidesToShow: 1,
+        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        arrows: true,
+        dots: true,
+        rtl: !(window.appDirection === 'ltr'),
+        nextArrow: '<button class="slick-next slick-arrow" aria-label="Next" type="button"><span class="'+arrowNextClass+'"></span></button>',
+        prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="'+arrowPrevClass+'"></span></button>'
+      });
+
+      $slider.on('afterChange', function(event, slick, currentSlide){
+        const totalSlides = slick.slideCount;
+        const slidesToShow = slick.options.slidesToShow;
+
+        if (currentSlide >= totalSlides - slidesToShow) {
+          setTimeout(function () {
+            $slider.slick('slickGoTo', 0);
+          }, 5000);
+        }
+      });
+    }
+
+    var forceImmediate = {{ 'true' if store.editing_mode else 'false' }};
+
+    if (!forceImmediate && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries, obs) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            initSlider();
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+
+      observer.observe(section);
+    } else {
+      initSlider();
+    }
+  });
+</script>
+  </section>
+{% endif %}

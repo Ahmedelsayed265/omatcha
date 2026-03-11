@@ -1,0 +1,129 @@
+<div id="menu-logo" style="display:none;">
+	<a href="/" class="logo-menu">
+		{% set logoUrl = store.settings.branding.logo %}
+		<img loading="lazy" class="menu-logo lazy-img" width="180" height="60" src="{{ image_url(logoUrl,{ h: 175, q: 100 }) }}" alt="{{ store.name }}">
+	</a>
+
+	<div id="sliding-menu-customer-block" class="user-greeting sliding-menu-customer-block" onclick="window.location.href='{{ url_for("profile") }}'" {% if not (customer is defined and customer) %}style="display: none;"{% endif %}>
+		<img loading="lazy" src="{{ 'user.png' | asset_url }}" alt="user-img"/>
+		<div class="user-info">
+			<p class="user-name">{{ _('Hello') }}, <span id="sliding-menu-customer-name" class="sliding-menu-customer-name">{{ customer.name if (customer is defined and customer) else '' }}</span></p>
+			<p class="welcome-text remove-underline">{{ _('Welcome to Shift Store') }}</p>
+		</div>
+    {# <form action="/auth/logout" method="POST" class="logout-form">
+      <input type="hidden" name="_token" value="{{ csrf_token }}"/>
+      <button type="submit" class="logout-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+          <path d="M15.5 8.04045C15.4588 6.87972 15.3216 6.15451 14.8645 5.58671C14.2114 4.77536 13.0944 4.52064 10.8605 4.01121L9.85915 3.78286C6.4649 3.00882 4.76777 2.6218 3.63388 3.51317C2.5 4.40454 2.5 6.1257 2.5 9.56803V14.432C2.5 17.8743 2.5 19.5955 3.63388 20.4868C4.76777 21.3782 6.4649 20.9912 9.85915 20.2171L10.8605 19.9888C13.0944 19.4794 14.2114 19.2246 14.8645 18.4133C15.3216 17.8455 15.4588 17.1203 15.5 15.9595" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M18.5 9.01172C18.5 9.01172 21.5 11.2212 21.5 12.0117C21.5 12.8023 18.5 15.0117 18.5 15.0117M21 12.0117H8.49998" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      </button>
+    </form> #}
+	</div>
+
+	<div id="sliding-menu-guest-block" class="user-greeting sliding-menu-guest-block" onclick="if(typeof handleLoginAction==='function'){ handleLoginAction(); } else { window.location.href='/auth/login'; }" {% if customer is defined and customer %}style="display: none;"{% endif %}>
+		<img loading="lazy" src="{{ 'user.png' | asset_url }}" alt="user-img"/>
+		<div class="user-info">
+			<p class="user-name">{{ _('Welcome to Shift Store') }}</p>
+			<p class="welcome-text">{{ _('Log in or create an account') }}</p>
+		</div>
+	</div>
+
+</div>
+
+<div id="menu-secondary" class="secondary-menu-wrap" style="display:none;">
+{% set multiple_countries = store.countries | length > 1 %}
+        {% set multiple_languages = store.languages | length > 1 %}
+        {% if multiple_countries or multiple_languages %}
+		<div class="links-bottom">
+			<div class="language-currency-btn" onclick="zidOpenRegionSettingDialog()">
+      {% if session.lang == 'en' %}
+      {% set change_to_lang = 'ar' %}
+      {% set change_to_lang_name = 'العربية' %}
+      {% set country_name = session.country.names.en %}
+      {% else %}
+      {% set change_to_lang = 'en' %}
+      {% set change_to_lang_name = 'English' %}
+      {% set country_name = session.country.names.ar %}
+      {% endif %}
+				<div class="lang-currency-menu">
+					<span>{{ change_to_lang_name  }}
+						<svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M5.5031 7.1294C5.60467 7.26388 5.90793 7.66534 6.08853 7.89676C6.45026 8.36027 6.94452 8.97618 7.47769 9.59026C8.01356 10.2074 8.57648 10.8085 9.07658 11.2504C9.32734 11.472 9.54762 11.6403 9.72939 11.7499C9.90035 11.853 10.0013 11.8744 10.0013 11.8744C10.0013 11.8744 10.0994 11.853 10.2703 11.7499C10.4521 11.6403 10.6724 11.472 10.9231 11.2504C11.4232 10.8085 11.9861 10.2074 12.522 9.59025C13.0552 8.97616 13.5494 8.36025 13.9112 7.89673C14.0918 7.66531 14.3946 7.26442 14.4962 7.12994C14.7009 6.852 15.0925 6.79206 15.3705 6.99675C15.6484 7.20145 15.7078 7.59269 15.5031 7.87063L15.5015 7.87273C15.395 8.01376 15.0809 8.42963 14.8966 8.66577C14.5267 9.13975 14.018 9.77384 13.4659 10.4098C12.9165 11.0426 12.3117 11.6915 11.7508 12.1871C11.471 12.4343 11.1875 12.6566 10.9157 12.8204C10.661 12.9739 10.3386 13.125 9.99985 13.125C9.66109 13.125 9.33868 12.9739 9.08404 12.8204C8.81223 12.6566 8.52866 12.4343 8.24891 12.1871C7.68798 11.6915 7.08325 11.0426 6.53382 10.4098C5.98169 9.77386 5.473 9.13978 5.1031 8.6658C4.91871 8.42953 4.60464 8.01371 4.4983 7.87292L4.4969 7.87107C4.2922 7.59313 4.35128 7.20149 4.62922 6.99679C4.90714 6.7921 5.2984 6.85149 5.5031 7.1294Z" fill="currentColor"/>
+						</svg>
+					</span>
+					<span>{{ country_name }}
+						<svg width="20" height="20" viewbox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M5.5031 7.1294C5.60467 7.26388 5.90793 7.66534 6.08853 7.89676C6.45026 8.36027 6.94452 8.97618 7.47769 9.59026C8.01356 10.2074 8.57648 10.8085 9.07658 11.2504C9.32734 11.472 9.54762 11.6403 9.72939 11.7499C9.90035 11.853 10.0013 11.8744 10.0013 11.8744C10.0013 11.8744 10.0994 11.853 10.2703 11.7499C10.4521 11.6403 10.6724 11.472 10.9231 11.2504C11.4232 10.8085 11.9861 10.2074 12.522 9.59025C13.0552 8.97616 13.5494 8.36025 13.9112 7.89673C14.0918 7.66531 14.3946 7.26442 14.4962 7.12994C14.7009 6.852 15.0925 6.79206 15.3705 6.99675C15.6484 7.20145 15.7078 7.59269 15.5031 7.87063L15.5015 7.87273C15.395 8.01376 15.0809 8.42963 14.8966 8.66577C14.5267 9.13975 14.018 9.77384 13.4659 10.4098C12.9165 11.0426 12.3117 11.6915 11.7508 12.1871C11.471 12.4343 11.1875 12.6566 10.9157 12.8204C10.661 12.9739 10.3386 13.125 9.99985 13.125C9.66109 13.125 9.33868 12.9739 9.08404 12.8204C8.81223 12.6566 8.52866 12.4343 8.24891 12.1871C7.68798 11.6915 7.08325 11.0426 6.53382 10.4098C5.98169 9.77386 5.473 9.13978 5.1031 8.6658C4.91871 8.42953 4.60464 8.01371 4.4983 7.87292L4.4969 7.87107C4.2922 7.59313 4.35128 7.20149 4.62922 6.99679C4.90714 6.7921 5.2984 6.85149 5.5031 7.1294Z" fill="currentColor"/>
+						</svg>
+					</span>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+</div>
+
+<nav id="sliding-menu" style="opacity: 0;position: fixed;">
+	  <ul class="list-menu">
+    {% for menu in store.settings.menus.main_menu.items %}
+    {% if menu.url %}
+    <li class="slide-menu-ul-li {% if menu.slug == 'all_categories' %} all-categories {% endif %}"
+      onclick="scrollToSubMenu(this)">
+      <a href="{{ menu.url }}" title="{{ menu.label }}" class="menu-link" aria-label="{{ menu.label }}">
+        {% if menu.image_thumbnail %}
+        <img loading="lazy" src="{{ menu.image_thumbnail }}" alt="menu" width="42" height="42"
+          class="menu-image lazy-img" />
+        {% endif %}
+        <span class="clickable-span">{{ menu.label }}</span>
+      </a>
+      {% if menu.items | length > 0 %}
+      <ul>
+        {% for menu_sub in menu.items %}
+        <li class="slide-menu-ul-li">
+          <a href="{{ menu_sub.url }}" aria-label="{{ menu_sub.label }}">
+            {% if menu_sub.image_thumbnail %}
+            <img loading="lazy" src="{{ menu_sub.image_thumbnail }}" alt="menu-sub" width="42" height="42"
+              class="menu-image lazy-img" />
+            {% endif %}
+            <span class="clickable-span">{{ menu_sub.label }}</span>
+          </a>
+          {% if menu_sub.items | length > 0 %}
+          <ul>
+            {% for menu_sub_sub in menu_sub.items %}
+            <li class="slide-menu-ul-li">
+              <a href="{{ menu_sub_sub.url }}" aria-label="{{ menu_sub_sub.label }}">
+                {% if menu_sub_sub.image_thumbnail %}
+                <img loading="lazy" src="{{ menu_sub_sub.image_thumbnail }}" alt="menu-sub-sub" width="42" height="42"
+                  class="menu-image lazy-img" />
+                {% endif %}
+                {{ menu_sub_sub.label }}
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
+
+<script>
+(function() {
+  function applySlidingMenuCustomer(customer) {
+    if (!customer || !customer.name) return;
+    document.querySelectorAll('.sliding-menu-customer-name').forEach(function(el) { el.textContent = customer.name; });
+    document.querySelectorAll('.sliding-menu-customer-block').forEach(function(el) { el.style.display = ''; });
+    document.querySelectorAll('.sliding-menu-guest-block').forEach(function(el) { el.style.display = 'none'; });
+  }
+  document.addEventListener('zid-customer-fetched', function (event) {
+    var customer = event.detail && event.detail.customer;
+    applySlidingMenuCustomer(customer);
+  });
+  if (window.zid && window.zid.customer) applySlidingMenuCustomer(window.zid.customer);
+})();
+</script>

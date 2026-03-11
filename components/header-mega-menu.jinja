@@ -1,0 +1,31 @@
+<div class="tp-menu-list">
+	<ul class="ul-list">
+		{% for menu in store.settings.menus.main_menu.items %}
+			{% if menu.url %}
+				<li class="top-level-link megamenu {% if safeget(menu, "url") == '/c/' %} all-categories {% endif %}">
+					<a href="{{ menu.url }}">{{ menu.label }}</a>
+					{% if menu.items | length > 0 %}
+						<div class="megamenu-list">
+							<ul class="dropdown">
+								{% for menu_sub in menu.items %}
+									<li>
+										<a href="{{ menu_sub.url }}">{{ menu_sub.name }}</a>
+										{% if menu_sub.items | length > 0 %}
+											<ul class="dropdown">
+												{% for menu_sub_sub in menu_sub.items %}
+													<li>
+														<a href="{{ menu_sub_sub.url }}">{{ menu_sub_sub.name }}</a>
+													</li>
+												{% endfor %}
+											</ul>
+										{% endif %}
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
+					{% endif %}
+				</li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+</div>

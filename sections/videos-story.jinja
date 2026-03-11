@@ -1,0 +1,249 @@
+{% if not settings.hide_element %}
+<section class="tp-videos-story s-block" section-id="{{ sectionId }}">
+	<div class="container">
+		  <div class="tp-title-section">
+      {% if settings.title %}
+        <h3 style="text-align: center; margin-bottom: 12px;">{{ settings.title }}</h3>
+      {% endif %}
+    </div>
+		<div class="tp-videos-items">
+			{% for item in safeget(settings, 'videos', []) %}
+				<div class="swiper-slide">
+					<div class="video-story">
+          {% if item.video %}
+            <video width="100%" loop muted playsinline{% if item.poster %} poster="{{ image_url(item.poster) }}"{% endif %}>
+              <source data-src="{{ item.video }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            {% else %}
+              <img loading="lazy" width="100%" height="550" class="lazy-img" data-src="{{ image_url(item.image) }}" alt="{{item.name}}">
+          {% endif %}
+          {% if item.name or item.review %}
+            <div class="review-box">
+              <h3>{{item.name}}</h3>
+              <svg width="112" height="16" viewBox="0 0 112 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.9974 0.833252C8.69691 0.833252 9.24792 1.36161 9.59969 2.07453L10.7744 4.44336C10.81 4.51667 10.8944 4.61991 11.0214 4.71434C11.1482 4.80868 11.2724 4.86073 11.3541 4.87446L13.4805 5.23067C14.2486 5.35974 14.8924 5.73625 15.1014 6.39185C15.3102 7.04691 15.0042 7.72766 14.4519 8.28101L14.4514 8.28155L12.7994 9.94716C12.7339 10.0132 12.6606 10.1375 12.6146 10.2995C12.5689 10.4605 12.5649 10.607 12.5856 10.7018L12.5859 10.7031L13.0585 12.7635C13.2545 13.6211 13.1896 14.4715 12.5847 14.916C11.9778 15.3621 11.1485 15.1644 10.395 14.7157L8.4017 13.5259C8.318 13.4759 8.17424 13.4354 8.00073 13.4354C7.82849 13.4354 7.68171 13.4754 7.59256 13.5272L7.5913 13.528L5.60192 14.7154C4.84937 15.1657 4.02103 15.3599 3.41407 14.9134C2.80966 14.4687 2.74143 13.6199 2.93807 12.7631L3.4106 10.7031L3.41089 10.7018C3.43161 10.607 3.42755 10.4605 3.38187 10.2995C3.33587 10.1375 3.26252 10.0132 3.19705 9.94716L1.5439 8.28034C0.995098 7.72701 0.690138 7.04685 0.897298 6.39276C1.10506 5.73675 1.74762 5.35979 2.51622 5.23063L4.64088 4.87471L4.64156 4.8746C4.71945 4.86108 4.8418 4.80962 4.96832 4.71504C5.09507 4.62028 5.17973 4.51682 5.21541 4.44336L5.21721 4.4397L6.39041 2.0739L6.39088 2.07297C6.74597 1.36064 7.29869 0.833252 7.9974 0.833252Z" fill="#F39C12"/>
+              <path d="M31.9974 0.833252C32.6969 0.833252 33.2479 1.36161 33.5997 2.07453L34.7744 4.44336C34.81 4.51667 34.8944 4.61991 35.0214 4.71434C35.1482 4.80868 35.2724 4.86073 35.3541 4.87446L37.4805 5.23067C38.2486 5.35974 38.8924 5.73625 39.1014 6.39185C39.3102 7.04691 39.0042 7.72766 38.4519 8.28101L38.4514 8.28155L36.7994 9.94716C36.7339 10.0132 36.6606 10.1375 36.6146 10.2995C36.5689 10.4605 36.5649 10.607 36.5856 10.7018L36.5859 10.7031L37.0585 12.7635C37.2545 13.6211 37.1896 14.4715 36.5847 14.916C35.9778 15.3621 35.1485 15.1644 34.395 14.7157L32.4017 13.5259C32.318 13.4759 32.1742 13.4354 32.0007 13.4354C31.8285 13.4354 31.6817 13.4754 31.5926 13.5272L31.5913 13.528L29.6019 14.7154C28.8494 15.1657 28.021 15.3599 27.4141 14.9134C26.8097 14.4687 26.7414 13.6199 26.9381 12.7631L27.4106 10.7031L27.4109 10.7018C27.4316 10.607 27.4276 10.4605 27.3819 10.2995C27.3359 10.1375 27.2625 10.0132 27.1971 9.94716L25.5439 8.28034C24.9951 7.72701 24.6901 7.04685 24.8973 6.39276C25.1051 5.73675 25.7476 5.35979 26.5162 5.23063L28.6409 4.87471L28.6416 4.8746C28.7194 4.86108 28.8418 4.80962 28.9683 4.71504C29.0951 4.62028 29.1797 4.51682 29.2154 4.44336L29.2172 4.4397L30.3904 2.0739L30.3909 2.07297C30.746 1.36064 31.2987 0.833252 31.9974 0.833252Z" fill="#F39C12"/>
+              <path d="M55.9974 0.833252C56.6969 0.833252 57.2479 1.36161 57.5997 2.07453L58.7744 4.44336C58.81 4.51667 58.8944 4.61991 59.0214 4.71434C59.1482 4.80868 59.2724 4.86073 59.3541 4.87446L61.4805 5.23067C62.2486 5.35974 62.8924 5.73625 63.1014 6.39185C63.3102 7.04691 63.0042 7.72766 62.4519 8.28101L62.4514 8.28155L60.7994 9.94716C60.7339 10.0132 60.6606 10.1375 60.6146 10.2995C60.5689 10.4605 60.5649 10.607 60.5856 10.7018L60.5859 10.7031L61.0585 12.7635C61.2545 13.6211 61.1896 14.4715 60.5847 14.916C59.9778 15.3621 59.1485 15.1644 58.395 14.7157L56.4017 13.5259C56.318 13.4759 56.1742 13.4354 56.0007 13.4354C55.8285 13.4354 55.6817 13.4754 55.5926 13.5272L55.5913 13.528L53.6019 14.7154C52.8494 15.1657 52.021 15.3599 51.4141 14.9134C50.8097 14.4687 50.7414 13.6199 50.9381 12.7631L51.4106 10.7031L51.4109 10.7018C51.4316 10.607 51.4276 10.4605 51.3819 10.2995C51.3359 10.1375 51.2625 10.0132 51.1971 9.94716L49.5439 8.28034C48.9951 7.72701 48.6901 7.04685 48.8973 6.39276C49.1051 5.73675 49.7476 5.35979 50.5162 5.23063L52.6409 4.87471L52.6416 4.8746C52.7194 4.86108 52.8418 4.80962 52.9683 4.71504C53.0951 4.62028 53.1797 4.51682 53.2154 4.44336L53.2172 4.4397L54.3904 2.0739L54.3909 2.07297C54.746 1.36064 55.2987 0.833252 55.9974 0.833252Z" fill="#F39C12"/>
+              <path d="M79.9974 0.833252C80.6969 0.833252 81.2479 1.36161 81.5997 2.07453L82.7744 4.44336C82.81 4.51667 82.8944 4.61991 83.0214 4.71434C83.1482 4.80868 83.2724 4.86073 83.3541 4.87446L85.4805 5.23067C86.2486 5.35974 86.8924 5.73625 87.1014 6.39185C87.3102 7.04691 87.0042 7.72766 86.4519 8.28101L86.4514 8.28155L84.7994 9.94716C84.7339 10.0132 84.6606 10.1375 84.6146 10.2995C84.5689 10.4605 84.5649 10.607 84.5856 10.7018L84.5859 10.7031L85.0585 12.7635C85.2545 13.6211 85.1896 14.4715 84.5847 14.916C83.9778 15.3621 83.1485 15.1644 82.395 14.7157L80.4017 13.5259C80.318 13.4759 80.1742 13.4354 80.0007 13.4354C79.8285 13.4354 79.6817 13.4754 79.5926 13.5272L79.5913 13.528L77.6019 14.7154C76.8494 15.1657 76.021 15.3599 75.4141 14.9134C74.8097 14.4687 74.7414 13.6199 74.9381 12.7631L75.4106 10.7031L75.4109 10.7018C75.4316 10.607 75.4276 10.4605 75.3819 10.2995C75.3359 10.1375 75.2625 10.0132 75.1971 9.94716L73.5439 8.28034C72.9951 7.72701 72.6901 7.04685 72.8973 6.39276C73.1051 5.73675 73.7476 5.35979 74.5162 5.23063L76.6409 4.87471L76.6416 4.8746C76.7194 4.86108 76.8418 4.80962 76.9683 4.71504C77.0951 4.62028 77.1797 4.51682 77.2154 4.44336L77.2172 4.4397L78.3904 2.0739L78.3909 2.07297C78.746 1.36064 79.2987 0.833252 79.9974 0.833252Z" fill="#F39C12"/>
+              <path d="M103.997 0.833252C104.697 0.833252 105.248 1.36161 105.6 2.07453L106.774 4.44336C106.81 4.51667 106.894 4.61991 107.021 4.71434C107.148 4.80868 107.272 4.86073 107.354 4.87446L109.48 5.23067C110.249 5.35974 110.892 5.73625 111.101 6.39185C111.31 7.04691 111.004 7.72766 110.452 8.28101L110.451 8.28155L108.799 9.94716C108.734 10.0132 108.661 10.1375 108.615 10.2995C108.569 10.4605 108.565 10.607 108.586 10.7018L108.586 10.7031L109.058 12.7635C109.255 13.6211 109.19 14.4715 108.585 14.916C107.978 15.3621 107.148 15.1644 106.395 14.7157L104.402 13.5259C104.318 13.4759 104.174 13.4354 104.001 13.4354C103.828 13.4354 103.682 13.4754 103.593 13.5272L103.591 13.528L101.602 14.7154C100.849 15.1657 100.021 15.3599 99.4141 14.9134C98.8097 14.4687 98.7414 13.6199 98.9381 12.7631L99.4106 10.7031L99.4109 10.7018C99.4316 10.607 99.4276 10.4605 99.3819 10.2995C99.3359 10.1375 99.2625 10.0132 99.1971 9.94716L97.5439 8.28034C96.9951 7.72701 96.6901 7.04685 96.8973 6.39276C97.1051 5.73675 97.7476 5.35979 98.5162 5.23063L100.641 4.87471L100.642 4.8746C100.719 4.86108 100.842 4.80962 100.968 4.71504C101.095 4.62028 101.18 4.51682 101.215 4.44336L101.217 4.4397L102.39 2.0739L102.391 2.07297C102.746 1.36064 103.299 0.833252 103.997 0.833252Z" fill="#F39C12"/>
+              </svg>
+              <p>{{item.review}}</p>
+            </div>
+          {% endif %}
+            <div class="play-video" title="play-video">
+              <svg width="17" height="23" viewBox="0 0 17 23" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.4324 9.7218C16.4657 10.5225 16.4657 12.083 15.4324 12.8837L3.93296 21.7942C2.61872 22.8125 0.707951 21.8758 0.707951 20.2132L0.707952 2.39223C0.707952 0.729617 2.61872 -0.207059 3.93296 0.8113L15.4324 9.7218Z" fill="#1E1E1E" fill-opacity="0.5"></path></svg>
+            </div>
+            <div class="volume-toggle" title="Toggle Sound">
+              <svg class="mute-video" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+                  <path d="M14 14.8135V9.18646C14 6.04126 14 4.46866 13.0747 4.0773C12.1494 3.68593 11.0603 4.79793 8.88232 7.02192C7.75439 8.17365 7.11085 8.42869 5.50604 8.42869C4.10257 8.42869 3.40084 8.42869 2.89675 8.77262C1.85035 9.48655 2.00852 10.882 2.00852 12C2.00852 13.118 1.85035 14.5134 2.89675 15.2274C3.40084 15.5713 4.10257 15.5713 5.50604 15.5713C7.11085 15.5713 7.75439 15.8264 8.88232 16.9781C11.0603 19.2021 12.1494 20.3141 13.0747 19.9227C14 19.5313 14 17.9587 14 14.8135Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M18 10L22 14M18 14L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+              <svg class="unmute-video" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none" style="display: none;">
+                  <path d="M14 14.8135V9.18646C14 6.04126 14 4.46866 13.0747 4.0773C12.1494 3.68593 11.0603 4.79793 8.88232 7.02192C7.75439 8.17365 7.11085 8.42869 5.50604 8.42869C4.10257 8.42869 3.40084 8.42869 2.89675 8.77262C1.85035 9.48655 2.00852 10.882 2.00852 12C2.00852 13.118 1.85035 14.5134 2.89675 15.2274C3.40084 15.5713 4.10257 15.5713 5.50604 15.5713C7.11085 15.5713 7.75439 15.8264 8.88232 16.9781C11.0603 19.2021 12.1494 20.3141 13.0747 19.9227C14 19.5313 14 17.9587 14 14.8135Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M17 9C17.6254 9.81968 18 10.8634 18 12C18 13.1366 17.6254 14.1803 17 15" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M20 7C21.2508 8.36613 22 10.1057 22 12C22 13.8943 21.2508 15.6339 20 17" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function ensureVideoSource(video) {
+    if (!video) return;
+    const source = video.querySelector('source');
+    if (source && !source.src && source.dataset.src) {
+      source.src = source.dataset.src;
+      video.load();
+    }
+  }
+
+  function pauseAllVideos() {
+    document.querySelectorAll('.video-story').forEach(story => {
+      const video = story.querySelector('video');
+      const playBtn = story.querySelector('.play-video');
+      const volumeToggle = story.querySelector('.volume-toggle');
+      const reviewBox = story.querySelector('.review-box');
+      
+      if (video) video.pause();
+      if (playBtn) playBtn.classList.remove('hidden');
+      if (volumeToggle) volumeToggle.style.display = 'none';
+      if (reviewBox) reviewBox.style.display = 'block';
+    });
+  }
+
+  // تشغيل الفيديو عند الضغط على زر التشغيل
+  document.querySelectorAll('.play-video').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const parent = btn.closest('.video-story');
+      const video = parent.querySelector('video');
+      const reviewBox = parent.querySelector('.review-box');
+
+      pauseAllVideos();
+
+      if (video) {
+        ensureVideoSource(video);
+        video.play();
+      }
+      btn.classList.add('hidden');
+      parent.querySelector('.volume-toggle').style.display = 'flex';
+      if (reviewBox) reviewBox.style.display = 'none';
+    });
+  });
+
+  // عند الضغط على الفيديو نفسه: تشغيل/إيقاف
+  document.querySelectorAll('.video-story').forEach((container) => {
+    const video = container.querySelector('video');
+    const playBtn = container.querySelector('.play-video');
+    const volumeToggle = container.querySelector('.volume-toggle');
+    const reviewBox = container.querySelector('.review-box');
+
+    if (video) {
+      video.addEventListener('click', () => {
+        if (video.paused) {
+          pauseAllVideos();
+          ensureVideoSource(video);
+          video.play();
+          playBtn.classList.add('hidden');
+          volumeToggle.style.display = 'flex';
+          if (reviewBox) reviewBox.style.display = 'none';
+        } else {
+          video.pause();
+          playBtn.classList.remove('hidden');
+          volumeToggle.style.display = 'none';
+          if (reviewBox) reviewBox.style.display = 'block';
+        }
+      });
+    }
+  });
+
+  // زر الصوت
+  document.querySelectorAll('.volume-toggle').forEach((toggle) => {
+    const video = toggle.closest('.video-story').querySelector('video');
+    const muteIcon = toggle.querySelector('.mute-video');
+    const unmuteIcon = toggle.querySelector('.unmute-video');
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (video) {
+        video.muted = !video.muted;
+        muteIcon.style.display = video.muted ? 'block' : 'none';
+        unmuteIcon.style.display = video.muted ? 'none' : 'block';
+      }
+    });
+
+    toggle.style.display = 'none';
+  });
+
+  // التحقق من ظهور الفيديو داخل الشاشة
+  function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
+  window.addEventListener("scroll", () => {
+    document.querySelectorAll('.video-story').forEach((story) => {
+      const video = story.querySelector('video');
+      const playBtn = story.querySelector('.play-video');
+      const volumeToggle = story.querySelector('.volume-toggle');
+      const reviewBox = story.querySelector('.review-box');
+
+      if (video && !isInViewport(video) && !video.paused) {
+        video.pause();
+        playBtn.classList.remove('hidden');
+        volumeToggle.style.display = 'none';
+        if (reviewBox) reviewBox.style.display = 'block';
+      }
+    });
+  });
+
+});
+</script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function(){
+    var section = document.querySelector('[section-id="{{ sectionId }}"]');
+    if (!section) return;
+
+    var arrowNextClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_right' : 'icon-keyboard_arrow_left';
+    var arrowPrevClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_left' : 'icon-keyboard_arrow_right';
+
+    function initSlider() {
+      var $slider = $('[section-id={{ sectionId }}] .tp-videos-items');
+      if (!$slider.length || $slider.hasClass('slick-initialized')) return;
+
+      $slider.slick({
+        slidesToShow: 4,
+        infinite: true,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        arrows: true,
+        dots: true,
+        rtl: !(window.appDirection === 'ltr'),
+        nextArrow: '<button class="slick-next slick-arrow" aria-label="Next" type="button"><span class="'+arrowNextClass+'"></span></button>',
+        prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="'+arrowPrevClass+'"></span></button>',
+        responsive: [
+          {
+            breakpoint: 992,
+            settings: {
+              slidesToShow: 3,
+              centerMode: true,
+              centerPadding: '60px'
+            }
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 2,
+              centerMode: true,
+              centerPadding: '50px'
+            }
+          },
+          {
+            breakpoint: 500,
+            settings: {
+              slidesToShow: 2,
+              centerMode: true,
+              centerPadding: '20px'
+            }
+          },
+          {
+            breakpoint: 375,
+            settings: {
+              slidesToShow: 1,
+              centerMode: true,
+              centerPadding: '30px'
+            }
+          }
+        ]
+      });
+    }
+
+    var forceImmediate = {{ 'true' if store.editing_mode else 'false' }};
+
+    if (!forceImmediate && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            initSlider();
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+
+      observer.observe(section);
+    } else {
+      initSlider();
+    }
+  });
+</script>
+
+
+</section>
+{% endif %}

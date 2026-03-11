@@ -1,0 +1,123 @@
+{
+  "name": {
+    "ar": "اعلى الصفحة",
+    "en": "Header"
+  },
+  "icon": "fa fa-square",
+  "groups": [
+    {
+      "id": "announcement_bar",
+      "icon": "font_awesome",
+      "name": {
+        "ar": "شريط التنبيهات",
+        "en": "Announcement bar"
+      },
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "display",
+          "label": {
+            "ar": "إظهار شريط التنبيهات",
+            "en": "Display announcement bar"
+          }
+        },
+        {
+          "type": "checkbox",
+          "id": "stop_move",
+          "label": {
+            "ar": "ايقاف التحريك",
+            "en": "Stop moving"
+          }
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": {
+            "ar": "لون الخلفية",
+            "en": "Background color"
+          }
+        },
+        {
+          "type": "range",
+          "id": "bar_speed",
+          "label": {
+            "ar": "سرعة حركة الشريط",
+            "en": "Marquee speed"
+          },
+          "min": 5,
+          "max": 100,
+          "step": 5,
+          "unit": "s",
+          "default": 50
+        },
+        {
+          "type": "list",
+          "id": "advertisement_bar",
+          "label": {
+            "ar": "الاعلان",
+            "en": "Advertisement"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "text",
+              "label": {
+                "ar": "نص الاعلان",
+                "en": "Text"
+              }
+            },
+            {
+              "type": "color",
+              "id": "text_color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "page_display",
+          "label": {
+            "ar": "عرض شريط التنبيهات في",
+            "en": "Display announcement bar in"
+          },
+          "options": [
+            {
+              "value": "all",
+              "label": {
+                "ar": "جميع الصفحات",
+                "en": "All pages"
+              }
+            },
+            {
+              "value": "home",
+              "label": {
+                "ar": "الصفحة الرئيسية فقط",
+                "en": "Home page only"
+              }
+            }
+          ],
+          "default": "all"
+        }
+      ]
+    }
+  ]
+}

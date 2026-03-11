@@ -1,0 +1,61 @@
+<div class="profile-box">
+	<ul>
+		<li>
+			<a href="/account-profile" class="{% if section == 'profile' %}active{% endif %}">
+				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+					<path d="M14 8.99988H18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					<path d="M14 12.4999H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					<rect x="2" y="2.99988" width="20" height="18" rx="5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+					<path d="M5 15.9999C6.20831 13.4188 10.7122 13.249 12 15.9999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M10.5 8.99988C10.5 10.1044 9.60457 10.9999 8.5 10.9999C7.39543 10.9999 6.5 10.1044 6.5 8.99988C6.5 7.89531 7.39543 6.99988 8.5 6.99988C9.60457 6.99988 10.5 7.89531 10.5 8.99988Z" stroke="currentColor" stroke-width="1.5"/>
+				</svg>
+				<div class="content-list-profile">
+					<h3>{{ _('Personal info') }}</h3>
+					<p>{{ _('Manage your personal information') }}</p>
+				</div>
+			</a>
+		</li>
+
+		<li>
+			<a href="/account-addresses" class="{% if section == 'addresses' %}active{% endif %}">
+				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+					<path d="M13.6177 21.367C13.1841 21.773 12.6044 22 12.0011 22C11.3978 22 10.8182 21.773 10.3845 21.367C6.41302 17.626 1.09076 13.4469 3.68627 7.37966C5.08963 4.09916 8.45834 2 12.0011 2C15.5439 2 18.9126 4.09916 20.316 7.37966C22.9082 13.4393 17.599 17.6389 13.6177 21.367Z" stroke="currentColor" stroke-width="1.5"/>
+					<path d="M15.5 11C15.5 12.933 13.933 14.5 12 14.5C10.067 14.5 8.5 12.933 8.5 11C8.5 9.067 10.067 7.5 12 7.5C13.933 7.5 15.5 9.067 15.5 11Z" stroke="currentColor" stroke-width="1.5"/>
+				</svg>
+				<div class="content-list-profile">
+					<h3>{{ _('Addresses') }}</h3>
+					<p>{{ _('Manage your addresses') }}</p>
+				</div>
+			</a>
+		</li>
+
+		{% if store.settings.products.wishlist_enabled == true %}
+			<li>
+				<a href="/account-wishlist" class="{% if section == 'wishlist' %}active{% endif %}">
+					<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
+						<path d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+					</svg>
+					<div class="content-list-profile">
+						<h3>{{ _('Wishlist') }}</h3>
+						<p>{{ _('Your saved products') }}</p>
+					</div>
+				</a>
+			</li>
+		{% endif %}
+
+		<li>
+			<a href="/account-orders" class="{% if section == 'orders' %}active{% endif %}">
+				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+					<path d="M12 22C11.1818 22 10.4002 21.6698 8.83693 21.0095C4.94564 19.3657 3 18.5438 3 17.1613C3 16.7742 3 10.0645 3 7M12 22C12.8182 22 13.5998 21.6698 15.1631 21.0095C19.0544 19.3657 21 18.5438 21 17.1613V7M12 22L12 11.3548" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M8.32592 9.69138L5.40472 8.27785C3.80157 7.5021 3 7.11423 3 6.5C3 5.88577 3.80157 5.4979 5.40472 4.72215L8.32592 3.30862C10.1288 2.43621 11.0303 2 12 2C12.9697 2 13.8712 2.4362 15.6741 3.30862L18.5953 4.72215C20.1984 5.4979 21 5.88577 21 6.5C21 7.11423 20.1984 7.5021 18.5953 8.27785L15.6741 9.69138C13.8712 10.5638 12.9697 11 12 11C11.0303 11 10.1288 10.5638 8.32592 9.69138Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M6 12L8 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M17 4L7 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg>
+				<div class="content-list-profile">
+					<h3>{{ _('Orders') }}</h3>
+					<p>{{ _('View your orders') }}</p>
+				</div>
+			</a>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,2103 @@
+{% extends "layout.jinja" %}
+
+{% block header %} {% include 'header.jinja' %} {% endblock %}
+
+{% block top_links %}
+<link rel="stylesheet" type="text/css" href="{{ 'toastr.min.css' | asset_url }}" />
+<link rel="stylesheet" type="text/css" href="{{ 'ekko-lightbox.css' | asset_url }}" />
+<link rel="stylesheet" type="text/css" href="{{ 'prod-details.css' | asset_url }}" />
+{% endblock %}
+
+
+{% block main_content %}
+<div class="breadcrumb-subtitle">
+  <section class="breadcrumb-section">
+    <nav aria-label="breadcrumb">
+      <div class="container">
+        <ol class="breadcrumb" id="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="/">{{ _('Home') }}</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ product.selected_product.name }}
+          </li>
+        </ol>
+      </div>
+    </nav>
+  </section>
+</div>
+
+<section
+  class="product products-details-page {% if thumb_bottom %}thumb-bottom{% endif %} no-tabs">
+  <div class="container pd-0">
+    <section class="products-details">
+      <!--GALLERY-->
+      <div id="wrap" class="col-product-image-wrapper">
+        <!-- Carousel -->
+        <div class="product-images-carousel-thumbs swiper-container">
+          <div class="swiper-wrapper">
+            {% for image in product.selected_product.media %}
+            <div class="swiper-slide">
+              <a class="thumb-image-a" data-index="{{ loop.index0 }}" href="javascript:;">
+                <img loading="lazy" src="{{ image.image.medium }}" data-index="{{ loop.index0 }}" alt="image">
+                {% if image.provider and image.link %}
+                <img loading="lazy" id="video-play-icon" class="play-icon" src="{{ 'video-play.svg' | asset_url }}"
+                  alt="play" data-index="{{ loop.index0 }}" />
+                {% endif %}
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div
+          class="product-images-carousel product-images-carousel-init {% if product.selected_product.media | length <= 0 %}d-none{% endif %}">
+          {% if product.badge %}
+          {% include 'vitrin:products/badge.jinja' %}
+          {% endif %}
+          {% if store.settings.products.wishlist_enabled == true %}
+          <span class="add-to-wishlist" data-wishlist-id="{{ product.id }}">
+            <button zid-visible-customer="true" type="button" class="icon-heart-mask"
+              onclick="addToWishlist(this, '{{ product.id }}')" aria-label="Wishlist"></button>
+            <button zid-visible-guest="true" type="button" class="icon-heart-mask"
+              href="/auth/login?redirect_to={{ session.url.path }}" aria-label="Wishlist"></button>
+            <img loading="lazy" class="loader d-none" src="{{ 'spinner.gif' | asset_url }}" width="20" height="20"
+              loading="lazy" />
+          </span>
+          {% endif %}
+          <div id="product-images" class="product-images slide gallery">
+            <div id="product-images-slick" class="swiper-container">
+              <div class="swiper-wrapper">
+                {% for image in product.selected_product.media %}
+                <div class="swiper-slide">
+                  <a class="image-link" href="javascript:;">
+                    <img loading="lazy" src="{{ image.image.full_size }}" class="carousel-img"
+                      data-index="{{ loop.index0 }}"
+                      alt="{{ image.alt_text }}">
+                      {% if image.provider and image.link %}
+                          <img id="main-video-icon"
+                            class="play-icon"
+                            src="{{ 'video-play.svg' | asset_url }}"
+                            alt="play"
+                            width="25"
+                            onClick="showIframe(this, '{{ image.link }}')"
+                          />
+                      {% endif %}
+                  </a>
+                  {% if image.provider and image.link %}
+                  <div class="iframe-video pt-1 d-none">
+                    <a id="iframe-close-btn" type="button" class="text-white btn btn-none grow"
+                      onClick="hideIframe(this)">
+                      X
+                    </a>
+                    <iframe width="100%" height="100%" src="" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen style="max-width: 100%">
+                    </iframe>
+                  </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- No image -->
+        <div class="product-images-empty {% if product.selected_product.media | length > 0 %}d-none{% endif %}">
+          <div class="content">
+            <img loading="lazy" src="{{ 'product-img.svg' | asset_url }}" width="100%" height="auto" />
+          </div>
+        </div>
+
+      </div>
+
+      <div
+        class="col-product-info {% if product.selected_product.media | length <= 1 %}col-product-info-single-image{% endif %}">
+        <section>
+          <div class="available-share">
+        <div class="product-info-toggle">
+          {% if product.sold_products_count %}
+            <div class="product-count sold-count info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff"
+                fill="none">
+                <path
+                  d="M13.8561 22C26.0783 19 19.2338 7 10.9227 2C9.9453 5.5 8.47838 6.5 5.54497 10C1.66121 14.6339 3.5895 20 8.96719 22C8.1524 21 6.04958 18.9008 7.5 16C8 15 9 14 8.5 12C9.47778 12.5 11.5 13 12 15.5C12.8148 14.5 13.6604 12.4 12.8783 10C19 14.5 16.5 19 13.8561 22Z"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="lang">{{ _('Sold more than %s times') | format(product.sold_products_count)
+                }}</span>
+            </div>
+          {% elif product.selected_product.sold_products_count %}
+            <div class="product-count sold-count info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff"
+                fill="none">
+                <path
+                  d="M13.8561 22C26.0783 19 19.2338 7 10.9227 2C9.9453 5.5 8.47838 6.5 5.54497 10C1.66121 14.6339 3.5895 20 8.96719 22C8.1524 21 6.04958 18.9008 7.5 16C8 15 9 14 8.5 12C9.47778 12.5 11.5 13 12 15.5C12.8148 14.5 13.6604 12.4 12.8783 10C19 14.5 16.5 19 13.8561 22Z"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="lang">{{ _('Sold more than %s times') | format(product.selected_product.sold_products_count) }}</span>
+            </div>
+          {% endif %}
+          {% include 'components/show-now.jinja' %}
+            {% if store.settings.products.reviews_enabled and product.rating.total_count > 0 %}
+              <div class="rating-box info-item">
+                {% set rating = product.rating.average %}
+                {% include 'components/rating-stars.jinja' %}
+                <span class="product-card-rating-count">({{ product.rating.total_count }})</span>
+              </div>
+            {% endif %}
+          </div>
+
+          {% set _ns = namespace(is_pre_order=false) %}
+          {% for item in (pre_order_list or []) %}
+            {% if item.product.id == product.id %}
+              {% set _ns.is_pre_order = true %}
+            {% endif %}
+          {% endfor %}
+          {% set is_pre_order = _ns.is_pre_order %}
+          {% set is_out_stock = product.selected_product.out_of_stock %}
+            <div class="available-product {{ 'out-stock' if is_out_stock else 'in-stock' }} {{ 'pre-order' if (is_pre_order and not is_out_stock) else '' }}">
+              <span class="icon--inventory"></span>
+              {% if is_out_stock %}
+                {{ _('Out of stock') }}
+              {% elif is_pre_order %}
+                {{ _('Pre Order') }}
+              {% else %}
+                {{ _('In Stock') }}
+              {% endif %}
+            </div>
+          </div>
+
+          <h1 class="title-product">{{ product.name | safe }}</h1>
+          <div class="price-loyalty">
+            <div class="price-product">
+              <p class="product-formatted-price">
+                {% if product.selected_product.formatted_sale_price %}
+                  {{ product.selected_product.formatted_sale_price }}
+                {% else %}
+                  {{ product.selected_product.formatted_price }}
+                {% endif %}
+              </p>
+              
+              <p class="price-tawfer {% if not product.selected_product.formatted_sale_price %}d-none{% endif %}">
+                <span class="product-formatted-price-old">
+                  {% if product.selected_product.formatted_sale_price %}
+                    {{ product.selected_product.formatted_price }}
+                  {% endif %}
+                </span>
+                <span class="product-formatted-price-discount">
+                  {% if product.selected_product.formatted_sale_price %}
+                  - {{ product.discount_percentage }}%
+                  {% endif %}
+                </span>
+              </p>
+            </div>
+
+            <div class="loyalty-points">
+              {% include 'vitrin:products/loyalty_points_widget.jinja' %}
+            </div>
+          </div>
+          {% if product.low_stock_quantity %}
+          <div class="low-quantity-section d-inline-block">
+            <span class="icon-flag_black" style="color: #EC5550; font-size: 16px"></span>&nbsp;
+            <span class="low-quantity">{{ _('Remaining %s only') | format(product.low_stock_quantity)
+              }}</span>
+          </div>
+          {% endif %}
+
+          {% if product.bundle_offer %}
+          <div class="bundle-offer-section">
+            <span class="icon-gift" style="color: red; font-size: 14px"></span>&nbsp;
+            <span class="bundle-offer-title">{{ product.bundle_offer.name }}</span>
+          </div>
+          {% endif %}
+          {# {% if product.short_description %}
+          <div class="product-description">
+            {{ product.short_description | safe }}
+            &nbsp;<a id="product-description-a" href="#nav-description" class="text-color-primary read-more-btn">{{
+              _('Read more') }}</a>
+          </div>
+          {% endif %} #}
+          {% include 'components/features-product.jinja' %}
+          <div class="product-payments">
+            {% include 'vitrin:products/payment_widgets.jinja' %}
+          </div>
+          <form id="product-form">
+            <input id="product-id" type="hidden" value="{{ product.selected_product.id }}">
+
+            <div class="size-box">
+              {% include 'vitrin:products/variants_list.jinja' %}
+              <!-- new custom fields update -->
+              {% if product.has_custom_input_fields %}
+              <div class="border-product" style="margin-top: 25px"></div>
+              {% include 'vitrin:products/custom_input_fields.jinja' %}
+              {% endif %}
+            </div>
+            {% if product.selected_product.is_infinite or product.selected_product.quantity > 0 %}
+              <div class="select-quantity-div" style="display:none;">
+                {% include 'components/select-quantity.jinja' %}
+              </div>
+            {% endif %}
+            <div
+              class="section-out-of-stock-notify-me {% if product.selected_product.out_of_stock %}d-block{% else %}d-none{% endif %}">
+              <h4 class="product-title">{{ _('This product is out of stock') }}</h4>
+              <form>
+                <input type="hidden" class="send-notify-product-id" value="{{ product.selected_product.id }}">
+                <h4>{{ _('Notify me when product is available') }}</h4>
+                <div class="form-notify-me">
+                  <div class="form-group">
+                    <input class="form-control send-notify-name" value="" type="text"
+                      placeholder="{{ _('Enter your name') }}" />
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control send-notify-email" type="email" value=""
+                      placeholder="{{ _('Enter your email') }}" />
+                  </div>
+                  <div class="form-group">
+                    <div class="form-notify-me-phone-row">
+                      <input class="form-control send-notify-phone" type="number" value=""
+                        placeholder="{{ _('Enter your phone (Optional)') }}" maxlength="10" />
+                      <input class="form-control send-notify-country-key" type="number" placeholder="966"
+                        maxlength="4" />
+                    </div>
+                  </div>
+                  <div class="form-notify-me-submit-button-row">
+                    <button type="button" class="btn btn-primary btn-send-notify" onclick="sendProductNotifyMe()">
+                      <img loading="lazy" class="send-notify-progress d-none" src="{{ 'spinner.gif' | asset_url }}"
+                        width="15" height="15" />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff"
+                        fill="none">
+                        <path
+                          d="M21.0477 3.05293C18.8697 0.707363 2.48648 6.4532 2.50001 8.551C2.51535 10.9299 8.89809 11.6617 10.6672 12.1581C11.7311 12.4565 12.016 12.7625 12.2613 13.8781C13.3723 18.9305 13.9301 21.4435 15.2014 21.4996C17.2278 21.5892 23.1733 5.342 21.0477 3.05293Z"
+                          stroke="currentColor" stroke-width="1.5" />
+                        <path d="M11.5 12.5L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                          stroke-linejoin="round" />
+                      </svg>
+                      {{ _('Send') }}
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </form>
+        </section>
+
+              <!-- Bundle Product Selection Container -->
+      {% if product.product_class == 'dynamic_bundle' %}
+          {% include 'vitrin:products/bundle-products.jinja' %}
+      {% endif %}
+
+        {% if sm_banner %}
+          <img class="sm-banner" src="{{sm_banner}}" alt="sm-banner" />
+        {% endif %}
+
+        <div class="product-buttons {% if product.selected_product.out_of_stock %}d-none{% else %}d-block{% endif %}">
+          <div class="product-buttons-flex add-cart-page">
+          {% if product.selected_product.is_infinite or product.selected_product.quantity > 0 %}
+              <div class="quantity-add-cart column--quantity">
+                  {# <label>{{ _('Quantity') }}</label> #}
+                  <div class="select-quantity-div">
+                              <div class="quantity-input">
+                              <button type="button" id="increase-quantity" class="btn-quantity" aria-label="increase-quantity">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                                    <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                              </button>
+                                <input type="number" id="product-quantity-input" aria-label="quantity" name="quantity" min="1" value="1" readonly>
+                                <button type="button" id="decrease-quantity" class="btn-quantity" aria-label="decrease-quantity">
+                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                                      <path d="M20 12L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                  </svg>
+                                  </button>
+                              </div>
+                  </div>
+              </div>
+            {% endif %}
+            {% if is_pre_order and not is_out_stock %}
+              <button class="btn-add-to-cart" type="button" onclick="productAddToCart()">
+                <img loading="lazy" class="add-to-cart-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="25"
+                  height="25" />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M6.75 2C6.75 1.58579 6.41421 1.25 6 1.25C5.58579 1.25 5.25 1.58579 5.25 2V2.63479C4.44524 2.86288 3.7665 3.2336 3.20154 3.84436C2.42363 4.68535 2.07785 5.74792 1.91225 7.07951C1.74998 8.3843 1.74999 10.0565 1.75 12.19V12.81C1.74999 14.9435 1.74998 16.6157 1.91225 17.9205C2.07785 19.2521 2.42363 20.3147 3.20154 21.1556C3.98714 22.0049 4.99276 22.3901 6.25129 22.573C7.46932 22.75 9.02555 22.75 10.9892 22.75H13.0108C14.9745 22.75 16.5307 22.75 17.7487 22.573C19.0072 22.3901 20.0129 22.0049 20.7985 21.1556C21.5764 20.3147 21.9222 19.2521 22.0878 17.9205C22.25 16.6157 22.25 14.9435 22.25 12.8099V12.1901C22.25 10.0565 22.25 8.38431 22.0878 7.07951C21.9222 5.74792 21.5764 4.68535 20.7985 3.84436C20.2335 3.2336 19.5548 2.86288 18.75 2.63479V2C18.75 1.58579 18.4142 1.25 18 1.25C17.5858 1.25 17.25 1.58579 17.25 2V2.36589C16.1139 2.24997 14.716 2.24998 13.0108 2.25H10.9892C9.28402 2.24998 7.88606 2.24997 6.75 2.36589V2ZM4.30269 4.86292C4.56203 4.58256 4.87129 4.36791 5.2786 4.20584C5.36806 4.51998 5.65717 4.75 6 4.75C6.41421 4.75 6.75 4.41421 6.75 4V3.87459C7.81101 3.75156 9.18237 3.75 11.05 3.75H12.95C14.8176 3.75 16.189 3.75156 17.25 3.87459V4C17.25 4.41421 17.5858 4.75 18 4.75C18.3428 4.75 18.6319 4.51998 18.7214 4.20585C19.1287 4.36791 19.438 4.58256 19.6973 4.86292C20.1696 5.37347 20.4495 6.07336 20.5974 7.25H3.40261C3.55052 6.07336 3.83044 5.37347 4.30269 4.86292ZM3.28892 8.75H20.7111C20.7495 9.70689 20.75 10.8508 20.75 12.2432V12.7568C20.75 14.9551 20.7486 16.5339 20.5992 17.7354C20.4518 18.9208 20.1715 19.6244 19.6973 20.1371C19.2308 20.6414 18.6027 20.9331 17.533 21.0886C16.4352 21.2481 14.9881 21.25 12.95 21.25H11.05C9.01188 21.25 7.56476 21.2481 6.46704 21.0886C5.39728 20.9331 4.76921 20.6414 4.30269 20.1371C3.82849 19.6244 3.54821 18.9208 3.40078 17.7354C3.25137 16.5339 3.25 14.9551 3.25 12.7568V12.2432C3.25 10.8508 3.25055 9.70689 3.28892 8.75ZM13.0077 18.9431C13.3927 19.1731 13.7187 19.2521 13.9847 19.2521H13.9857C14.3127 19.2521 14.5497 19.132 14.6927 19.028C14.9537 18.839 15.3567 18.375 15.1327 17.391L14.8927 16.345C14.8937 16.344 14.8937 16.341 14.8937 16.341L15.7307 15.492C16.1857 15.041 16.3537 14.497 16.1927 14C16.0327 13.507 15.5827 13.167 14.9567 13.069L13.8807 12.886C13.8797 12.885 13.8787 12.8851 13.8787 12.8851L13.2787 11.678C12.9897 11.089 12.5237 10.75 12.0017 10.75H11.9997C11.4777 10.75 11.0107 11.088 10.7197 11.676L10.1187 12.886C10.1177 12.887 10.1167 12.887 10.1167 12.887L9.04571 13.069C8.42171 13.167 7.9717 13.506 7.8107 13.998C7.6487 14.494 7.8147 15.038 8.2637 15.486L9.1067 16.341C9.1077 16.343 9.1087 16.3471 9.1087 16.3471L8.8687 17.391C8.6347 18.407 9.0997 18.873 9.3107 19.026C9.5207 19.178 10.1047 19.476 10.9887 18.945L11.9997 18.346L13.0077 18.9431ZM13.6337 17.57L12.7367 17.038L12.7357 17.041C12.3087 16.777 11.6947 16.777 11.2647 17.04L10.3657 17.5721L10.5777 16.649C10.5777 16.6472 10.5781 16.6456 10.5786 16.6439C10.5791 16.642 10.5797 16.6402 10.5797 16.638C10.6787 16.179 10.5257 15.6481 10.1987 15.3141L9.4227 14.5271L10.4007 14.361C10.8237 14.292 11.2537 13.972 11.4457 13.584L11.9977 12.473L12.5487 13.582C12.7427 13.973 13.1747 14.293 13.5927 14.359L14.5757 14.526L13.7977 15.3141C13.4717 15.6481 13.3197 16.1801 13.4217 16.6471L13.6337 17.57Z"/>
+                </svg>
+                <span>{{ _('Pre Order') }}</span>
+              </button>
+            {% else %}
+              <button class="btn-add-to-cart" type="button" onclick="productAddToCart()">
+                <img loading="lazy" class="add-to-cart-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="25"
+                  height="25" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor"
+                  fill="none">
+                  <path
+                    d="M3.87289 17.0194L2.66933 9.83981C2.48735 8.75428 2.39637 8.21152 2.68773 7.85576C2.9791 7.5 3.51461 7.5 4.58564 7.5H19.4144C20.4854 7.5 21.0209 7.5 21.3123 7.85576C21.6036 8.21152 21.5126 8.75428 21.3307 9.83981L20.1271 17.0194C19.7282 19.3991 19.5287 20.5889 18.7143 21.2945C17.9 22 16.726 22 14.3782 22H9.62182C7.27396 22 6.10003 22 5.28565 21.2945C4.47127 20.5889 4.27181 19.3991 3.87289 17.0194Z"
+                    stroke="currentColor" stroke-width="1.5"></path>
+                  <path d="M17.5 7.5C17.5 4.46243 15.0376 2 12 2C8.96243 2 6.5 4.46243 6.5 7.5" stroke="currentColor"
+                    stroke-width="1.5"></path>
+                </svg>
+                <span>{{ _('Add to cart') }}</span>
+              </button>
+            {% endif %}
+
+          </div>
+          {# {% include 'vitrin:checkout/checkout_dialog.jinja' %}
+          {% if not safeget(store, 'settings.general.availability.closed_now') %}
+          <button class="btn btn-buy-now d-none" type="button" onclick="zidProductBuyNow()">
+            <img class="buy-now-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="25" height="25" />
+            <span>{{ _('Buy now') }}</span>
+          </button>
+          {% endif %} #}
+          <div class="apple-pay-button">
+            {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
+          </div>
+        </div>
+
+        {% if is_pre_order and not is_out_stock and pre_order_text %}
+          <p class="pre-order-text">{{ pre_order_text }}</p>
+        {% endif %}
+
+        {% if not is_pre_order and not is_out_stock %}
+          {% include 'components/shipping-options.jinja' %}
+        {% endif %}
+
+        <div id="product-view-add-to-cart"></div>
+          <div class="tp-mask payment-methods">
+            <div class="tp-marquee">
+                {% include 'components/payment-methods.jinja' %}
+            </div>
+          </div>
+      </div>
+    </section>
+  </div>
+  <div class="tp-product-bottom">
+    <div class="container">
+      {% if product.bundle_offer %}
+      <section class="bundle-offer-details-section s-block">
+                  <div class="flex-bundle">
+                      <div class="description-icon">
+                          <span class="icon-gift"></span>
+                      </div>
+                      <div class="description-title">
+                          <div class="bundle-offer-title">{{ product.bundle_offer.name }}</div>
+                          <div class="bundle-offer-title-description">{{ product.bundle_offer.description }}</div>
+                      </div>
+                  </div>
+                  <div class="description-paragrah">
+                      <div class="bundle-offer-products">
+                          <div class="bundle-offer-details-products products-grid">
+                              {% for product in product.bundle_offer.products.results[:5] %}
+                                      {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
+                              {% endfor %}
+                          </div>
+                      </div>
+                      {% if product.bundle_offer and product.bundle_offer.products and product.bundle_offer.products.results | length > 5 %}
+                    <div class="bundle-offer-more">
+                        <a class="tp-btn" href="javascript:;" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">{{ _("Display all products") }}</a>
+                    </div>
+                    {% endif %}
+                  </div>
+              </section>
+      {% include 'vitrin:products/grouped-product.jinja' %}
+      {#
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          bundleOfferProducts();
+        });
+      </script> #}
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="meta-mini"></div>
+  </div>
+
+{% if not hide_bar %}
+<div class="tp-bar bar-product-single" style="background: {{ bar_background_color }};">
+  <div class="tp-mask">
+    <div class="tp-marquee">
+      {% for item in (bar_list or []) %}
+        <a href="{% if item.url %}{{ item.url }}{% else %}javascript:;{% endif %}" style="color: {{ item.text_color }};">
+          {% if item.image %}
+            <img loading="lazy" width="26" height="26" class="lazy-img" src="{{ image_url(item.image) }}" alt="">
+          {% endif %}
+          {{ item.title }}
+        </a>
+      {% endfor %}
+    </div>
+    <div class="tp-marquee">
+      {% for item in (bar_list or []) %}
+        <a href="{% if item.url %}{{ item.url }}{% else %}javascript:;{% endif %}" style="color: {{ item.text_color }};">
+          {% if item.image %}
+            <img loading="lazy" width="26" height="26" class="lazy-img" src="{{ image_url(item.image) }}" alt="">
+          {% endif %}
+          {{ item.title }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+  <div class="container">
+    <div class="tp-product-details-tab-nav tp-tab">
+      <div class="tab-content" id="navPresentationTabContent">
+      {% if product.description %}
+        <div class="tab-pane" id="nav-description" role="tabpanel"
+          aria-labelledby="nav-description-tab">
+          <div class="description-box">
+            {{ product.description | safe }}
+          </div>
+        </div>
+      {% endif %}
+        <div class="videos-part">
+          <div class="tp-title-section">
+            <h3 class="videos-title"></h3>
+          </div>
+          <div class="videos-box">
+            <div class="tp-videos-items"></div>
+          </div>
+        </div>
+
+        <div class="compare-part">
+          <div class="tp-title-section">
+            <h3 class="compare-title"></h3>
+          </div>
+          <div class="compare-table"></div>
+        </div>
+
+        {% if store.settings.products.reviews_enabled %}
+        <div class="review-part">
+            <div class="total-review-progress">
+              <div class="tp-product-details-review-number">
+                <h3 class="tp-product-details-review-number-title">{{ _('Total ratings') }}</h3>
+                <div class="tp-product-details-review-summery">
+                  <div class="review-summery">
+                    <div class="tp-product-details-review-summery-value">
+                      <span>{{ product.rating.average or 0 }}</span>
+                    </div>
+                    <div class="tp-product-details-review-summery-rating">
+                      {% set rating = product.rating.average %}
+                      {% include 'components/rating-stars.jinja' %}
+                    </div>
+                  </div>
+                  <p>{{ _('Based on') }} ({{ product.rating.total_count or 0 }}
+                    {{ _('reviews') }})</p>
+                  <div class="rating-progress">
+                {% include 'components/rating-progress.jinja' %}
+                </div>
+                  <a href="/products/{{ product.slug}}/reviews/add" class="add-review-btn" id="add-review-btn">{{
+                    _('Add review') }} </a>
+                </div>
+              </div>
+              <div class="tp-product-details-review-wrapper">
+                <div class="tp-product-details-review-list">
+                  {% if product.reviews and product.reviews.results and product.reviews.results|length > 0 %}
+                  {% set reviews = product.reviews.results %}
+                  {% include 'components/customer-reviews.jinja' %}
+                  {% if product.reviews.pages_count > 1 %}
+                  <div class="all-reviews-box">
+                    <a href="/products/{{ product.id }}/reviews" type="button" class="all-reviews-btn">
+                      {{ _('View all reviews') }}
+                    </a>
+                  </div>
+                  {% endif %}
+                  {% else %}
+                  <div class="reviews-empty">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff"
+                      fill="none">
+                      <path
+                        d="M2 12C2 7.52166 2 5.28249 3.39124 3.89124C4.78249 2.5 7.02166 2.5 11.5 2.5C15.9783 2.5 18.2175 2.5 19.6088 3.89124C21 5.28249 21 7.52166 21 12C21 16.4783 21 18.7175 19.6088 20.1088C18.2175 21.5 15.9783 21.5 11.5 21.5C7.02166 21.5 4.78249 21.5 3.39124 20.1088C2 18.7175 2 16.4783 2 12Z"
+                        stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                      <path
+                        d="M12.3638 7.72209L13.2437 9.49644C13.3637 9.74344 13.6837 9.98035 13.9536 10.0257L15.5485 10.2929C16.5684 10.4643 16.8083 11.2103 16.0734 11.9462L14.8335 13.1964C14.6236 13.4081 14.5086 13.8164 14.5736 14.1087L14.9285 15.6562C15.2085 16.8812 14.5636 17.355 13.4887 16.7148L11.9939 15.8226C11.7239 15.6613 11.2789 15.6613 11.004 15.8226L9.50913 16.7148C8.43925 17.355 7.78932 16.8761 8.06929 15.6562L8.42425 14.1087C8.48925 13.8164 8.37426 13.4081 8.16428 13.1964L6.92442 11.9462C6.1945 11.2103 6.42947 10.4643 7.44936 10.2929L9.04419 10.0257C9.30916 9.98035 9.62912 9.74344 9.74911 9.49644L10.629 7.72209C11.109 6.7593 11.8889 6.7593 12.3638 7.72209Z"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span>{{ _('No reviews yet') }}</span>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if store.settings.products.questions_enabled %}
+        <div class="tab-pane" id="nav-question" role="tabpanel" aria-labelledby="nav-question-tab">
+          {# <div class="tp-title-section">
+            <h3>{{ _('Questions') }}</h3>
+          </div> #}
+          {% if product.questions %}
+          <h3 class="tp-product-details-review-title">
+            {{ _('Questions') }}
+            <a href="javascript:;" class="add-review-btn addQuestionButton" id="addQuestionButton">
+              <span class="icon-add_circle"></span>{{ _('Ask a question') }}</a>
+          </h3>
+          {% endif %}
+          {% set questions = product.questions %}
+          {% include 'components/product-questions.jinja' %}
+        </div>
+        {% endif %}
+
+        <div class="faqs-part">
+          <div class="tp-title-section">
+            <h3 class="faqs-title"></h3>
+          </div>
+          <div class="faqs-box" id="faqs-box"></div>
+        </div>
+
+        {% if product.metafields %}
+        <div class="tab-pane" id="nav-metafields" role="tabpanel" aria-labelledby="nav-metafields-tab" style="display: none;">
+          <div class="tp-title-section">
+            <h3>{{ _('Specifications') }}</h3>
+          </div>
+          <div class="description-paragrah">
+            {% include 'vitrin:shared/metafields.jinja' %}
+          </div>
+        </div>
+        {% endif %}
+        {% if product.has_variants %}
+        <div class="tab-pane" id="nav-variants" role="tabpanel" aria-labelledby="nav-variants-tab" style="display: none;">
+          {# <div class="tp-title-section">
+            <h3>{{ _('Options') }}</h3>
+          </div> #}
+          <div class="card-table d-none d-lg-block">
+            <div class="card">
+              <div class="card-body card-table-header">
+                <div class="row">
+                  {% for option in product.options %}
+                  <div class="col">{{option.name}}</div>
+                  {% endfor %}
+                  <div class="col col-price">{{ _('Images') }}</div>
+                  <div class="col col-price">{{ _('Price') }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% for variant in product.variants %}
+          {% if not variant.unavailable %}
+          <div class="card-table options-table">
+            <div class="card">
+              <div class="card-body">
+                <div class="row flex-column flex-lg-row align-items-start align-items-lg-center">
+                  {% for attribute in variant.attributes %}
+                  <div class="col m-col">
+                    <span class="variant-name-sm d-inline-block d-lg-none">{{ product.options[loop.index0].name }}</span>
+                    <span>{{ attribute.value }}</span>
+                  </div>
+                  {% endfor %}
+
+                  <div class="col">
+                    {% if variant.images | length > 0 %}
+                    <div class="d-flex m-col">
+                      {% for image in variant.images %}
+                      <div class="variant-image-wrapper" data-var-id="{{ variant.id }}">
+                        <div class="box-1-1">
+                          <div class="content">
+                            <a data-index="{{ loop.index0 }}" data-link-var-id="{{ variant.id }}"
+                              class="d-flex align-items-center justify-content-center"
+                              style="width: 100%; height: 100%;" href="javascript:;">
+                              <img loading="lazy" src="{{ image.image.medium }}"
+                                data-image-url="{{ image.image.full_size }}">
+                            </a>
+                          </div>
+                        </div>
+
+                      </div>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <span class="d-none d-lg-inline">{{ _('No image') }}</span>
+                    {% endif %}
+                  </div>
+                  <div class="col m-col">
+                    <span class="variant-name-sm d-inline-block d-lg-none">{{ _('Price') }}</span>
+                    {% if variant.sale_price %}
+                    <h4 style="font-size: 1.2rem" class="price-detail d-inline-block">{{
+                      variant.sale_price }}
+                      <del>{{ variant.price }}</del>
+                    </h4>
+                    {% else %}
+                    <h4 class="d-inline-block" style="font-size: 1.2rem">{{ variant.price }}</h4>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="tp-product-bottom">
+    <div class="container">
+      {% if (product.related_products | length) > 0 %}
+      <section class="tp-product-card s-block">
+        <div class="tp-title-section">
+          <h3>{{ _('You may also like') }}</h3>
+        </div>
+
+        {% include 'components/related-products.jinja' %}
+        
+      </section>
+
+      <script>
+              var showRelatedProducts = function () {
+          var arrowNextClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_right': 'icon-keyboard_arrow_left';
+          var arrowPrevClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_left' : 'icon-keyboard_arrow_right';
+          $('#related-products').slick({
+              slidesToShow: 5,
+              slidesToScroll: 5,
+              infinite: true,
+              autoplay: true,
+              autoplaySpeed: 3000,
+              arrows: true,
+              dots: false,
+              rtl: !(window.appDirection === 'ltr'),
+              nextArrow:'<button class="slick-next slick-arrow" aria-label="Next" type="button" style=""><span class="'+arrowNextClass+'"></span></button>',
+              prevArrow:'<button class="slick-prev slick-arrow" aria-label="Previous" type="button" style=""><span class="'+arrowPrevClass+'"></span></button>',
+              responsive: [
+                {
+                breakpoint: 1200,
+                settings: {
+                  slidesToShow: 5,
+                  slidesToScroll: 5,
+                }
+              },
+              {
+                breakpoint: 1024,
+                settings: {
+                  slidesToShow: 4,
+                  slidesToScroll: 4,
+                }
+              },
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 3,
+                  slidesToScroll: 3,
+                }
+              },
+              {
+                breakpoint: 450,
+                settings: {
+                  slidesToShow: 2,
+                  slidesToScroll: 2,
+                }
+              },
+              {
+                breakpoint: 350,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                }
+              }
+            ]
+          });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+          showRelatedProducts();
+        });
+      </script>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if product.bundle_offer and product.bundle_offer.products.results | length > 5 %}
+      <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-fullscreen modal-dialog-scrollable bundle-offer-products-dialog">
+              <div class="modal-content">
+                  <div class="modal-body">
+                      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" style="font-size: 40px;">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                          <div class="bundle-offer-products">
+                              <div class="bundle-offer-details-products-all products-grid">
+                              {% for product in product.bundle_offer.products.results %}
+                                {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
+                              {% endfor %}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      {% endif %}
+
+
+{% if store.settings.products.questions_enabled %}
+{% include 'components/product-question-add.jinja' %}
+{% endif %}
+
+{% if sticky_cart %}
+<div class="sticky-cart">
+  <div class="product-buttons {% if product.selected_product.out_of_stock %}d-none{% else %}d-block{% endif %}">
+    <div class="product-buttons-flex">
+      {% if product.selected_product.is_infinite or product.selected_product.quantity > 0 %}
+        <div class="select-quantity-div">
+          <div class="quantity-input">
+            <button type="button" id="increase-quantity" class="btn-quantity">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+            <input type="number" id="product-quantity" aria-label="quantity" name="quantity" class="select-quantity" min="1"
+              value="1" readonly>
+            <button type="button" id="decrease-quantity" class="btn-quantity">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                <path d="M20 12L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        {% endif %}
+      {% if is_pre_order and not is_out_stock %}
+        <button class="btn-add-to-cart checkout-btn" type="button" onclick="productAddToCart()">
+          <img loading="lazy" class="add-to-cart-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="25"
+            height="25" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.75 2C6.75 1.58579 6.41421 1.25 6 1.25C5.58579 1.25 5.25 1.58579 5.25 2V2.63479C4.44524 2.86288 3.7665 3.2336 3.20154 3.84436C2.42363 4.68535 2.07785 5.74792 1.91225 7.07951C1.74998 8.3843 1.74999 10.0565 1.75 12.19V12.81C1.74999 14.9435 1.74998 16.6157 1.91225 17.9205C2.07785 19.2521 2.42363 20.3147 3.20154 21.1556C3.98714 22.0049 4.99276 22.3901 6.25129 22.573C7.46932 22.75 9.02555 22.75 10.9892 22.75H13.0108C14.9745 22.75 16.5307 22.75 17.7487 22.573C19.0072 22.3901 20.0129 22.0049 20.7985 21.1556C21.5764 20.3147 21.9222 19.2521 22.0878 17.9205C22.25 16.6157 22.25 14.9435 22.25 12.8099V12.1901C22.25 10.0565 22.25 8.38431 22.0878 7.07951C21.9222 5.74792 21.5764 4.68535 20.7985 3.84436C20.2335 3.2336 19.5548 2.86288 18.75 2.63479V2C18.75 1.58579 18.4142 1.25 18 1.25C17.5858 1.25 17.25 1.58579 17.25 2V2.36589C16.1139 2.24997 14.716 2.24998 13.0108 2.25H10.9892C9.28402 2.24998 7.88606 2.24997 6.75 2.36589V2ZM4.30269 4.86292C4.56203 4.58256 4.87129 4.36791 5.2786 4.20584C5.36806 4.51998 5.65717 4.75 6 4.75C6.41421 4.75 6.75 4.41421 6.75 4V3.87459C7.81101 3.75156 9.18237 3.75 11.05 3.75H12.95C14.8176 3.75 16.189 3.75156 17.25 3.87459V4C17.25 4.41421 17.5858 4.75 18 4.75C18.3428 4.75 18.6319 4.51998 18.7214 4.20585C19.1287 4.36791 19.438 4.58256 19.6973 4.86292C20.1696 5.37347 20.4495 6.07336 20.5974 7.25H3.40261C3.55052 6.07336 3.83044 5.37347 4.30269 4.86292ZM3.28892 8.75H20.7111C20.7495 9.70689 20.75 10.8508 20.75 12.2432V12.7568C20.75 14.9551 20.7486 16.5339 20.5992 17.7354C20.4518 18.9208 20.1715 19.6244 19.6973 20.1371C19.2308 20.6414 18.6027 20.9331 17.533 21.0886C16.4352 21.2481 14.9881 21.25 12.95 21.25H11.05C9.01188 21.25 7.56476 21.2481 6.46704 21.0886C5.39728 20.9331 4.76921 20.6414 4.30269 20.1371C3.82849 19.6244 3.54821 18.9208 3.40078 17.7354C3.25137 16.5339 3.25 14.9551 3.25 12.7568V12.2432C3.25 10.8508 3.25055 9.70689 3.28892 8.75ZM13.0077 18.9431C13.3927 19.1731 13.7187 19.2521 13.9847 19.2521H13.9857C14.3127 19.2521 14.5497 19.132 14.6927 19.028C14.9537 18.839 15.3567 18.375 15.1327 17.391L14.8927 16.345C14.8937 16.344 14.8937 16.341 14.8937 16.341L15.7307 15.492C16.1857 15.041 16.3537 14.497 16.1927 14C16.0327 13.507 15.5827 13.167 14.9567 13.069L13.8807 12.886C13.8797 12.885 13.8787 12.8851 13.8787 12.8851L13.2787 11.678C12.9897 11.089 12.5237 10.75 12.0017 10.75H11.9997C11.4777 10.75 11.0107 11.088 10.7197 11.676L10.1187 12.886C10.1177 12.887 10.1167 12.887 10.1167 12.887L9.04571 13.069C8.42171 13.167 7.9717 13.506 7.8107 13.998C7.6487 14.494 7.8147 15.038 8.2637 15.486L9.1067 16.341C9.1077 16.343 9.1087 16.3471 9.1087 16.3471L8.8687 17.391C8.6347 18.407 9.0997 18.873 9.3107 19.026C9.5207 19.178 10.1047 19.476 10.9887 18.945L11.9997 18.346L13.0077 18.9431ZM13.6337 17.57L12.7367 17.038L12.7357 17.041C12.3087 16.777 11.6947 16.777 11.2647 17.04L10.3657 17.5721L10.5777 16.649C10.5777 16.6472 10.5781 16.6456 10.5786 16.6439C10.5791 16.642 10.5797 16.6402 10.5797 16.638C10.6787 16.179 10.5257 15.6481 10.1987 15.3141L9.4227 14.5271L10.4007 14.361C10.8237 14.292 11.2537 13.972 11.4457 13.584L11.9977 12.473L12.5487 13.582C12.7427 13.973 13.1747 14.293 13.5927 14.359L14.5757 14.526L13.7977 15.3141C13.4717 15.6481 13.3197 16.1801 13.4217 16.6471L13.6337 17.57Z"/>
+          </svg>
+          <span>{{ _('Pre Order') }}</span>
+        </button>
+      {% else %}
+        <button class="btn-add-to-cart" type="button" onclick="productAddToCart()">
+          <img loading="lazy" class="add-to-cart-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="25"
+            height="25" />
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor"
+            fill="none">
+            <path
+              d="M3.87289 17.0194L2.66933 9.83981C2.48735 8.75428 2.39637 8.21152 2.68773 7.85576C2.9791 7.5 3.51461 7.5 4.58564 7.5H19.4144C20.4854 7.5 21.0209 7.5 21.3123 7.85576C21.6036 8.21152 21.5126 8.75428 21.3307 9.83981L20.1271 17.0194C19.7282 19.3991 19.5287 20.5889 18.7143 21.2945C17.9 22 16.726 22 14.3782 22H9.62182C7.27396 22 6.10003 22 5.28565 21.2945C4.47127 20.5889 4.27181 19.3991 3.87289 17.0194Z"
+              stroke="currentColor" stroke-width="1.5"></path>
+            <path d="M17.5 7.5C17.5 4.46243 15.0376 2 12 2C8.96243 2 6.5 4.46243 6.5 7.5" stroke="currentColor"
+              stroke-width="1.5"></path>
+          </svg>
+          <span>{{ _('Add to cart') }}</span>
+        </button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+<div id="svg-icons" style="display:none;">
+    <svg id="icon-stars" width="112" height="16" viewBox="0 0 112 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M7.9974 0.833252C8.69691 0.833252 9.24792 1.36161 9.59969 2.07453L10.7744 4.44336C10.81 4.51667 10.8944 4.61991 11.0214 4.71434C11.1482 4.80868 11.2724 4.86073 11.3541 4.87446L13.4805 5.23067C14.2486 5.35974 14.8924 5.73625 15.1014 6.39185C15.3102 7.04691 15.0042 7.72766 14.4519 8.28101L14.4514 8.28155L12.7994 9.94716C12.7339 10.0132 12.6606 10.1375 12.6146 10.2995C12.5689 10.4605 12.5649 10.607 12.5856 10.7018L12.5859 10.7031L13.0585 12.7635C13.2545 13.6211 13.1896 14.4715 12.5847 14.916C11.9778 15.3621 11.1485 15.1644 10.395 14.7157L8.4017 13.5259C8.318 13.4759 8.17424 13.4354 8.00073 13.4354C7.82849 13.4354 7.68171 13.4754 7.59256 13.5272L7.5913 13.528L5.60192 14.7154C4.84937 15.1657 4.02103 15.3599 3.41407 14.9134C2.80966 14.4687 2.74143 13.6199 2.93807 12.7631L3.4106 10.7031L3.41089 10.7018C3.43161 10.607 3.42755 10.4605 3.38187 10.2995C3.33587 10.1375 3.26252 10.0132 3.19705 9.94716L1.5439 8.28034C0.995098 7.72701 0.690138 7.04685 0.897298 6.39276C1.10506 5.73675 1.74762 5.35979 2.51622 5.23063L4.64088 4.87471L4.64156 4.8746C4.71945 4.86108 4.8418 4.80962 4.96832 4.71504C5.09507 4.62028 5.17973 4.51682 5.21541 4.44336L5.21721 4.4397L6.39041 2.0739L6.39088 2.07297C6.74597 1.36064 7.29869 0.833252 7.9974 0.833252Z"
+            fill="#F39C12" />
+        <path
+            d="M31.9974 0.833252C32.6969 0.833252 33.2479 1.36161 33.5997 2.07453L34.7744 4.44336C34.81 4.51667 34.8944 4.61991 35.0214 4.71434C35.1482 4.80868 35.2724 4.86073 35.3541 4.87446L37.4805 5.23067C38.2486 5.35974 38.8924 5.73625 39.1014 6.39185C39.3102 7.04691 39.0042 7.72766 38.4519 8.28101L38.4514 8.28155L36.7994 9.94716C36.7339 10.0132 36.6606 10.1375 36.6146 10.2995C36.5689 10.4605 36.5649 10.607 36.5856 10.7018L36.5859 10.7031L37.0585 12.7635C37.2545 13.6211 37.1896 14.4715 36.5847 14.916C35.9778 15.3621 35.1485 15.1644 34.395 14.7157L32.4017 13.5259C32.318 13.4759 32.1742 13.4354 32.0007 13.4354C31.8285 13.4354 31.6817 13.4754 31.5926 13.5272L31.5913 13.528L29.6019 14.7154C28.8494 15.1657 28.021 15.3599 27.4141 14.9134C26.8097 14.4687 26.7414 13.6199 26.9381 12.7631L27.4106 10.7031L27.4109 10.7018C27.4316 10.607 27.4276 10.4605 27.3819 10.2995C27.3359 10.1375 27.2625 10.0132 27.1971 9.94716L25.5439 8.28034C24.9951 7.72701 24.6901 7.04685 24.8973 6.39276C25.1051 5.73675 25.7476 5.35979 26.5162 5.23063L28.6409 4.87471L28.6416 4.8746C28.7194 4.86108 28.8418 4.80962 28.9683 4.71504C29.0951 4.62028 29.1797 4.51682 29.2154 4.44336L29.2172 4.4397L30.3904 2.0739L30.3909 2.07297C30.746 1.36064 31.2987 0.833252 31.9974 0.833252Z"
+            fill="#F39C12" />
+        <path
+            d="M55.9974 0.833252C56.6969 0.833252 57.2479 1.36161 57.5997 2.07453L58.7744 4.44336C58.81 4.51667 58.8944 4.61991 59.0214 4.71434C59.1482 4.80868 59.2724 4.86073 59.3541 4.87446L61.4805 5.23067C62.2486 5.35974 62.8924 5.73625 63.1014 6.39185C63.3102 7.04691 63.0042 7.72766 62.4519 8.28101L62.4514 8.28155L60.7994 9.94716C60.7339 10.0132 60.6606 10.1375 60.6146 10.2995C60.5689 10.4605 60.5649 10.607 60.5856 10.7018L60.5859 10.7031L61.0585 12.7635C61.2545 13.6211 61.1896 14.4715 60.5847 14.916C59.9778 15.3621 59.1485 15.1644 58.395 14.7157L56.4017 13.5259C56.318 13.4759 56.1742 13.4354 56.0007 13.4354C55.8285 13.4354 55.6817 13.4754 55.5926 13.5272L55.5913 13.528L53.6019 14.7154C52.8494 15.1657 52.021 15.3599 51.4141 14.9134C50.8097 14.4687 50.7414 13.6199 50.9381 12.7631L51.4106 10.7031L51.4109 10.7018C51.4316 10.607 51.4276 10.4605 51.3819 10.2995C51.3359 10.1375 51.2625 10.0132 51.1971 9.94716L49.5439 8.28034C48.9951 7.72701 48.6901 7.04685 48.8973 6.39276C49.1051 5.73675 49.7476 5.35979 50.5162 5.23063L52.6409 4.87471L52.6416 4.8746C52.7194 4.86108 52.8418 4.80962 52.9683 4.71504C53.0951 4.62028 53.1797 4.51682 53.2154 4.44336L53.2172 4.4397L54.3904 2.0739L54.3909 2.07297C54.746 1.36064 55.2987 0.833252 55.9974 0.833252Z"
+            fill="#F39C12" />
+        <path
+            d="M79.9974 0.833252C80.6969 0.833252 81.2479 1.36161 81.5997 2.07453L82.7744 4.44336C82.81 4.51667 82.8944 4.61991 83.0214 4.71434C83.1482 4.80868 83.2724 4.86073 83.3541 4.87446L85.4805 5.23067C86.2486 5.35974 86.8924 5.73625 87.1014 6.39185C87.3102 7.04691 87.0042 7.72766 86.4519 8.28101L86.4514 8.28155L84.7994 9.94716C84.7339 10.0132 84.6606 10.1375 84.6146 10.2995C84.5689 10.4605 84.5649 10.607 84.5856 10.7018L84.5859 10.7031L85.0585 12.7635C85.2545 13.6211 85.1896 14.4715 84.5847 14.916C83.9778 15.3621 83.1485 15.1644 82.395 14.7157L80.4017 13.5259C80.318 13.4759 80.1742 13.4354 80.0007 13.4354C79.8285 13.4354 79.6817 13.4754 79.5926 13.5272L79.5913 13.528L77.6019 14.7154C76.8494 15.1657 76.021 15.3599 75.4141 14.9134C74.8097 14.4687 74.7414 13.6199 74.9381 12.7631L75.4106 10.7031L75.4109 10.7018C75.4316 10.607 75.4276 10.4605 75.3819 10.2995C75.3359 10.1375 75.2625 10.0132 75.1971 9.94716L73.5439 8.28034C72.9951 7.72701 72.6901 7.04685 72.8973 6.39276C73.1051 5.73675 73.7476 5.35979 74.5162 5.23063L76.6409 4.87471L76.6416 4.8746C76.7194 4.86108 76.8418 4.80962 76.9683 4.71504C77.0951 4.62028 77.1797 4.51682 77.2154 4.44336L77.2172 4.4397L78.3904 2.0739L78.3909 2.07297C78.746 1.36064 79.2987 0.833252 79.9974 0.833252Z"
+            fill="#F39C12" />
+        <path
+            d="M103.997 0.833252C104.697 0.833252 105.248 1.36161 105.6 2.07453L106.774 4.44336C106.81 4.51667 106.894 4.61991 107.021 4.71434C107.148 4.80868 107.272 4.86073 107.354 4.87446L109.48 5.23067C110.249 5.35974 110.892 5.73625 111.101 6.39185C111.31 7.04691 111.004 7.72766 110.452 8.28101L110.451 8.28155L108.799 9.94716C108.734 10.0132 108.661 10.1375 108.615 10.2995C108.569 10.4605 108.565 10.607 108.586 10.7018L108.586 10.7031L109.058 12.7635C109.255 13.6211 109.19 14.4715 108.585 14.916C107.978 15.3621 107.148 15.1644 106.395 14.7157L104.402 13.5259C104.318 13.4759 104.174 13.4354 104.001 13.4354C103.828 13.4354 103.682 13.4754 103.593 13.5272L103.591 13.528L101.602 14.7154C100.849 15.1657 100.021 15.3599 99.4141 14.9134C98.8097 14.4687 98.7414 13.6199 98.9381 12.7631L99.4106 10.7031L99.4109 10.7018C99.4316 10.607 99.4276 10.4605 99.3819 10.2995C99.3359 10.1375 99.2625 10.0132 99.1971 9.94716L97.5439 8.28034C96.9951 7.72701 96.6901 7.04685 96.8973 6.39276C97.1051 5.73675 97.7476 5.35979 98.5162 5.23063L100.641 4.87471L100.642 4.8746C100.719 4.86108 100.842 4.80962 100.968 4.71504C101.095 4.62028 101.18 4.51682 101.215 4.44336L101.217 4.4397L102.39 2.0739L102.391 2.07297C102.746 1.36064 103.299 0.833252 103.997 0.833252Z"
+            fill="#F39C12" />
+    </svg>
+    <svg id="icon-mute" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"
+        color="#000000" fill="none">
+        <path
+            d="M14 14.8135V9.18646C14 6.04126 14 4.46866 13.0747 4.0773C12.1494 3.68593 11.0603 4.79793 8.88232 7.02192C7.75439 8.17365 7.11085 8.42869 5.50604 8.42869C4.10257 8.42869 3.40084 8.42869 2.89675 8.77262C1.85035 9.48655 2.00852 10.882 2.00852 12C2.00852 13.118 1.85035 14.5134 2.89675 15.2274C3.40084 15.5713 4.10257 15.5713 5.50604 15.5713C7.11085 15.5713 7.75439 15.8264 8.88232 16.9781C11.0603 19.2021 12.1494 20.3141 13.0747 19.9227C14 19.5313 14 17.9587 14 14.8135Z"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M18 10L22 14M18 14L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+    </svg>
+    <svg id="icon-unmute" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+        height="24" color="#000000" fill="none">
+        <path
+            d="M14 14.8135V9.18646C14 6.04126 14 4.46866 13.0747 4.0773C12.1494 3.68593 11.0603 4.79793 8.88232 7.02192C7.75439 8.17365 7.11085 8.42869 5.50604 8.42869C4.10257 8.42869 3.40084 8.42869 2.89675 8.77262C1.85035 9.48655 2.00852 10.882 2.00852 12C2.00852 13.118 1.85035 14.5134 2.89675 15.2274C3.40084 15.5713 4.10257 15.5713 5.50604 15.5713C7.11085 15.5713 7.75439 15.8264 8.88232 16.9781C11.0603 19.2021 12.1494 20.3141 13.0747 19.9227C14 19.5313 14 17.9587 14 14.8135Z"
+            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M17 9C17.6254 9.81968 18 10.8634 18 12C18 13.1366 17.6254 14.1803 17 15" stroke="#000000"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M20 7C21.2508 8.36613 22 10.1057 22 12C22 13.8943 21.2508 15.6339 20 17" stroke="#000000"
+            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <svg id="icon-play" width="17" height="23" viewBox="0 0 17 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M15.4324 9.7218C16.4657 10.5225 16.4657 12.083 15.4324 12.8837L3.93296 21.7942C2.61872 22.8125 0.707951 21.8758 0.707951 20.2132L0.707952 2.39223C0.707952 0.729617 2.61872 -0.207059 3.93296 0.8113L15.4324 9.7218Z"
+            fill="#1E1E1E" fill-opacity="0.5"></path>
+    </svg>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include 'footer.jinja' %}
+{% endblock %}
+
+{% block footer_scripts %}
+
+    <script type="text/javascript" src="{{ 'ekko-lightbox.min.js' | asset_url }}"></script>
+    <script type="text/javascript" src="{{ 'product-details.js' | asset_url }}"></script>
+    <script type="text/javascript" src="{{ 'toastr.min.js' | asset_url }}"></script>
+
+    {{ product_view_scripts| safe }}
+
+      <script>
+          var store_currency = '{{ session.currency.code }}';
+          var store_lang = '{{ session.lang }}';
+        </script>
+
+<script>
+(function() {
+  var productData = {{ product.selected_product | tojson }};
+
+  // نتحقق أولاً أن هناك تصنيفات للمنتج
+  if (!productData.categories || !productData.categories.length) return;
+
+  const breadcrumbOl = document.querySelector("#breadcrumb");
+  if (!breadcrumbOl) return;
+
+  const productLi = breadcrumbOl.querySelector("li.active");
+  if (!productLi) return;
+
+  // إزالة كل العناصر القديمة ماعدا الصفحة الرئيسية والمنتج
+  breadcrumbOl.querySelectorAll("li:not(:first-child):not(.active)").forEach(el => el.remove());
+
+  // اختيار التصنيف "الأكثر تحديدًا" حسب عدد parents (إن وجد)
+  let categoriesSorted = productData.categories.slice().sort(
+    (a, b) => (b.meta?.parents?.length || 0) - (a.meta?.parents?.length || 0)
+  );
+
+  const mainCategory = categoriesSorted[0]; // أكثر تصنيف تحديدًا
+
+  // بناء المسار من parents
+  const categoryPath = [];
+
+  if (mainCategory.meta?.parents?.length) {
+    mainCategory.meta.parents.slice().reverse().forEach(parentId => {
+      const parentCat = productData.categories.find(c => Number(c.id) === Number(parentId));
+      // إخفاء التصنيف إذا لم يتم العثور عليه بدلاً من عرض "تصنيف مفقود"
+      if (parentCat) {
+        categoryPath.push(parentCat);
+      }
+    });
+  }
+
+  // إضافة التصنيف الرئيسي
+  categoryPath.push(mainCategory);
+
+  // إنشاء عناصر الـ breadcrumb
+  categoryPath.forEach(cat => {
+    // التحقق من أن التصنيف موجود وليس "تصنيف مفقود"
+    if (cat && cat.name && cat.name !== "تصنيف مفقود") {
+      const li = document.createElement("li");
+      li.classList.add("breadcrumb-item");
+
+      const a = document.createElement("a");
+      a.href = cat.id && cat.slug ? `/categories/${cat.id}/${cat.slug}` : "#";
+      a.textContent = cat.name;
+
+      li.appendChild(a);
+      breadcrumbOl.insertBefore(li, productLi);
+    }
+  });
+
+})();
+</script>
+
+    <script>
+        var productImages = {{  product.selected_product.media | tojson | safe }};
+        var customerWishlistIds = {{ (customer.wishlist if (customer is defined and customer) else []) | tojson | safe }};
+        var preOrderProductIds = [];
+        {% for item in (pre_order_list or []) %}
+        preOrderProductIds.push("{{ item.product.id }}");
+        {% endfor %}
+        if (typeof window.loadTamaraProductWidget !== 'function') {
+            window.loadTamaraProductWidget = function() {};
+        }
+
+        (function(){
+            var pageSection = document.querySelector('section.product.products-details-page');
+            if(!pageSection) return;
+
+            var hadThumbBottomFromServer = pageSection.classList.contains('thumb-bottom');
+
+            function applyThumbBottomClass(){
+                var isSmall = window.innerWidth <= 992;
+                if(isSmall){
+                    pageSection.classList.add('thumb-bottom');
+                } else {
+                    if(!hadThumbBottomFromServer){
+                        pageSection.classList.remove('thumb-bottom');
+                    }
+                }
+            }
+
+            applyThumbBottomClass();
+            window.addEventListener('resize', applyThumbBottomClass);
+        })();
+
+        $(window).on('load', function () {
+            if (window.checkout_dialog) {
+                $('.btn-buy-now').removeClass('d-none');
+            }
+        });
+
+        window.zidProductBuyNow = async () => {
+
+            const buyNowLoading = (isLoading) => {
+                const buttonElement = $('.btn-buy-now');
+                const loaderElement = $('.buy-now-progress');
+                const iconElement = $('.buy-now-icon');
+
+                buttonElement.prop('disabled', isLoading);
+                loaderElement.toggleClass('d-none', !isLoading);
+                iconElement.toggleClass('d-none', isLoading);
+            };
+            
+            const bundlePayload = window.bundleCartPayload;
+            const addProductOptions = bundlePayload ? { ...bundlePayload, form_id: 'product-form' } : { form_id: 'product-form' };
+
+            try {
+
+                buyNowLoading(true);
+
+                const response = await window.zid.cart.buyNow(addProductOptions, { showErrorNotification: true });
+
+                buyNowLoading(false);
+
+            } catch(error) {
+                console.error(error, 'Buy Now failed');
+            }
+
+            buyNowLoading(false);
+
+        }
+
+        // Listen for bundle selection changes and update payload
+        window.addEventListener('vitrin:bundle-selections:updated', function(event) {
+            const cartData = event?.detail?.data;
+            const bundlePayload = cartData?.cartPayload;
+            const isValid = cartData?.isSelectionsValid;
+
+            // Store the bundle payload globally so productAddToCart can use it
+            window.bundleCartPayload = bundlePayload;
+
+            // cart button is initially disabled until bundle selections are valid
+            const buyNowButton = $('.btn-buy-now');
+            const addToCartBtn = document.querySelector('.btn-add-to-cart');
+            
+
+            if (addToCartBtn) {
+                if (!isValid) {
+                    addToCartBtn.classList.add('disabled');
+                    addToCartBtn.disabled = true;
+                    buyNowButton.prop('disabled', true);
+                } else {
+                    addToCartBtn.classList.remove('disabled');
+                    addToCartBtn.disabled = false;
+                    buyNowButton.disabled = false;
+                    buyNowButton.prop('disabled', false);
+                }
+            }
+        });
+
+
+        window.productAddToCart = function() {
+           const addToCartBtn = document.querySelector('.btn-add-to-cart');
+
+          if(addToCartBtn.disabled) return;
+
+          if (typeof $ === 'undefined') {
+              return;
+          }
+          
+          if (!$('.add-to-cart-progress').hasClass('d-none')) {
+              return;
+          }
+
+          $('.add-to-cart-progress').removeClass('d-none');
+          $('.add-to-cart-icon').addClass('d-none');
+
+          var quantity = parseInt($('#product-quantity').val()) || 1;
+          var productId = $('#product-id').val() || '{{ product.selected_product.id }}';
+
+          if (!window.zid || !window.zid.cart || !window.zid.cart.addProduct) {
+               $('.add-to-cart-progress').addClass('d-none');
+               $('.add-to-cart-icon').removeClass('d-none');
+              window.zid?.toaster?.showError('{{ _("Cart service not available") }}');
+              return;
+          }
+
+          const bundlePayload = window.bundleCartPayload;
+          const addProductOptions = bundlePayload ?
+            { ...bundlePayload, form_id: 'product-form' } :
+            { form_id: 'product-form' };
+
+          window.zid.cart.addProduct(addProductOptions, { showErrorNotification: true }).then(function(response) {
+              if (response && response.item && response.cart_items_quantity) {
+                  
+                  if (response.cart_items_quantity) {
+                      $('.cart-badge').removeClass('d-none').text(response.cart_items_quantity);
+                  }
+                  
+                  if (typeof fetchCart === 'function') {
+                      fetchCart()
+                  }
+
+                  $('.added-notification').addClass("show");
+                  setTimeout(function() {
+                      $('.added-notification').removeClass("show");
+                  }, 5000);
+
+                  window.zid?.toaster?.showSuccess('{{ _("Added to cart successfully") }}');
+
+                  var image = $('#product-images-slick .slick-slide.slick-active img');
+                  var cart = $('.a-shopping-cart');
+
+                  if (image.length && cart.length && typeof addToCartAnimation === 'function') {
+                      addToCartAnimation(cart, image);
+                  }
+
+              } else {
+                  var errorMessage = response && response.message ? response.message : '{{ _("Failed to add to cart") }}';
+                  window.zid?.toaster?.showError(errorMessage);
+              }
+
+              $('.add-to-cart-progress').addClass('d-none');
+              $('.add-to-cart-icon').removeClass('d-none');
+          }).catch(function(error) {
+
+              $('.add-to-cart-progress').addClass('d-none');
+              $('.add-to-cart-icon').removeClass('d-none');
+          });
+      };
+
+      let isMainProductPreOrder = false;
+
+      document.addEventListener("DOMContentLoaded", function() {
+        const mainProductId = "{{ product.id }}";
+        isMainProductPreOrder = preOrderProductIds.includes(String(mainProductId));
+        if (isMainProductPreOrder) {
+          $('.btn-add-to-cart span').html('{{ _('Pre Order') }}');
+        } else {
+          $('.btn-add-to-cart span').html('{{ _('Add to cart') }}');
+        }
+      });
+
+        function productOptionsChanged(selected_product) {
+          if (selected_product) {
+              $('#product-id').val(selected_product.id)
+              $('.send-notify-product-id').val(selected_product.id)
+
+              if (selected_product.in_stock) {
+                  if (isMainProductPreOrder) {
+            $('.btn-add-to-cart span').html('{{ _('Pre Order') }}');
+          } else {
+            $('.btn-add-to-cart span').html('{{ _('Add to cart') }}');
+          }
+            // Selected a valid variant that is available.
+            if(selected_product.formatted_sale_price){
+                $('.product-formatted-price').html(selected_product.formatted_sale_price)
+                $('.product-formatted-price-old').html(selected_product.formatted_price)
+                $('.product-formatted-price-discount').html('{{ _("Discount") }}'+' '+selected_product.discount_percentage+'%')
+                
+                $('.price-tawfer').removeClass('d-none').show()
+                $('.product-formatted-price-old').show()
+                $('.product-formatted-price-discount').show()
+            }else{
+                $('.product-formatted-price').html(selected_product.formatted_price)
+                $('.product-formatted-price-old').html('')
+                $('.product-formatted-price-discount').html('')
+                $('.price-tawfer').addClass('d-none').hide()
+                $('.product-formatted-price-old').hide()
+                $('.product-formatted-price-discount').hide()
+            }
+            
+            if (typeof formatPrices === 'function') {
+                formatPrices();
+            }
+
+            if(selected_product.weight && selected_product.weight.value){
+                $('.div-product-weight').removeClass('d-none');
+                $('.div-product-weight .product-weight').html(selected_product.weight.value+' '+selected_product.weight.unit)
+            }else{
+                $('.div-product-weight').addClass('d-none')
+            }
+
+            if(selected_product.sku){
+                $('.div-product-sku').removeClass('d-none');
+                $('.div-product-sku .product-sku').html(selected_product.sku)
+            }else{
+                $('.div-product-sku').addClass('d-none');
+            }
+
+
+            {% if store.settings.products.low_stock_label_enabled %}
+            var store_low_stock_limit = {{ safeget(store.settings.products, 'low_stock_quantity_threshold', safeget(store.settings.products, 'low_stock_quantity_limit', 5)) }};
+            var low_stock_message = '{{ _('Remaining %s only') }}';
+
+            if (!selected_product.is_infinite && selected_product.quantity < store_low_stock_limit) {
+                $('.low-quantity-section').removeClass('d-none').addClass('d-inline-block');
+                $('.low-quantity-section .low-quantity').html(low_stock_message.replace('%s', selected_product.quantity));
+            } else {
+                $('.low-quantity-section').removeClass('d-inline-block').addClass('d-none');
+            }
+            {% endif %}
+
+            var sold_product_count_message = '{{ _('Sold more than %s times') }}';
+            if (selected_product.sold_products_count) {
+                $('.product-count').removeClass('d-none');
+                $('.product-count .lang').html(sold_product_count_message.replace('%s', selected_product.sold_products_count))
+            } else {
+                $('.product-count').removeClass('d-flex');
+                $('.product-count').addClass('d-none');
+            }
+            var selectQuantity = ''
+
+            if(selected_product.is_infinite)
+                selected_product.quantity = 100;
+
+            if(selected_product.quantity > 0) {
+                $('.quantity-add-cart').removeClass('d-none')
+                var quantityMax = (selected_product.quantity > 100) ? 100 : selected_product.quantity;
+                selectQuantity = '<option value="1"selected>1</option>'
+                for(var i=2; i <= quantityMax; i++){
+                    selectQuantity += '<option value="'+i+'">'+i+'</option>';
+                }
+            }else{
+                $('.quantity-add-cart').addClass('d-none')
+            }
+
+            $('.select-quantity').html(selectQuantity);
+
+            $('.select-quantity').html(selectQuantity);
+
+            $('#product-quantity-input').val(1);
+            $('.select-quantity').trigger('change');
+
+            $('.product-buttons').removeClass('d-none');
+            $('.section-out-of-stock-notify-me').addClass('d-none');
+
+            if (isMainProductPreOrder) {
+              $('.btn-add-to-cart span').html('{{ _('Pre Order') }}');
+            } else {
+              $('.btn-add-to-cart span').html('{{ _('Add to cart') }}');
+            }
+
+            updateProductImages(selected_product);
+        } else {
+            // Variant is sold out.
+            if(selected_product.formatted_sale_price){
+                $('.product-formatted-price').html(selected_product.formatted_sale_price)
+                $('.product-formatted-price-old').html(selected_product.formatted_price)
+                $('.product-formatted-price-discount').html('{{ _("Discount") }}'+' '+selected_product.discount_percentage+'%')
+                $('.price-tawfer').removeClass('d-none').show()
+                $('.product-formatted-price-old').show()
+                $('.product-formatted-price-discount').show()
+            } else{
+                $('.product-formatted-price').html(selected_product.formatted_price)
+                $('.product-formatted-price-old').html('')
+                $('.product-formatted-price-discount').html('')
+                $('.price-tawfer').addClass('d-none').hide()
+                $('.product-formatted-price-old').hide()
+                $('.product-formatted-price-discount').hide()
+            }
+            
+            if (typeof formatPrices === 'function') {
+                formatPrices();
+            }
+            
+            $('.quantity-add-cart').addClass('d-none')
+            $('.product-buttons').addClass('d-none');
+            $('.section-out-of-stock-notify-me').removeClass('d-none');
+
+            $('.btn-add-to-cart span').html('{{ _('Option not available') }}');
+
+            if(selected_product.sku){
+                $('.div-product-sku').removeClass('d-none');
+                $('.div-product-sku .product-sku').html(selected_product.sku)
+            } else {
+                $('.div-product-sku').addClass('d-none');
+            }
+            updateProductImages(selected_product);
+        }
+
+        } else {
+            // variant doesn't exist.
+            $('.quantity-add-cart').addClass('d-none')
+            $('.product-buttons').addClass('d-none');
+            $('.section-out-of-stock-notify-me').removeClass('d-none');
+
+            $('.btn-add-to-cart span').html('{{ _('Option not available') }}');
+
+            updateProductImages(selected_product);
+          }
+      }
+
+        function updateProductImages(selected_product) {
+            if(selected_product && selected_product.media && selected_product.media.length > 0){
+                $('.product-images-carousel').removeClass('d-none');
+                $('.product-images-carousel-thumbs').removeClass('d-none-important');
+                $('.product-images-empty').addClass('d-none');
+
+                if (typeof modalThumbsSwiper !== 'undefined') {
+                    modalThumbsSwiper.destroy(true, true);
+                }
+                if (typeof swiper_main !== 'undefined') {
+                    swiper_main.destroy(true, true);
+                }
+                $('.product-images-carousel').addClass('product-images-carousel-init');
+
+                productImages = selected_product.media;
+
+                $('#product-images-slick .swiper-wrapper').html('');
+                $('#product-images-slick .swiper-wrapper').removeAttr('style');
+                $('.product-images-carousel-thumbs .swiper-wrapper').html('');
+
+                for (var z = 0; z < productImages.length; z++) {
+                    var prImage = productImages[z];
+
+                    $('#product-images-slick .swiper-wrapper').append(
+                        `<div class="swiper-slide">
+                        <a class="image-link" href="javascript:;">
+                            <img loading="lazy" src="${prImage.image.full_size}" class="carousel-img" alt="${selected_product.name}">
+                        ${prImage.provider && prImage.link ? `
+                            <img loading="lazy" id="main-video-icon" class="play-icon" src="{{ 'video-play.svg' | asset_url }}" alt="play"
+                                onclick="showIframe(this, '${prImage.link}')" />
+                        ` : ''}
+                        </a>
+                        <div class="iframe-video pt-1 d-none">
+                            <a id="iframe-close-btn" class="text-white btn btn-none grow" onClick="hideIframe(this)">X</a>
+                            <iframe width="100%" height="100%" src="" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen style="max-width: 100%;">
+                            </iframe>
+                        </div>
+                    </div>`
+                    );
+
+                    $('.product-images-carousel-thumbs .swiper-wrapper').append(
+                        `<div class="swiper-slide">
+                            <a class="thumb-image-a" data-index="${z}" href="javascript:;">
+                            <img loading="lazy" src="${prImage.image.medium}" data-index="${z}" alt="image">
+                            ${prImage.provider && prImage.link ? `
+                                <img loading="lazy" id="video-play-icon" class="play-icon" src="{{ 'video-play.svg' | asset_url }}" alt="play" data-index="${z}">
+                            ` : ''}
+                        </a>
+                        </div>`
+                    );
+                }
+
+                initSlick(productImages, {% if thumb_bottom %}true{% else %}false{% endif %});
+                if (typeof applyFixedMediaHeightFromFirst === 'function') {
+                    applyFixedMediaHeightFromFirst();
+                }
+                applyFixedMediaHeightFromFirst();
+
+            } else {
+                $('.product-images-carousel').addClass('d-none');
+                $('.product-images-carousel-thumbs').addClass('d-none-important');
+                $('.product-images-empty').removeClass('d-none');
+            }
+        }
+
+
+      async function sendProductNotifyMe() {
+          $('.send-notify-progress').removeClass('d-none');
+
+          const countryCode = '+' + ($('.send-notify-country-key').val() || '966');
+          const productId = $('.send-notify-product-id').val();
+          const email = $('.send-notify-email').val();
+          const name = $('.send-notify-name').val();
+
+          let phone = '';
+          const rawPhone = $('.send-notify-phone').val();
+          if (rawPhone) {
+              phone = countryCode + rawPhone;
+          }
+
+          const baseUrl = "{{ store.permalink }}";
+          const payload = {
+              customer_email: email,
+              customer_phone_number: phone,
+              customer_name: name
+          };
+
+          const url = baseUrl + 'api/v1/products/' + encodeURIComponent(productId) + '/stock-alerts';
+
+          try {
+              const res = await fetch(url, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(payload)
+              });
+
+              if (res.ok) {
+                  let data = null;
+                  try {
+                      data = await res.json();
+                  } catch (e) {
+                      // Ignore JSON parse errors
+                  }
+
+                  if (!data || (data && data.status === 'success')) {
+                      window.zid?.toaster?.showSuccess('{{ _("Send Successfully") }}');
+                  } else if (data && data.data && data.data.message) {
+                      window.zid?.toaster?.showError(JSON.stringify(data.data.message));
+                  } else {
+                      window.zid?.toaster?.showError('{{ _("failed to send") }}');
+                  }
+              } else {
+                  let errData = null;
+                  try {
+                      errData = await res.json();
+                  } catch (e) {
+                      // Ignore JSON parse errors
+                  }
+                  
+                  const msg = (errData && errData.data && errData.data.message)
+                      || (errData && errData.detail)
+                      || 'HTTP ' + res.status;
+
+                  window.zid?.toaster?.showError(msg);
+              }
+
+          } catch (error) {
+              var errorMessage = '{{ _("Failed to send alert request") }}';
+
+              window.zid?.toaster?.showError(errorMessage);
+          } finally {
+              $('.send-notify-progress').addClass('d-none');
+          }
+      };
+
+        
+
+        $('#product-description-a ').click(function(){
+            event.preventDefault();
+
+            $('html, body').animate({
+                scrollTop: $($.attr(this, 'href')).offset().top - ((window.matchMedia('(max-width: 768px)').matches) ? 15 :  150)
+            }, 500);
+
+        });
+
+        function addReviewButtonChecks() {
+            if (!customer){
+                $('#add-review-btn').css('display','none');
+                $('#add-review-link').removeClass('d-none');
+                $('#add-review-link').attr('href', `/auth/login?redirect_to=${window.location.pathname.replace('/','')}`);
+            }
+        }
+
+        function applyFixedMediaHeightFromFirst() {
+            var $firstImg = $('#product-images-slick .swiper-slide img.carousel-img').first();
+            if ($firstImg.length === 0) return;
+            var setHeights = function(h) {
+                if (!h || h <= 0) return;
+                var px = h + 'px';
+                var $container = $('#product-images-slick');
+                $container.css('height', px);
+                $container.find('.swiper-wrapper').css('height', px);
+                $container.find('.swiper-slide').css('height', px);
+            };
+            var imgEl = $firstImg.get(0);
+            if (imgEl.complete && imgEl.naturalHeight) {
+                setHeights($firstImg.height());
+            } else {
+                $firstImg.on('load', function(){
+                    setHeights($firstImg.height());
+                });
+            }
+        }
+
+        $(document).ready(function() {
+            initSlick(productImages, {% if thumb_bottom %}true{% else %}false{% endif %});
+            applyFixedMediaHeightFromFirst();
+            if (customerWishlistIds) {
+              fillWishlistItems(customerWishlistIds.map(id => ({ id })));
+            }
+        });
+
+
+        $(document).on('click','#product-images-slick .image-link',function(event){
+          if ($(event.target).is('#main-video-icon')) {
+                  return;
+              }
+            $('.pswp').removeClass('d-hide');
+            $('.app').addClass('d-hide');
+
+            openPhotoSwiper(productImages.map(function (image) {
+                return image.image.full_size
+            }), $('#product-images-slick .swiper-slide-active').attr('data-swiper-slide-index'));
+
+        });
+
+        $(document).on('click','.variant-image-wrapper a',function(event){
+            $('.pswp').removeClass('d-hide');
+            $('.app').addClass('d-hide');
+            var elm = event.currentTarget;
+            var varId = $(elm).attr('data-link-var-id');
+
+            var images = [];
+
+            $("div[data-var-id='"+varId+"']  img").each(function(iElm){
+                images.push($( this ).attr('data-image-url'))
+            });
+
+            openPhotoSwiper(images, $(elm).attr('data-index'));
+        });
+
+
+        var initSlick = function(productImages,thumbBottom) {
+            var modalThumbsSwiper = new Swiper(".product-images-carousel-thumbs", {
+                slidesPerView: 5,
+                spaceBetween: 10,
+                centeredSlides: true,
+                centeredSlidesBounds: true,
+                watchOverflow: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                direction: (window.innerWidth <= 992 || thumbBottom) ? 'horizontal' : 'vertical'
+            });
+
+          var swiper_main = new Swiper('#product-images-slick', {
+                slidesPerView: 1,
+                spaceBetween: 0,
+                loop: true,
+                watchOverflow: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                thumbs: {
+                    swiper: modalThumbsSwiper,
+                },
+              navigation: {
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+              },
+               pagination: {
+                  el: ".swiper-pagination",
+                },
+              allowTouchMove: true,
+              on: {
+                slideChangeTransitionStart: function () {
+                  const previousSlide = $(this.slides[this.previousIndex]);
+                  const iframeContainer = previousSlide.find(".iframe-video");
+                  iframeContainer.addClass("d-none");
+                  iframeContainer.find("iframe").attr("src", "");
+                },
+                slideChangeTransitionEnd: function () {
+                  const activeSlide = $(this.slides[this.activeIndex]);
+                  const playIcon = activeSlide.find("#main-video-icon");
+                  if (playIcon.length) {
+                    playIcon.trigger("click");
+                  }
+                },
+              }
+          });
+
+        }
+
+        initSlick(productImages, {% if thumb_bottom %}true{% else %}false{% endif %});
+
+        $('#product-images-slick').on('init', function(event, Swiper){
+            $('.product-images-carousel').removeClass('product-images-carousel-init');
+        });
+
+        var openPhotoSwipe = function(productImages, index) {
+            var pswpElement = document.querySelectorAll('.pswp')[0];
+
+            var items = productImages.map(function (image) {
+                return {
+                    src: image,
+                    w: 1200,
+                    h: 900
+                }
+            })
+
+            var options = {
+                history: false,
+                focus: false,
+
+                showAnimationDuration: 0,
+                hideAnimationDuration: 0,
+                index: parseInt(''+index)
+
+            };
+
+            var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+
+            gallery.listen('close', function() {
+                $('.pswp').addClass('d-hide');
+                $('.app').removeClass('d-hide');
+            });
+
+            gallery.init();
+        };
+
+                {# var bundleOfferProducts = function () {
+                var bundleOfferSlider = new Swiper(".tp-bundle-offer-products-swiper", {
+                  slidesPerView: "auto",
+                  spaceBetween: 10,
+                  freeMode: true,
+                  autoplay: {
+                    delay: 3000
+                  },
+                  navigation: {
+                    nextEl: ".tp-slider-button-next",
+                    prevEl: ".tp-slider-button-prev"
+                  }
+                });
+        } #}
+
+          document.addEventListener('zid-customer-fetched', function (event) {
+    var customer = event.detail.customer;
+    if (customer) {
+      $('.send-notify-name').val(customer.name || '');
+      $('.send-notify-email').val(customer.email || '');
+      if (customer.mobile) {
+        $('.send-notify-country-key').val(customer.mobile.substring(0, 3) || '966');
+        $('.send-notify-phone').val(customer.mobile.substring(3) || '');
+      }
+    }
+  });
+
+        // Product Image Video with SwiperJS
+        const getIframeLink = (videoLink) => {
+          const videoIdMatch = videoLink.match(
+            /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?|.*[?&]v=)|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+          );
+
+          if (videoIdMatch && videoIdMatch[1]) {
+            const videoLinkId = videoIdMatch[1];
+            return `https://www.youtube.com/embed/${videoLinkId}?autoplay=1&enablejsapi=1`;
+          }
+          return null;
+        };
+
+        const showIframe = (elm, imageVideoSrc) => {
+          const iframeLink = getIframeLink(imageVideoSrc);
+          const iframeContainer = $(elm).closest('.swiper-slide').find('.iframe-video');
+          const iframeElem = iframeContainer.find("iframe");
+
+          iframeContainer.removeClass("d-none");
+          if (iframeElem.attr("src") !== iframeLink) {
+            iframeElem.attr("src", iframeLink);
+          }
+        };
+
+        const hideIframe = (elm) => {
+          const iframeContainer = $(elm).closest(".iframe-video");
+          iframeContainer.addClass("d-none");
+          iframeContainer.find("iframe").attr("src", "");
+        };
+
+        $(document).ready(() => {
+          setTimeout(() => {
+            const activeSlide = $("#product-images-slick .swiper-slide-active .image-link");
+            const playIcon = activeSlide.find("#main-video-icon");
+            if (playIcon.length) {
+              playIcon.trigger("click");
+            }
+          }, 250);
+        });
+
+    </script>
+
+<script>
+  $(document).ready(function () {
+  function getMaxQuantity() {
+    var $hiddenSelect = $('.select-quantity-div:first .select-quantity');
+    var maxQty = $hiddenSelect.find('option').length;
+    return maxQty > 0 ? maxQty : 100;
+  }
+
+  function syncAllQuantityFields(newValue) {
+    $('.select-quantity-div:first .select-quantity').val(newValue);
+    
+    $('#product-quantity-input').val(newValue);
+  }
+
+  $('#increase-quantity').on('click', function () {
+    var currentValue = parseInt($('#product-quantity-input').val()) || 1;
+    var maxQuantity = getMaxQuantity();
+
+    if (currentValue < maxQuantity) {
+      syncAllQuantityFields(currentValue + 1);
+    }
+  });
+
+  $('#decrease-quantity').on('click', function () {
+    var currentValue = parseInt($('#product-quantity-input').val()) || 1;
+
+    if (currentValue > 1) {
+      syncAllQuantityFields(currentValue - 1);
+    }
+  });
+
+  $(document).on('DOMSubtreeModified', '.select-quantity', function() {
+    var $input = $('#product-quantity-input');
+    var currentInputValue = parseInt($input.val()) || 1;
+    var newMaxQuantity = getMaxQuantity();
+    if (currentInputValue > newMaxQuantity) {
+      syncAllQuantityFields(newMaxQuantity);
+    }
+  });
+
+  syncAllQuantityFields(1);
+});
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const labels = document.querySelectorAll("#product-variants-options label");
+    labels.forEach(label => {
+      if (!label.querySelector("span")) {
+        const text = label.textContent.trim();
+        label.textContent = "";
+        const span = document.createElement("span");
+        span.textContent = text;
+        label.appendChild(span);
+      }
+    });
+
+    const variants = {{ product.variants | tojson | safe }};
+    const options = document.querySelectorAll("#product-variants-options ul li");
+
+    options.forEach((li, index) => {
+      const variant = variants[index];
+      if (!variant) return;
+
+      const price = variant.price;
+      const salePrice = variant.sale_price;
+      const formattedPrice = variant.formatted_price;
+      const formattedSalePrice = variant.formatted_sale_price;
+
+      li.dataset.price = price;
+      li.dataset.salePrice = salePrice || '';
+      li.dataset.variantId = variant.id;
+
+      if (variant.images && variant.images.length > 0) {
+        const imageUrl = variant.images[0].image.small || variant.images[0].image.thumbnail;
+        let imgEl = li.querySelector('img.variant-image');
+        if (!imgEl) {
+          imgEl = document.createElement('img');
+          imgEl.className = 'variant-image';
+          imgEl.loading = 'lazy';
+          li.insertBefore(imgEl, li.firstChild);
+        }
+        imgEl.src = imageUrl;
+        imgEl.alt = variant.name || '';
+      }
+
+      if (!li.querySelector('em')) {
+        const em = document.createElement('em');
+        li.insertBefore(em, li.firstChild);
+      }
+
+      let priceSpan = li.querySelector('.variant-price');
+      if (!priceSpan) {
+        priceSpan = document.createElement('span');
+        priceSpan.className = 'variant-price';
+        li.appendChild(priceSpan);
+      }
+
+      if (salePrice && salePrice < price) {
+        priceSpan.innerHTML = `
+          <span class="old-price">
+            ${formattedPrice.trim()}
+          </span>
+          <span class="new-price">
+            ${formattedSalePrice.trim()}
+          </span>
+        `;
+      } else {
+        priceSpan.innerHTML = `
+          <span class="new-price">${formattedPrice.trim()}</span>
+        `;
+      }
+    });
+  });
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const metafields = {{ product.metafields | tojson | safe }};
+    if (!Array.isArray(metafields)) return;
+
+    const currentLang = "{{ session.lang }}" || "ar";
+
+    // ===== Inject text metafields =====
+    function injectMetaContent(slug, selector) {
+      const meta = metafields.find((m) => m.slug === slug);
+      if (!meta || !meta.value) return false;
+      const content = meta.value[currentLang] || meta.value.ar || meta.value.en;
+      if (!content) return false;
+      const target = document.querySelector(selector);
+      if (target) target.innerHTML = content;
+      return true;
+    }
+
+    const hasMini = injectMetaContent("mini-desc-product", ".meta-mini");
+    const hasCompareTitle = injectMetaContent("compare-title", ".compare-title");
+    const hasCompareTable = injectMetaContent("compare-table", ".compare-table");
+    const hasVideosTitle = injectMetaContent("reviews-title", ".videos-title");
+
+    // ===== FAQs Section =====
+    let hasFaqs = false;
+    const faqsTitleMeta = metafields.find((m) => m.slug === "questions-title");
+    const faqsListMeta = metafields.find((m) => m.slug === "questions-list");
+
+    if (faqsTitleMeta && faqsTitleMeta.value) {
+      const title =
+        faqsTitleMeta.value[currentLang] ||
+        faqsTitleMeta.value.ar ||
+        faqsTitleMeta.value.en;
+      if (title) document.querySelector(".faqs-title").textContent = title;
+    }
+
+    if (faqsListMeta && faqsListMeta.value) {
+      const faqsData = faqsListMeta.value.cells || [];
+      const faqsBox = document.querySelector("#faqs-box");
+
+      faqsData.forEach((row, index) => {
+        const question =
+          row[0]?.value?.[currentLang] ||
+          row[0]?.value?.ar ||
+          row[0]?.value?.en ||
+          "";
+        const answer =
+          row[1]?.value?.[currentLang] ||
+          row[1]?.value?.ar ||
+          row[1]?.value?.en ||
+          "";
+
+        if (!question && !answer) return;
+
+        const item = document.createElement("div");
+        item.className = "accordion-item";
+
+        item.innerHTML = `
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed"
+              type="button" data-bs-toggle="collapse"
+              data-bs-target="#faq-collapse-${index}"
+              aria-expanded="false"
+              aria-controls="faq-collapse-${index}">
+              <span>${index + 1 < 10 ? "0" + (index + 1) : index + 1}</span>
+              ${question}
+            </button>
+          </h2>
+          <div id="faq-collapse-${index}"
+            class="accordion-collapse collapse"
+            data-bs-parent="#faqs-box">
+            <div class="accordion-body">${answer}</div>
+          </div>
+        `;
+        faqsBox.appendChild(item);
+        hasFaqs = true;
+      });
+    }
+
+    // ===== Reviews / Videos Section =====
+    let hasVideos = false;
+    const reviewsMeta = metafields.find((m) => m.slug === "reviews-ratings");
+    const container = document.querySelector(".tp-videos-items");
+
+    if (reviewsMeta && reviewsMeta.value && container) {
+      const reviewsData = reviewsMeta.value?.cells || [];
+
+      reviewsData.forEach((row) => {
+        const name =
+          row[0]?.value?.[currentLang] ||
+          row[0]?.value?.ar ||
+          row[0]?.value?.en ||
+          "";
+        const reviewText =
+          row[1]?.value?.[currentLang] ||
+          row[1]?.value?.ar ||
+          row[1]?.value?.en ||
+          "";
+        const imgSrc = row[2]?.value?.full_size || row[2]?.value?.medium || "";
+        const videoSrc = row[3]?.value?.url || "";
+
+        if (!name && !reviewText && !videoSrc && !imgSrc) return;
+
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+
+        slide.innerHTML = `
+          <div class="video-story">
+            ${
+              videoSrc
+                ? `
+                <video width="100%" loop muted playsinline>
+                  <source src="${videoSrc}" type="video/mp4">
+                </video>
+                <button class="play-video" title="Play / Pause">
+                  ${document.querySelector("#icon-play").outerHTML}
+                </button>
+                <button class="volume-toggle" title="Toggle Sound">
+                  <span class="icon-mute">${
+                    document.querySelector("#icon-mute").outerHTML
+                  }</span>
+                  <span class="icon-unmute" style="display:none;">${
+                    document.querySelector("#icon-unmute").outerHTML
+                  }</span>
+                </button>
+              `
+                : imgSrc
+                ? `<img loading="lazy" width="100%" height="550" src="${imgSrc}" alt="${name}">`
+                : ""
+            }
+            ${
+              name || reviewText
+                ? `
+                <div class="review-box">
+                  ${name ? `<h3>${name}</h3>` : ""}
+                  ${document.querySelector("#icon-stars").outerHTML}
+                  ${reviewText ? `<p>${reviewText}</p>` : ""}
+                </div>
+              `
+                : ""
+            }
+          </div>
+        `;
+        container.appendChild(slide);
+        hasVideos = true;
+      });
+    }
+
+    const videoStories = document.querySelectorAll(".video-story");
+
+    videoStories.forEach((story) => {
+      const video = story.querySelector("video");
+      const playBtn = story.querySelector(".play-video");
+      const volumeBtn = story.querySelector(".volume-toggle");
+      const reviewBox = story.querySelector(".review-box");
+      const muteIcon = volumeBtn?.querySelector(".icon-mute");
+      const unmuteIcon = volumeBtn?.querySelector(".icon-unmute");
+
+      if (video) {
+        if (volumeBtn) volumeBtn.style.display = "none";
+
+        if (muteIcon && unmuteIcon) {
+          muteIcon.style.display = video.muted ? "block" : "none";
+          unmuteIcon.style.display = video.muted ? "none" : "block";
+        }
+
+        video.addEventListener("click", () =>
+          toggleVideo(video, playBtn, volumeBtn, reviewBox)
+        );
+
+        if (playBtn) {
+          playBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleVideo(video, playBtn, volumeBtn, reviewBox);
+          });
+        }
+
+        video.addEventListener("pause", () => {
+          if (playBtn) playBtn.style.display = "block";
+          if (volumeBtn) volumeBtn.style.display = "none";
+          if (reviewBox) reviewBox.style.display = "block";
+        });
+        video.addEventListener("play", () => {
+          if (playBtn) playBtn.style.display = "none";
+          if (volumeBtn) volumeBtn.style.display = "block";
+          if (reviewBox) reviewBox.style.display = "none";
+        });
+      }
+
+      if (video && volumeBtn) {
+        volumeBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          video.muted = !video.muted;
+          muteIcon.style.display = video.muted ? "block" : "none";
+          unmuteIcon.style.display = video.muted ? "none" : "block";
+        });
+      }
+
+      function toggleVideo(video, playBtn, volumeBtn, reviewBox) {
+        videoStories.forEach((other) => {
+          const otherVideo = other.querySelector("video");
+          const otherPlay = other.querySelector(".play-video");
+          const otherVolume = other.querySelector(".volume-toggle");
+          if (otherVideo && otherVideo !== video) {
+            const otherBox = other.querySelector(".review-box");
+            otherVideo.pause();
+            otherPlay?.classList.remove("is-playing");
+            if (otherPlay) otherPlay.style.display = "block";
+            if (otherVolume) otherVolume.style.display = "none";
+            if (otherBox) otherBox.style.display = "block";
+          }
+        });
+
+        if (video.paused) {
+          video.play();
+          playBtn?.classList.add("is-playing");
+          if (volumeBtn) volumeBtn.style.display = "block";
+          if (reviewBox) reviewBox.style.display = "none";
+        } else {
+          video.pause();
+          playBtn?.classList.remove("is-playing");
+          if (volumeBtn) volumeBtn.style.display = "none";
+          if (reviewBox) reviewBox.style.display = "block";
+        }
+      }
+    });
+
+    function isInViewport(element) {
+      const rect = element.getBoundingClientRect();
+      return rect.top < window.innerHeight && rect.bottom > 0;
+    }
+
+    window.addEventListener("scroll", () => {
+      document.querySelectorAll(".video-story video").forEach((video) => {
+        const parent = video.closest(".video-story");
+        const playBtn = parent.querySelector(".play-video");
+        const volumeToggle = parent.querySelector(".volume-toggle");
+        const reviewBox = parent.querySelector(".review-box");
+
+        if (!isInViewport(video) && !video.paused) {
+          video.pause();
+          playBtn.classList.remove("hidden");
+          playBtn.style.display = "block";
+          volumeToggle.style.display = "none";
+          if (reviewBox) reviewBox.style.display = "block";
+        }
+      });
+    });
+
+    if (!hasMini)
+      document.querySelector(".meta-mini")?.closest(".container")?.remove();
+    if (!hasCompareTitle && !hasCompareTable)
+      document.querySelector(".compare-part")?.remove();
+    if (!hasVideos && !hasVideosTitle)
+      document.querySelector(".videos-part")?.remove();
+    if (!hasFaqs) document.querySelector(".faqs-part")?.remove();
+
+    if (hasVideos) {
+      setTimeout(() => {
+        initSlickSlider();
+      }, 500);
+    }
+
+    function initSlickSlider() {
+      var arrowNextClass =
+        window.appDirection === "ltr"
+          ? "icon-keyboard_arrow_right"
+          : "icon-keyboard_arrow_left";
+      var arrowPrevClass =
+        window.appDirection === "ltr"
+          ? "icon-keyboard_arrow_left"
+          : "icon-keyboard_arrow_right";
+      var $slider = $(".tp-videos-items");
+
+      if ($slider.length && !$slider.hasClass("slick-initialized")) {
+        $slider.slick({
+          slidesToScroll: 4,
+          slidesToShow: 4,
+          infinite: true,
+          autoplay: true,
+          autoplaySpeed: 5000,
+          arrows: true,
+          dots: true,
+          rtl: !(window.appDirection === "ltr"),
+          nextArrow:
+            '<button class="slick-next slick-arrow" aria-label="Next" type="button"><span class="' +
+            arrowNextClass +
+            '"></span></button>',
+          prevArrow:
+            '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="' +
+            arrowPrevClass +
+            '"></span></button>',
+          responsive: [
+          {
+            breakpoint: 992,
+            settings: {
+              slidesToShow: 3,
+              centerMode: true,
+              centerPadding: '60px',
+            }
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 2,
+              centerMode: true,
+              centerPadding: '50px',
+            }
+          },
+          {
+            breakpoint: 500,
+            settings: {
+              slidesToShow: 2,
+              centerMode: true,
+              centerPadding: '20px',
+            }
+          },
+          {
+            breakpoint: 375,
+            settings: {
+              slidesToShow: 1,
+              centerMode: true,
+              centerPadding: '30px',
+            }
+          }
+        ]
+        });
+      }
+    }
+  });
+</script>
+
+<script>
+$(function() {
+  var items = $(".product-info-toggle .info-item"),
+      index = -1;
+
+  function showNext() {
+    index++;
+    items.eq(index % items.length)
+      .fadeIn(400)
+      .delay(3000)
+      .fadeOut(400, showNext);
+  }
+
+  if (items.length > 1) {
+    items.hide();
+    showNext();
+  } else {
+    items.show();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  var loyaltyLong = {{ _("Points earned by purchasing this product") | tojson }};
+  var loyaltyShort = {{ _("Points earned") | tojson }};
+  const interval = setInterval(() => {
+    document.querySelectorAll('.loyalty-points-products-section p').forEach(p => {
+      if (p.textContent.trim().indexOf(loyaltyLong) !== -1) {
+        p.textContent = loyaltyShort;
+        clearInterval(interval);
+      }
+    });
+  }, 200);
+});
+
+</script>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,156 @@
+{
+  "name": {
+    "ar": "فلاتر التصفية",
+    "en": "Filters"
+  },
+  "icon": "fal fa-presentation",
+  "template": "sections/filters.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": {
+        "ar": "خلفية العنصر",
+        "en": "Text color"
+      }
+    },
+    {
+      "type": "image",
+      "id": "image",
+      "label": {
+        "ar": "الصورة",
+        "en": "Image"
+      }
+    },
+    {
+      "type": "text",
+      "id": "text_1",
+      "label": {
+        "ar": "عنوان الجملة الأولى",
+        "en": "First Sentence Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "options_text_1",
+      "label": {
+        "ar": "خيارات العنوان الأول",
+        "en": "First Title Options"
+      },
+      "max_items": 10,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "text_2",
+      "label": {
+        "ar": "عنوان الجملة الثانية",
+        "en": "Second Sentence Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "options_text_2",
+      "label": {
+        "ar": "خيارات العنوان الثاني",
+        "en": "Second Title Options"
+      },
+      "max_items": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "text_3",
+      "label": {
+        "ar": "عنوان الجملة الثالثة",
+        "en": "Third Sentence Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "options_text_3",
+      "label": {
+        "ar": "خيارات العنوان الثالث",
+        "en": "Third Title Options"
+      },
+      "max_items": 2,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        }
+      ]
+    },
+    {
+      "type": "url",
+      "id": "link_1",
+      "label": {
+        "ar": "رابط الخيار الأول مع الأول",
+        "en": "Link (Option 1 with Option 1)"
+      }
+    },
+    {
+      "type": "url",
+      "id": "link_2",
+      "label": {
+        "ar": "رابط الخيار الأول مع الثاني",
+        "en": "Link (Option 1 with Option 2)"
+      }
+    },
+    {
+      "type": "url",
+      "id": "link_3",
+      "label": {
+        "ar": "رابط الخيار الثاني مع الأول",
+        "en": "Link (Option 2 with Option 1)"
+      }
+    },
+    {
+      "type": "url",
+      "id": "link_4",
+      "label": {
+        "ar": "رابط الخيار الثاني مع الثاني",
+        "en": "Link (Option 2 with Option 2)"
+      }
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": {
+        "ar": "نص الزر",
+        "en": "Btn text"
+      }
+    }
+  ]
+}

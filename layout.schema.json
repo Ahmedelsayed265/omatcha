@@ -1,0 +1,667 @@
+{
+  "icon": "fa fa-square",
+  "name": {
+    "ar": "إعدادات القالب",
+    "en": "Layout settings"
+  },
+  "groups": [
+    {
+      "id": "colors",
+      "name": {
+        "ar": "الالوان",
+        "en": "Colors"
+      },
+      "icon": "fa fa-paint-brush",
+      "settings": [
+        {
+          "type": "fieldset",
+          "id": "header",
+          "label": {
+            "ar": "رأس الصفحة",
+            "en": "Header"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "type": "color",
+              "id": "background_color",
+              "label": {
+                "ar": "لون الخلفية",
+                "en": "Background color"
+              }
+            },
+            {
+              "type": "color",
+              "id": "text_color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            }
+          ]
+        },
+        {
+          "type": "fieldset",
+          "id": "footer",
+          "label": {
+            "ar": "اسفل الصفحة",
+            "en": "Footer"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "type": "color",
+              "id": "background_color",
+              "label": {
+                "ar": "لون الخلفية",
+                "en": "Background color"
+              }
+            },
+            {
+              "type": "color",
+              "id": "text_color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            }
+          ]
+        },
+        {
+          "type": "fieldset",
+          "id": "background",
+          "label": {
+            "ar": "لون خلفية المتجر",
+            "en": "Body Background Color"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "type": "color",
+              "id": "background_color",
+              "label": {
+                "ar": "لون الخلفية",
+                "en": "Background color"
+              }
+            }
+          ]
+        },
+        {
+          "type": "fieldset",
+          "id": "bottom_menu",
+          "label": {
+            "ar": "القائمة السفلية",
+            "en": "Bottom menu"
+          },
+          "expandable": true,
+          "settings": [
+            {
+              "type": "color",
+              "id": "background_color",
+              "label": {
+                "ar": "لون الخلفية",
+                "en": "Background color"
+              }
+            },
+            {
+              "type": "color",
+              "id": "text_color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "general",
+      "name": {
+        "ar": "اعدادت عامة",
+        "en": "General settings"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "text",
+          "id": "whatsapp",
+          "label": {
+            "ar": "رقم الواتساب",
+            "en": "Whatsapp number"
+          }
+        },
+        {
+          "type": "image",
+          "id": "another_logo",
+          "label": {
+            "ar": "شعار آخر",
+            "en": "Another logo"
+          }
+        }
+      ]
+    },
+    {
+      "id": "loading_page",
+      "name": {
+        "ar": "صفحة التحميل",
+        "en": "Loading page"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "hide_loader",
+          "label": {
+            "ar": "اخفاء صفحة التحميل",
+            "en": "Hide loader"
+          }
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": {
+            "ar": "لون الخلفية",
+            "en": "Background color"
+          }
+        }
+      ]
+    },
+    {
+      "id": "menu_settings",
+      "name": {
+        "ar": "اعدادات القائمة الجانبية",
+        "en": "Sidebar settings"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "side_bar_style",
+          "label": {
+            "ar": "قائمة جانبية منسدلة",
+            "en": "Dropdown side bar"
+          }
+        }
+      ]
+    },
+    {
+      "id": "header_setting",
+      "name": {
+        "ar": "رأس الصفحة",
+        "en": "Header settings"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "transparent_header",
+          "label": {
+            "ar": "قائمة شفافة",
+            "en": "Transparent header"
+          }
+        },
+        {
+          "type": "list",
+          "id": "catgs_search",
+          "label": {
+            "ar": "عناصر تظهر في البحث",
+            "en": "Items showing in search"
+          },
+          "max_items": 6,
+          "settings": [
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "footer_setting",
+      "name": {
+        "ar": "اسفل الصفحة",
+        "en": "Footer setting"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "text",
+          "id": "ios_app",
+          "label": {
+            "ar": "رابط تطبيق IOS",
+            "en": "iOS App url"
+          }
+        },
+        {
+          "type": "text",
+          "id": "android_app",
+          "label": {
+            "ar": "رابط تطبيق Android",
+            "en": "Android App url"
+          }
+        }
+      ]
+    },
+    {
+      "id": "product_single",
+      "name": {
+        "ar": "تفاصيل المنتج",
+        "en": "Product single"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "sticky_cart",
+          "label": {
+            "ar": "اضافة للسلة متحركة",
+            "en": "Sticky cart"
+          }
+        },
+        {
+          "type": "checkbox",
+          "id": "thumb_bottom",
+          "label": {
+            "ar": "عرض الصور المصغّرة أسفل الصورة الرئيسية",
+            "en": "Display thumbnails below the main image"
+          }
+        },
+        {
+          "type": "image",
+          "id": "sm_banner",
+          "label": {
+            "ar": "بنر اعلاني",
+            "en": "Promotional banner"
+          }
+        },
+        {
+          "type": "list",
+          "id": "features",
+          "label": {
+            "ar": "مزايا اضافية",
+            "en": "Additional features"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "image_feature",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title_feature",
+              "label": {
+                "ar": "العنوان",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "subtitle_feature",
+              "label": {
+                "ar": "نص اضافي",
+                "en": "Sub title"
+              }
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "id": "payment_methods",
+          "label": {
+            "ar": "وسائل الدفع",
+            "en": "Payment Methods"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "payment_logo",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shipping_options",
+      "name": {
+        "ar": "خيارات الشحن",
+        "en": "Shipping Options"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "list",
+          "id": "cities",
+          "label": {
+            "ar": "المدن والنصوص",
+            "en": "Cities and Descriptions"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "اسم المدينة",
+                "en": "City Name"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "subtitle",
+              "label": {
+                "ar": "نص إضافي",
+                "en": "Additional Text"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "features_bar",
+      "name": {
+        "ar": "شريط مميزات",
+        "en": "Features bar"
+      },
+      "icon": "fal fa-sparkles",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "hide_element",
+          "label": {
+            "ar": "إخفاء العنصر",
+            "en": "Hide element"
+          }
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": {
+            "ar": "لون الخلفية",
+            "en": "Background color"
+          }
+        },
+        {
+          "type": "list",
+          "id": "features_bar_list",
+          "label": {
+            "ar": "الاعلان",
+            "en": "Advertisement"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "نص الاعلان",
+                "en": "Text"
+              }
+            },
+            {
+              "type": "color",
+              "id": "text_color",
+              "label": {
+                "ar": "لون النص",
+                "en": "Text color"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pre_order",
+      "name": {
+        "ar": "طلب مسبق للمنتجات",
+        "en": "Pre order products"
+      },
+      "icon": "fal fa-sparkles",
+      "settings": [
+        {
+          "type": "text",
+          "id": "pre_order_text",
+          "label": {
+            "ar": "نص الطلب المسبق",
+            "en": "Pre order text"
+          }
+        },
+        {
+          "type": "list",
+          "id": "pre_order_list",
+          "label": {
+            "ar": "المنتج",
+            "en": "Product"
+          },
+          "settings": [
+            {
+              "type": "product",
+              "id": "product",
+              "label": {
+                "ar": "اختر المنتج",
+                "en": "Choose product"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mini_cart_products",
+      "name": {
+        "ar": "منتجات السلة",
+        "en": "Cart products"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "type": "list",
+          "id": "products_list",
+          "label": {
+            "ar": "المنتجات",
+            "en": "Products"
+          },
+          "settings": [
+            {
+              "type": "product",
+              "id": "product_item",
+              "label": {
+                "ar": "اختر المنتج",
+                "en": "Choose product"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cart_page",
+      "name": {
+        "ar": "صفحة السلة",
+        "en": "Cart page"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "list",
+          "id": "features_cart",
+          "label": {
+            "ar": "مزايا اضافية",
+            "en": "Additional features"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "image_feature",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title_feature",
+              "label": {
+                "ar": "العنوان",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "subtitle_feature",
+              "label": {
+                "ar": "نص اضافي",
+                "en": "Sub title"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Popup",
+      "name": {
+        "ar": "بوب اب اعلاني",
+        "en": "Popup"
+      },
+      "icon": "fa fa-cog",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "hide_Popup",
+          "label": {
+            "ar": "إخفاء العنصر",
+            "en": "Hide element"
+          }
+        },
+        {
+          "type": "list",
+          "id": "Popup_list",
+          "label": {
+            "ar": "اعلان",
+            "en": "Popup"
+          },
+          "max_items": 1,
+          "settings": [
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "video",
+              "id": "video",
+              "label": {
+                "ar": "الفيديو",
+                "en": "Video"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "des",
+              "label": {
+                "ar": "نص توضيحي",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "text",
+              "id": "btn_text",
+              "label": {
+                "ar": "نص الزر",
+                "en": "Btn text"
+              }
+            },
+            {
+              "type": "color",
+              "id": "btn_background_color",
+              "label": {
+                "ar": "لون خلفية الزر",
+                "en": "Button background color"
+              }
+            },
+            {
+              "type": "color",
+              "id": "btn_text_color",
+              "label": {
+                "ar": "لون نص الزر",
+                "en": "Button text color"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

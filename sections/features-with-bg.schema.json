@@ -1,0 +1,77 @@
+{
+  "name": {
+    "ar": "مزايا بخلفية",
+    "en": "Features with background"
+  },
+  "icon": "fal fa-presentation",
+  "template": "sections/features-with-bg.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": {
+        "ar": "لون خلفية العنصر",
+        "en": "Background color"
+      }
+    },
+    {
+      "type": "image",
+      "id": "background",
+      "label": {
+        "ar": "صورة الخلفية",
+        "en": "Background image"
+      }
+    },
+    {
+      "type": "image",
+      "id": "logo",
+      "label": {
+        "ar": "الشعار",
+        "en": "Logo"
+      }
+    },
+    {
+      "type": "list",
+      "id": "features",
+      "label": {
+        "ar": "عنصر",
+        "en": "Item"
+      },
+      "settings": [
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "type": "text",
+          "id": "desc",
+          "label": {
+            "ar": "نص فرعي",
+            "en": "Sub title"
+          }
+        }
+      ]
+    }
+  ]
+}

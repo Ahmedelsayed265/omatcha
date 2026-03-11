@@ -1,0 +1,159 @@
+{% if not settings.hide_element %}
+<section class="tp-filters s-block" style="background: {{ settings.background_color }};" section-id="{{ sectionId }}">
+	<div class="container">
+		<div class="filter-box">
+			<div class="filter-media">
+				{% if settings.image %}
+					<img loading="lazy" width="500" height="500" class="lazy-img" data-src="{{ settings.image }}" alt="image">
+				{% endif %}
+			</div>
+			<div class="filter-text">
+				<div class="filters-items">
+					<div class="filter-item">
+						<p>{{ settings.text_1 }}</p>
+						<div class="custom-dropdown" data-name="problem">
+							<div class="selected">
+              {% set first_option_1 = (settings.options_text_1 or []) | first %}
+              <span>{{ first_option_1.title if first_option_1 else '' }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+                  <path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              </div>
+							<ul class="dropdown-options">
+								{% for opt in safeget(settings, 'options_text_1', []) %}
+									<li data-value="{{ opt.title }}">{{ opt.title }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+
+					<div class="filter-item">
+						<p>{{ settings.text_2 }}</p>
+						<div class="custom-dropdown" id="living-dropdown" data-name="living">
+							<div class="selected" data-value="alone">
+              {% set first_option_2 = (settings.options_text_2 or []) | first %}
+              <span>{{ first_option_2.title if first_option_2 else '' }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+                  <path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              </div>
+							<ul class="dropdown-options">
+								{% for opt in safeget(settings, 'options_text_2', []) %}
+									<li data-value="{{ opt.title }}">{{ opt.title }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+
+					<div class="filter-item">
+						<p>{{ settings.text_3 }}</p>
+						<div class="custom-dropdown" id="time-dropdown" data-name="time">
+							<div class="selected" data-value="morning">
+              {% set first_option_3 = (settings.options_text_3 or []) | first %}
+              <span>{{ first_option_3.title if first_option_3 else '' }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+                  <path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              </div>
+							<ul class="dropdown-options">
+								{% for opt in safeget(settings, 'options_text_3', []) %}
+									<li data-value="{{ opt.title }}">{{ opt.title }}</li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				{% if settings.btn_text %}
+				<a id="filter-btn" href="javascript:;" class="tp-btn tp-btn-primary">
+					{{ settings.btn_text }}
+				</a>
+				{% endif %}
+			</div>
+      	<svg class="shape-filter-sec" width="88" height="130" viewbox="0 0 88 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<g opacity="0.7">
+						<path opacity="0.7" d="M78 42.5983C45.8824 46.6998 42.801 50.0246 39 84.6806C35.199 50.0247 32.1177 46.6998 0 42.5983C32.1176 38.4969 35.199 35.1721 39 0.516113C42.8011 35.1721 45.8824 38.4969 78 42.5983Z" fill="url(#paint0_linear_428_26055)"/>
+						<path opacity="0.5" d="M88 105.722C69.4706 108.088 67.6929 110.006 65.5 130C63.3071 110.006 61.5294 108.088 43 105.722C61.5294 103.356 63.3071 101.437 65.5 81.4436C67.6929 101.437 69.4706 103.356 88 105.722Z" fill="url(#paint1_linear_428_26055)"/>
+					</g>
+					<defs>
+						<linearGradient id="paint0_linear_428_26055" x1="2.98001e-05" y1="42.5984" x2="78" y2="42.5984" gradientunits="userSpaceOnUse">
+							<stop stop-color="var(--primary-color)"/>
+							<stop offset="1" stop-color="var(--primary-color)" stop-opacity="0.5"/>
+						</linearGradient>
+						<linearGradient id="paint1_linear_428_26055" x1="43" y1="105.722" x2="88" y2="105.722" gradientunits="userSpaceOnUse">
+							<stop stop-color="var(--primary-color)"/>
+							<stop offset="1" stop-color="var(--primary-color)" stop-opacity="0.5"/>
+						</linearGradient>
+					</defs>
+				</svg>
+		</div>
+	</div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const dropdowns = document.querySelectorAll(".custom-dropdown");
+  const btn = document.getElementById("filter-btn");
+
+  const links = {
+    "1-1": "{{ settings.link_1 }}",
+    "1-2": "{{ settings.link_2 }}",
+    "2-1": "{{ settings.link_3 }}",
+    "2-2": "{{ settings.link_4 }}"
+  };
+
+  dropdowns.forEach(dropdown => {
+    const selected = dropdown.querySelector(".selected");
+    const selectedSpan = selected.querySelector("span");
+    const optionsList = dropdown.querySelector(".dropdown-options");
+
+    selected.addEventListener("click", () => {
+      dropdowns.forEach(d => d !== dropdown && d.classList.remove("open"));
+      dropdown.classList.toggle("open");
+    });
+
+    optionsList.querySelectorAll("li").forEach((option, index) => {
+      option.addEventListener("click", () => {
+        const value = option.getAttribute("data-value");
+        const text = option.textContent;
+
+        selectedSpan.textContent = text;
+        selectedSpan.setAttribute("data-value", value);
+        selectedSpan.setAttribute("data-index", index + 1);
+
+        dropdown.classList.remove("open");
+        updateButtonLink();
+      });
+    });
+  });
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".custom-dropdown")) {
+      dropdowns.forEach(d => d.classList.remove("open"));
+    }
+  });
+
+  function updateButtonLink() {
+    const livingSpan = document.querySelector('#living-dropdown .selected span');
+    const timeSpan = document.querySelector('#time-dropdown .selected span');
+
+    const livingIndex = livingSpan?.getAttribute('data-index') || 1;
+    const timeIndex = timeSpan?.getAttribute('data-index') || 1;
+
+    const key = `${livingIndex}-${timeIndex}`;
+    const link = links[key] || "javascript:;";
+    btn.setAttribute("href", link);
+  }
+
+  const livingDefault = document.querySelector('#living-dropdown .selected span');
+  const timeDefault = document.querySelector('#time-dropdown .selected span');
+
+  livingDefault?.setAttribute('data-index', 1);
+  timeDefault?.setAttribute('data-index', 1);
+
+  updateButtonLink();
+});
+</script>
+
+
+{% endif %}

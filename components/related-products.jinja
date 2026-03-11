@@ -1,0 +1,9 @@
+<div class="tp-products-swiper" id="related-products">
+	{% for rProduct in product.related_products %}
+		<div class="prod-col">
+			{% set product = rProduct %}
+			{% set index = loop.index0 %}
+			{% include 'components/product-card.jinja' %}
+		</div>
+	{% endfor %}
+</div>

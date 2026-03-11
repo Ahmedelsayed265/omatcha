@@ -1,0 +1,85 @@
+{
+  "name": {
+    "ar": "المزايا التنافسية",
+    "en": "Competitive Advantages"
+  },
+  "icon": "fal fa-images",
+  "template": "sections/advantages.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "advantages",
+      "label": {
+        "ar": "ميزة",
+        "en": "Advantage"
+      },
+      "settings": [
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Text"
+          }
+        },
+        {
+          "type": "color",
+          "id": "text_color_title",
+          "label": {
+            "ar": "لون العنوان",
+            "en": "Text color"
+          }
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": {
+            "ar": "العنوان الفرعي",
+            "en": "Sub title"
+          }
+        },
+        {
+          "type": "color",
+          "id": "text_color_subtitle",
+          "label": {
+            "ar": "لون العنوان الفرعي",
+            "en": "Text color"
+          }
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": {
+            "ar": "الرابط",
+            "en": "Link"
+          }
+        }
+      ]
+    }
+  ]
+}

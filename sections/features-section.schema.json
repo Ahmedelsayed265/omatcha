@@ -1,0 +1,65 @@
+{
+  "name": {
+    "ar": "خصائص المتجر ",
+    "en": "Store features | Bunches App"
+  },
+  "icon": "fal fa-sparkles",
+  "template": "sections/features-section.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "store_features",
+      "label": {
+        "ar": "الخصائص",
+        "en": "Feature"
+      },
+      "settings": [
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          },
+          "info": {
+            "ar": "مقاس الصورة 60 عرض * 60 طول",
+            "en": "Image size: 60 width * 60 height"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Text"
+          }
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": {
+            "ar": "العنوان الفرعي",
+            "en": "Sub title"
+          }
+        }
+      ]
+    }
+  ]
+}

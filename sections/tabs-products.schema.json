@@ -1,0 +1,62 @@
+{
+  "name": {
+    "ar": "منتجات بتبويبات",
+    "en": "Tabbed Products"
+  },
+  "icon": "fal fa-box",
+  "template": "sections/tabs-products.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "display_two_rows",
+      "label": {
+        "ar": "عرض صفين في الشريط",
+        "en": "Display 2 rows in slider"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Main Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "tabs",
+      "label": {
+        "ar": "التبويبات",
+        "en": "Tabs"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": {
+            "ar": "اسم التبويب",
+            "en": "Tab Label"
+          }
+        },
+        {
+          "type": "category_products",
+          "id": "category",
+          "label": {
+            "ar": "منتجات التبويب",
+            "en": "Tab Products"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+<div class="tp-shop-top">
+  <div class="tp-shop-top-right">
+    <div class="tp-shop-top-filter {% if has_products_filtration %}d-none{% else %}d-inline-block{% endif %}">
+      <button type="button" class="tp-filter-btn tp-btn tp-btn-primary-outline filter-open-btn" id="products-list-filter" data-bs-toggle="modal"
+        data-bs-target="#filterModal">
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff"
+            fill="none">
+            <path d="M3 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3 17H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18 17L21 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M15 7L21 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M6 7C6 6.06812 6 5.60218 6.15224 5.23463C6.35523 4.74458 6.74458 4.35523 7.23463 4.15224C7.60218 4 8.06812 4 9 4C9.93188 4 10.3978 4 10.7654 4.15224C11.2554 4.35523 11.6448 4.74458 11.8478 5.23463C12 5.60218 12 6.06812 12 7C12 7.93188 12 8.39782 11.8478 8.76537C11.6448 9.25542 11.2554 9.64477 10.7654 9.84776C10.3978 10 9.93188 10 9 10C8.06812 10 7.60218 10 7.23463 9.84776C6.74458 9.64477 6.35523 9.25542 6.15224 8.76537C6 8.39782 6 7.93188 6 7Z"
+              stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M12 17C12 16.0681 12 15.6022 12.1522 15.2346C12.3552 14.7446 12.7446 14.3552 13.2346 14.1522C13.6022 14 14.0681 14 15 14C15.9319 14 16.3978 14 16.7654 14.1522C17.2554 14.3552 17.6448 14.7446 17.8478 15.2346C18 15.6022 18 16.0681 18 17C18 17.9319 18 18.3978 17.8478 18.7654C17.6448 19.2554 17.2554 19.6448 16.7654 19.8478C16.3978 20 15.9319 20 15 20C14.0681 20 13.6022 20 13.2346 19.8478C12.7446 19.6448 12.3552 19.2554 12.1522 18.7654C12 18.3978 12 17.9319 12 17Z"
+              stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </span>
+        {{ _('Filter') }}
+      </button>
+    </div>
+    <div class="tp-shop-top-filter open-close-filter {% if has_products_filtration %}d-inline-block{% else %}d-none{% endif %}">
+      <button type="button" class="tp-filter-btn tp-btn tp-btn-primary-outline">
+        <span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff"
+            fill="none">
+            <path d="M3 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M3 17H9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M18 17L21 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path d="M15 7L21 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" />
+            <path
+              d="M6 7C6 6.06812 6 5.60218 6.15224 5.23463C6.35523 4.74458 6.74458 4.35523 7.23463 4.15224C7.60218 4 8.06812 4 9 4C9.93188 4 10.3978 4 10.7654 4.15224C11.2554 4.35523 11.6448 4.74458 11.8478 5.23463C12 5.60218 12 6.06812 12 7C12 7.93188 12 8.39782 11.8478 8.76537C11.6448 9.25542 11.2554 9.64477 10.7654 9.84776C10.3978 10 9.93188 10 9 10C8.06812 10 7.60218 10 7.23463 9.84776C6.74458 9.64477 6.35523 9.25542 6.15224 8.76537C6 8.39782 6 7.93188 6 7Z"
+              stroke="currentColor" stroke-width="1.5" />
+            <path
+              d="M12 17C12 16.0681 12 15.6022 12.1522 15.2346C12.3552 14.7446 12.7446 14.3552 13.2346 14.1522C13.6022 14 14.0681 14 15 14C15.9319 14 16.3978 14 16.7654 14.1522C17.2554 14.3552 17.6448 14.7446 17.8478 15.2346C18 15.6022 18 16.0681 18 17C18 17.9319 18 18.3978 17.8478 18.7654C17.6448 19.2554 17.2554 19.6448 16.7654 19.8478C16.3978 20 15.9319 20 15 20C14.0681 20 13.6022 20 13.2346 19.8478C12.7446 19.6448 12.3552 19.2554 12.1522 18.7654C12 18.3978 12 17.9319 12 17Z"
+              stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </span>
+        {{ _('Filter') }}
+      </button>
+    </div>
+    <div class="tp-shop-top-result">
+      {% if count > 0 %}
+      <p>{{ _('Showing') }} <b id="product-filter-count">{{count}}</b> {{ _('products') }}</p>
+      {% else %}
+      <p>{{ _('No products') }}</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="tp-shop-top-left">
+    <div class="dropdown tp-shop-top-select">
+  <button id="products-list-sort" type="button" class="btn-sort" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    
+    <span>
+        {% if session.query_params.get('sort_by') == 'popularity_order' %}
+            {{ _('Popularity') }}
+        {% elif session.query_params.get('sort_by') == 'price' and session.query_params.get('order') == 'asc' %}
+            {{ _('Price') }}: {{ _('Low to high') }}
+        {% elif session.query_params.get('sort_by') == 'price' and session.query_params.get('order') == 'desc' %}
+            {{ _('Price') }}: {{ _('High to low') }}
+        {% else %}
+            {{ _('Newest') }}
+        {% endif %}
+    </span>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+      <path d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+<div class="dropdown-menu select-dropdown">
+  <a class="dropdown-item" onclick="this.href = this.getAttribute('data-href')" data-href="{{ session.url.include_query_params(sort_by='created_at', order='desc') }}">
+      {{ _('Newest') }}
+  </a>
+  <a class="dropdown-item" onclick="this.href = this.getAttribute('data-href')" data-href="{{ session.url.include_query_params(sort_by='popularity_order', order='asc') }}">
+      {{ _('Popularity') }}
+  </a>
+  <a class="dropdown-item" onclick="this.href = this.getAttribute('data-href')" data-href="{{ session.url.include_query_params(sort_by='price', order='asc') }}">
+      {{ _('Price') }}: {{ _('Low to high') }}
+  </a>
+  <a class="dropdown-item" onclick="this.href = this.getAttribute('data-href')" data-href="{{ session.url.include_query_params(sort_by='price', order='desc') }}">
+      {{ _('Price') }}: {{ _('High to low') }}
+  </a>
+</div>
+
+</div>
+
+    {# <div class="tp-shop-top-tab">
+      <button type="button" class="grid-btn active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+          <path
+            d="M2 18C2 16.4596 2 15.6893 2.34673 15.1235C2.54074 14.8069 2.80693 14.5407 3.12353 14.3467C3.68934 14 4.45956 14 6 14C7.54044 14 8.31066 14 8.87647 14.3467C9.19307 14.5407 9.45926 14.8069 9.65327 15.1235C10 15.6893 10 16.4596 10 18C10 19.5404 10 20.3107 9.65327 20.8765C9.45926 21.1931 9.19307 21.4593 8.87647 21.6533C8.31066 22 7.54044 22 6 22C4.45956 22 3.68934 22 3.12353 21.6533C2.80693 21.4593 2.54074 21.1931 2.34673 20.8765C2 20.3107 2 19.5404 2 18Z"
+            stroke="currentColor" stroke-width="1.5" />
+          <path
+            d="M14 18C14 16.4596 14 15.6893 14.3467 15.1235C14.5407 14.8069 14.8069 14.5407 15.1235 14.3467C15.6893 14 16.4596 14 18 14C19.5404 14 20.3107 14 20.8765 14.3467C21.1931 14.5407 21.4593 14.8069 21.6533 15.1235C22 15.6893 22 16.4596 22 18C22 19.5404 22 20.3107 21.6533 20.8765C21.4593 21.1931 21.1931 21.4593 20.8765 21.6533C20.3107 22 19.5404 22 18 22C16.4596 22 15.6893 22 15.1235 21.6533C14.8069 21.4593 14.5407 21.1931 14.3467 20.8765C14 20.3107 14 19.5404 14 18Z"
+            stroke="currentColor" stroke-width="1.5" />
+          <path
+            d="M2 6C2 4.45956 2 3.68934 2.34673 3.12353C2.54074 2.80693 2.80693 2.54074 3.12353 2.34673C3.68934 2 4.45956 2 6 2C7.54044 2 8.31066 2 8.87647 2.34673C9.19307 2.54074 9.45926 2.80693 9.65327 3.12353C10 3.68934 10 4.45956 10 6C10 7.54044 10 8.31066 9.65327 8.87647C9.45926 9.19307 9.19307 9.45926 8.87647 9.65327C8.31066 10 7.54044 10 6 10C4.45956 10 3.68934 10 3.12353 9.65327C2.80693 9.45926 2.54074 9.19307 2.34673 8.87647C2 8.31066 2 7.54044 2 6Z"
+            stroke="currentColor" stroke-width="1.5" />
+          <path
+            d="M14 6C14 4.45956 14 3.68934 14.3467 3.12353C14.5407 2.80693 14.8069 2.54074 15.1235 2.34673C15.6893 2 16.4596 2 18 2C19.5404 2 20.3107 2 20.8765 2.34673C21.1931 2.54074 21.4593 2.80693 21.6533 3.12353C22 3.68934 22 4.45956 22 6C22 7.54044 22 8.31066 21.6533 8.87647C21.4593 9.19307 21.1931 9.45926 20.8765 9.65327C20.3107 10 19.5404 10 18 10C16.4596 10 15.6893 10 15.1235 9.65327C14.8069 9.45926 14.5407 9.19307 14.3467 8.87647C14 8.31066 14 7.54044 14 6Z"
+            stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      </button>
+      <button type="button" class="list-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+          <path d="M4 5L20 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M4 12L20 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+          <path d="M4 19L20 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div> #}
+  </div>
+</div>
+
+<div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body">
+				<button id="products-list-filter-form-close" type="button" class="close-modal" data-bs-dismiss="modal" aria-label="Close">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+            <path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+				</button>
+				{% include 'components/products-filter-form.jinja' %}
+			</div>
+		</div>
+	</div>
+</div>
+

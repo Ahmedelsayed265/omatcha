@@ -1,0 +1,82 @@
+{
+  "name": {
+    "ar": "شريط الاعلانات",
+    "en": "Advertisement bar"
+  },
+  "icon": "fal fa-sparkles",
+  "template": "sections/advertisement-bar.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": {
+        "ar": "لون الخلفية",
+        "en": "Background color"
+      }
+    },
+    {
+      "type": "range",
+      "id": "bar_speed",
+      "label": {
+        "ar": "سرعة حركة الشريط",
+        "en": "Marquee speed"
+      },
+      "min": 5,
+      "max": 100,
+      "step": 5,
+      "unit": "s",
+      "default": 50
+    },
+    {
+      "type": "list",
+      "id": "advertisement_bar",
+      "label": {
+        "ar": "الاعلان",
+        "en": "Advertisement"
+      },
+      "settings": [
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "نص الاعلان",
+            "en": "Text"
+          }
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": {
+            "ar": "لون النص",
+            "en": "Text color"
+          }
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": {
+            "ar": "الرابط",
+            "en": "Link"
+          }
+        }
+      ]
+    }
+  ]
+}

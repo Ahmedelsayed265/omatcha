@@ -1,0 +1,173 @@
+{% extends "layout.jinja" %}
+
+{% block header %} {% include 'header.jinja' %} {% endblock %}
+
+{% block top_links %}
+<link rel="stylesheet" type="text/css" href="{{ 'prod-details.css' | asset_url }}" />
+<link rel="stylesheet" type="text/css" href="{{ 'photoswipe.css' | asset_url }}" />
+<link rel="stylesheet" type="text/css" href="{{ 'default-skin.css' | asset_url }}" />
+{% endblock %}
+
+{% block main_content %}
+
+<section class="product products-details-page products-reviews-page">
+   <div class="container pb-5">
+      <section class="products-details mb-5">
+
+         <a href="/products/{{ product.slug }}">
+            <div class="d-flex">
+               {% if product.main_image and product.main_image.image and product.main_image.image.large %}
+                  <img loading="lazy" src="{{ product.main_image.image.large }}" class="product-image" alt="{{ product.name }}" />
+               {% elif product.images and product.images|length > 0 %}
+                  <img loading="lazy" src="{{ product.images[0].image.large }}" class="product-image" alt="{{ product.name }}" />
+               {% endif %}
+               <h1 style="color: initial">{{ product.name }}</h1>
+            </div>
+         </a>
+
+  <div class="review-part mt-5">
+	<div class="total-review-progress">
+		<div class="tp-product-details-review-number">
+			<h3 class="tp-product-details-review-number-title">{{ _('Reviews & Ratings') }}</h3>
+			<div class="tp-product-details-review-summery">
+				<div class="review-summery">
+					<div class="tp-product-details-review-summery-value">
+						<span>{{ product.rating.average if product.rating.average else 0 }}</span>
+					</div>
+					<div class="tp-product-details-review-summery-rating">
+						{% set rating = product.rating.average %}
+						{% include 'components/rating-stars.jinja' %}
+					</div>
+				</div>
+				<p>{{ _('Based on') }}
+					({{ product.rating.total_count if product.rating.total_count else 0 }}
+					{{ _('reviews') }})</p>
+				<div class="rating-progress">
+					{% include 'components/rating-progress.jinja' %}
+				</div>
+				<a href="/products/{{ product.id}}/reviews/add" class="add-review-btn" id="add-review-btn">{{
+                    _('Add review') }}
+				</a>
+			</div>
+		</div>
+		<div class="tp-product-details-review-wrapper">
+			<div class="tp-product-details-review-list">
+				{% if product.rating %}
+					{% set reviews = product.reviews.results %}
+					{% include 'components/customer-reviews.jinja' %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+    {% set totalPages = product.reviews.pages_count %}
+    {% set currentPage = product.reviews.page %}
+    {% include 'components/pagination.jinja' %}
+
+      </section>
+   </div>
+</section>
+
+{% endblock %}
+
+{% block footer_sticky %}
+<!-- PhotoSwipe HTML - يجب أن يكون خارج .app -->
+<div class="pswp d-hide" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div>
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer_scripts %}
+<script src="{{ 'photoswipe.min.js' | asset_url }}"></script>
+<script src="{{ 'photoswipe-ui-default.min.js' | asset_url }}"></script>
+<script>
+$(document).ready(function() {
+  // دالة تكبير الصور - نفس طريقة صفحة المنتج
+  function openPhotoSwipe(images, index) {
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    if (!pswpElement) {
+      console.error('PhotoSwipe element not found');
+      return;
+    }
+
+    var items = images.map(function (image) {
+      return {
+        src: image,
+        w: 1200,
+        h: 900
+      };
+    });
+
+    var options = {
+      history: false,
+      focus: false,
+      showAnimationDuration: 0,
+      hideAnimationDuration: 0,
+      index: parseInt('' + index) || 0
+    };
+
+    $('.pswp').removeClass('d-hide');
+    $('.app').addClass('d-hide');
+
+    var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+
+    gallery.listen('close', function() {
+      $('.pswp').addClass('d-hide');
+      $('.app').removeClass('d-hide');
+    });
+    
+    gallery.init();
+  }
+
+  // معالجة النقر على صور التقييمات
+  $(document).on('click', '.review-image-clickable', function() {
+    var parent = $(this).closest('.review-images-box');
+    var index = $(this).attr('attr-index');
+    var images = [];
+    
+    $('img', parent).each(function(idx, itm) {
+      images.push($(itm).attr('src'));
+    });
+    
+    if (images.length > 0) {
+      openPhotoSwipe(images, index);
+    }
+  });
+});
+</script>
+{% endblock %}
+
+{% block footer %} {% include 'footer.jinja' %} {% endblock %}

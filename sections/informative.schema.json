@@ -1,0 +1,78 @@
+{
+  "name": {
+    "ar": "شرح المكونات",
+    "en": "Explanation components"
+  },
+  "icon": "fal fa-sparkles",
+  "template": "sections/informative.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "image",
+      "id": "main_image",
+      "label": {
+        "ar": "الصورة الرئيسية",
+        "en": "Main image"
+      },
+      "info": {
+        "ar": "مقاس الصورة 450 عرض * 500 طول",
+        "en": "Image size: 450 width * 500 height"
+      }
+    },
+    {
+      "type": "list",
+      "id": "informative_box",
+      "label": {
+        "ar": "عنصر",
+        "en": "Item"
+      },
+      "max_items": 6,
+      "settings": [
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          },
+          "info": {
+            "ar": "مقاس الصورة 65 عرض * 65 طول",
+            "en": "Image size: 65 width * 65 height"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": {
+            "ar": "العنوان الفرعي",
+            "en": "Sub title"
+          }
+        }
+      ]
+    }
+  ]
+}

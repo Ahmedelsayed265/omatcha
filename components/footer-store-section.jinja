@@ -1,0 +1,345 @@
+<div class="tp-footer-area">
+	<div class="tp-footer-top">
+		<div class="container">
+    {# <div class="klaviyo-form-Tnr4k5"></div> #}
+			<div class="row">
+				<div class="col-xl-4 col-lg-3 col-md-12 about-us-div">
+					<div class="tp-footer-widget footer-col-1 mb-50">
+						<div class="tp-footer-widget-content">
+							<div class="tp-footer-logo">
+								<a href="/" aria-label="home">
+									{% set logoUrl = store.settings.branding.logo %}
+									<img loading="lazy" class="footer-logo lazy-img" width="180" height="60" data-src="{{ image_url(logoUrl,{ h: 175, q: 100 }) }}" alt="{{ store.name }}">
+								</a>
+							</div>
+							<p class="tp-footer-desc">{{ about_settings.about_us_des | safe }}</p>
+							<div class="tp-footer-social social-sm">
+								{% if store.settings.contact.facebook %}
+									<a href="https://www.facebook.com/{{ store.settings.contact.facebook }}" target="_blank" aria-label="Facebook">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+											<path fill-rule="evenodd" clip-rule="evenodd" d="M6.18182 10.3333C5.20406 10.3333 5 10.5252 5 11.4444V13.1111C5 14.0304 5.20406 14.2222 6.18182 14.2222H8.54545V20.8889C8.54545 21.8081 8.74951 22 9.72727 22H12.0909C13.0687 22 13.2727 21.8081 13.2727 20.8889V14.2222H15.9267C16.6683 14.2222 16.8594 14.0867 17.0631 13.4164L17.5696 11.7497C17.9185 10.6014 17.7035 10.3333 16.4332 10.3333H13.2727V7.55556C13.2727 6.94191 13.8018 6.44444 14.4545 6.44444H17.8182C18.7959 6.44444 19 6.25259 19 5.33333V3.11111C19 2.19185 18.7959 2 17.8182 2H14.4545C11.191 2 8.54545 4.48731 8.54545 7.55556V10.3333H6.18182Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+										</svg>
+									</a>
+								{% endif %}
+
+								{% if store.settings.contact.instagram %}
+									<a href="https://www.instagram.com/{{ store.settings.contact.instagram }}" target="_blank" aria-label="Instagram">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+											<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+											<path d="M16.5 12C16.5 14.4853 14.4853 16.5 12 16.5C9.51472 16.5 7.5 14.4853 7.5 12C7.5 9.51472 9.51472 7.5 12 7.5C14.4853 7.5 16.5 9.51472 16.5 12Z" stroke="currentColor" stroke-width="1.5"></path>
+											<path d="M17.5078 6.5L17.4988 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+										</svg>
+									</a>
+								{% endif %}
+
+								{% if store.settings.contact.twitter %}
+									<a href="https://twitter.com/{{ store.settings.contact.twitter }}" target="_blank" aria-label="Twitter">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+											<path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+										</svg>
+									</a>
+								{% endif %}
+
+								{% if store.settings.contact.snapchat %}
+									<a href="https://www.snapchat.com/add/{{ store.settings.contact.snapchat }}" target="_blank" aria-label="Snapchat">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+											<path d="M6.57556 7.42444C6.57556 4.42861 9.00416 2 12 2C14.9958 2 17.4244 4.42861 17.4244 7.42444C17.4244 12.1722 17.6611 14.5456 22 16.4444C19.7778 17 19.2222 17.5556 18.6667 19.7778C14.7778 19.7778 14.2222 22 12 22C9.77778 22 9.22222 19.7778 5.33333 19.7778C4.77778 17.5556 4.22222 17 2 16.4444C6.33889 14.5456 6.57556 12.1722 6.57556 7.42444Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+											<path d="M2 16C5.82356 13.9171 5.82356 11.9503 2.95589 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+											<path d="M22 16C18.1764 13.9171 18.1764 11.9503 21.0441 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+										</svg>
+									</a>
+								{% endif %}
+
+								{% if store.settings.contact.tiktok %}
+									<a href="https://www.tiktok.com/@{{ store.settings.contact.tiktok }}" target="_blank" aria-label="TikTok">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+											<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+											<path d="M10.5359 11.0075C9.71585 10.8916 7.84666 11.0834 6.93011 12.7782C6.01355 14.4729 6.9373 16.2368 7.51374 16.9069C8.08298 17.5338 9.89226 18.721 11.8114 17.5619C12.2871 17.2746 12.8797 17.0603 13.552 14.8153L13.4738 5.98145C13.3441 6.95419 14.4186 9.23575 17.478 9.5057" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+										</svg>
+									</a>
+								{% endif %}
+								{% if store.settings.contact.website %}
+									<a href="{{ store.settings.contact.website }}" target="_blank" aria-label="Website">
+										<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+											<circle cx="12" cy="12" r="10"/>
+											<path d="M8 12c0 6 4 10 4 10s4-4 4-10S12 2 12 2 8 6 8 12Z"/>
+											<path d="M21 15H3M21 9H3"/>
+										</svg>
+									</a>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+				{% if not (about_settings.links_1_hide) %}
+					<div class="col-xl-2 col-lg-3 col-md-4 col-sm-4 links-1">
+						<div class="tp-footer-widget">
+            {% if about_settings.links_1_title %}
+							<h4 class="tp-footer-widget-title collapsed" data-bs-toggle="collapse" data-bs-target="#footerMenu1" aria-expanded="false" aria-controls="footerMenu1">{{ about_settings.links_1_title }}</h4>
+							{% endif %}
+              <div class="tp-footer-widget-content collapse" id="footerMenu1">
+								<ul>
+									{% for link in about_settings.links_1_links %}
+										<li>
+											<a href="{{ link.url }}">{{ link.title }}</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				{% if not (about_settings.links_2_hide) %}
+					<div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 links-2">
+						<div class="tp-footer-widget">
+              {% if about_settings.links_2_title %}
+							<h4 class="tp-footer-widget-title collapsed" data-bs-toggle="collapse" data-bs-target="#footerMenu2" aria-expanded="false" aria-controls="footerMenu2">{{ about_settings.links_2_title }}</h4>
+							{% endif %}
+              <div class="tp-footer-widget-content collapse" id="footerMenu2">
+								<ul>
+									{% for link in about_settings.links_2_links %}
+										<li>
+											<a href="{{ link.url }}">{{ link.title }}</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				{% if not contact_us %}
+					<div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 contact-us-div">
+						<div class="tp-footer-widget footer-col-4 mb-50">
+							<h4 class="tp-footer-widget-title">{{ _('Contact us') }}</h4>
+							<div class="tp-footer-widget-content">
+								<div class="tp-footer-contact">
+									<div class="tp-footer-contact-item">
+										<div class="tp-footer-contact-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 14 14" fill="none">
+												<path d="M1.40039 2.0999C1.40039 1.91425 1.47414 1.7362 1.60542 1.60493C1.73669 1.47365 1.91474 1.3999 2.10039 1.3999H3.60749C3.77319 1.39998 3.93348 1.45883 4.05986 1.56598C4.18624 1.67314 4.27052 1.82165 4.29769 1.9851L4.81569 5.0896C4.84044 5.23746 4.81707 5.38935 4.74903 5.52292C4.68098 5.6565 4.57184 5.7647 4.43769 5.8316L3.35409 6.3727C3.74267 7.33566 4.32137 8.2104 5.05563 8.94466C5.78989 9.67892 6.66464 10.2576 7.62759 10.6462L8.16939 9.5626C8.23626 9.42858 8.34435 9.31954 8.47778 9.2515C8.61121 9.18346 8.76295 9.16001 8.91069 9.1846L12.0152 9.7026C12.1786 9.72978 12.3272 9.81405 12.4343 9.94043C12.5415 10.0668 12.6003 10.2271 12.6004 10.3928V11.8999C12.6004 12.0856 12.5266 12.2636 12.3954 12.3949C12.2641 12.5262 12.086 12.5999 11.9004 12.5999H10.5004C5.47439 12.5999 1.40039 8.5259 1.40039 3.4999V2.0999Z" fill="#0D0702"/>
+											</svg>
+										</div>
+										<div class="tp-footer-contact-content">
+											{% set contact_phone = about_settings.contact_info_phone if about_settings.contact_info_phone else store.settings.contact.phone %}
+											<a href="tel:{{ contact_phone }}">{{ contact_phone }}</a>
+										</div>
+									</div>
+									<div class="tp-footer-contact-item">
+										<div class="tp-footer-contact-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 14 14" fill="none">
+												<path d="M12.5977 4.1186L6.99976 6.9172L1.40186 4.1186C1.42258 3.76192 1.57889 3.42665 1.83878 3.18146C2.09867 2.93628 2.44246 2.79974 2.79976 2.7998H11.1998C11.557 2.79974 11.9008 2.93628 12.1607 3.18146C12.4206 3.42665 12.5769 3.76192 12.5977 4.1186Z" fill="#0D0702"/>
+												<path d="M1.39961 5.68262L6.99961 8.48262L12.5996 5.68262V9.80002C12.5996 10.1713 12.4521 10.5274 12.1896 10.79C11.927 11.0525 11.5709 11.2 11.1996 11.2H2.79961C2.42831 11.2 2.07221 11.0525 1.80966 10.79C1.54711 10.5274 1.39961 10.1713 1.39961 9.80002V5.68262Z" fill="#0D0702"/>
+											</svg>
+										</div>
+										<div class="tp-footer-contact-content">
+											{% set contact_email = about_settings.contact_info_email if about_settings.contact_info_email else store.settings.contact.email %}
+											<a href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+										</div>
+									</div>
+									{# <div class="tp-footer-contact-item">
+										<div class="tp-footer-contact-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewbox="0 0 14 14" fill="none">
+												<path fill-rule="evenodd" clip-rule="evenodd" d="M10.465 2.83466C9.54606 1.91569 8.29966 1.39941 7.00004 1.39941C5.70041 1.39941 4.45401 1.91569 3.53504 2.83466C2.61606 3.75364 2.09979 5.00004 2.09979 6.29966C2.09979 7.59929 2.61606 8.84569 3.53504 9.76467L7.00004 13.2297L10.465 9.76467C10.9201 9.30965 11.2811 8.76946 11.5274 8.17493C11.7736 7.5804 11.9004 6.94318 11.9004 6.29966C11.9004 5.65615 11.7736 5.01893 11.5274 4.4244C11.2811 3.82987 10.9201 3.28968 10.465 2.83466ZM7.00004 7.69966C6.62873 7.69966 6.27264 7.55217 6.01009 7.28961C5.74754 7.02706 5.60004 6.67097 5.60004 6.29966C5.60004 5.92836 5.74754 5.57227 6.01009 5.30972C6.27264 5.04716 6.62873 4.89966 7.00004 4.89966C7.37134 4.89966 7.72744 5.04716 7.98999 5.30972C8.25254 5.57227 8.40004 5.92836 8.40004 6.29966C8.40004 6.67097 8.25254 7.02706 7.98999 7.28961C7.72744 7.55217 7.37134 7.69966 7.00004 7.69966Z" fill="#0D0702"/>
+											</svg>
+										</div>
+										<div class="tp-footer-contact-content">
+											<a class="contact-location" {% if store.settings.general.business_address.lat %} target="_blank" href="https://maps.google.com/?q={{ store.settings.general.business_address.lat }},{{ store.settings.general.business_address.lng }}" {% endif %}>
+												{{ store.settings.general.business_address.street }}
+											</a>
+										</div>
+									</div> #}
+									<div class="tp-footer-social social-lg">
+										{% if store.settings.contact.facebook %}
+											<a href="https://www.facebook.com/{{ store.settings.contact.facebook }}" target="_blank" aria-label="Facebook">
+												<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+													<path fill-rule="evenodd" clip-rule="evenodd" d="M6.18182 10.3333C5.20406 10.3333 5 10.5252 5 11.4444V13.1111C5 14.0304 5.20406 14.2222 6.18182 14.2222H8.54545V20.8889C8.54545 21.8081 8.74951 22 9.72727 22H12.0909C13.0687 22 13.2727 21.8081 13.2727 20.8889V14.2222H15.9267C16.6683 14.2222 16.8594 14.0867 17.0631 13.4164L17.5696 11.7497C17.9185 10.6014 17.7035 10.3333 16.4332 10.3333H13.2727V7.55556C13.2727 6.94191 13.8018 6.44444 14.4545 6.44444H17.8182C18.7959 6.44444 19 6.25259 19 5.33333V3.11111C19 2.19185 18.7959 2 17.8182 2H14.4545C11.191 2 8.54545 4.48731 8.54545 7.55556V10.3333H6.18182Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+												</svg>
+											</a>
+										{% endif %}
+
+										{% if store.settings.contact.instagram %}
+											<a href="https://www.instagram.com/{{ store.settings.contact.instagram }}" target="_blank" aria-label="Instagram">
+												<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+													<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+													<path d="M16.5 12C16.5 14.4853 14.4853 16.5 12 16.5C9.51472 16.5 7.5 14.4853 7.5 12C7.5 9.51472 9.51472 7.5 12 7.5C14.4853 7.5 16.5 9.51472 16.5 12Z" stroke="currentColor" stroke-width="1.5"></path>
+													<path d="M17.5078 6.5L17.4988 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+												</svg>
+											</a>
+										{% endif %}
+
+										{% if store.settings.contact.twitter %}
+											<a href="https://twitter.com/{{ store.settings.contact.twitter }}" target="_blank" aria-label="Twitter">
+												<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+													<path d="M3 21L10.5484 13.4516M21 3L13.4516 10.5484M13.4516 10.5484L8 3H3L10.5484 13.4516M13.4516 10.5484L21 21H16L10.5484 13.4516" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+												</svg>
+											</a>
+										{% endif %}
+
+										{% if store.settings.contact.snapchat %}
+											<a href="https://www.snapchat.com/add/{{ store.settings.contact.snapchat }}" target="_blank" aria-label="Snapchat">
+												<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+													<path d="M6.57556 7.42444C6.57556 4.42861 9.00416 2 12 2C14.9958 2 17.4244 4.42861 17.4244 7.42444C17.4244 12.1722 17.6611 14.5456 22 16.4444C19.7778 17 19.2222 17.5556 18.6667 19.7778C14.7778 19.7778 14.2222 22 12 22C9.77778 22 9.22222 19.7778 5.33333 19.7778C4.77778 17.5556 4.22222 17 2 16.4444C6.33889 14.5456 6.57556 12.1722 6.57556 7.42444Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+													<path d="M2 16C5.82356 13.9171 5.82356 11.9503 2.95589 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+													<path d="M22 16C18.1764 13.9171 18.1764 11.9503 21.0441 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+												</svg>
+											</a>
+										{% endif %}
+
+										{% if store.settings.contact.tiktok %}
+											<a href="https://www.tiktok.com/@{{ store.settings.contact.tiktok }}" target="_blank" aria-label="TikTok">
+												<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="currentColor" fill="none">
+													<path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"></path>
+													<path d="M10.5359 11.0075C9.71585 10.8916 7.84666 11.0834 6.93011 12.7782C6.01355 14.4729 6.9373 16.2368 7.51374 16.9069C8.08298 17.5338 9.89226 18.721 11.8114 17.5619C12.2871 17.2746 12.8797 17.0603 13.552 14.8153L13.4738 5.98145C13.3441 6.95419 14.4186 9.23575 17.478 9.5057" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+												</svg>
+											</a>
+										{% endif %}
+										{% if store.settings.contact.website %}
+											<a href="{{ store.settings.contact.website }}" target="_blank" aria-label="Website">
+												<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+													<circle cx="12" cy="12" r="10"/>
+													<path d="M8 12c0 6 4 10 4 10s4-4 4-10S12 2 12 2 8 6 8 12Z"/>
+													<path d="M21 15H3M21 9H3"/>
+												</svg>
+											</a>
+										{% endif %}
+									</div>
+								</div>
+										{% if ios_app or android_app %}
+									<div class="google-apple-stores">
+										{% if ios_app %}
+											<a href="{{ ios_app }}" target="_blank" aria-label="ios_app">
+												<img loading="lazy" class="lazy-img" data-src="{{ 'app-store.svg' | asset_url }}" alt="store" width="115" height="35">
+											</a>
+										{% endif %}
+										{% if android_app %}
+											<a href="{{ android_app }}" target="_blank" aria-label="android_app">
+												<img loading="lazy" class="lazy-img" data-src="{{ 'google-play.svg' | asset_url }}" alt="store" width="115" height="35">
+											</a>
+										{% endif %}
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+
+			<div class="certificates-methods">
+        {% if store.settings.general.tax_settings.is_certificate_visible or store.settings.general.tax_settings.tax_number or store.settings.contact.business_center or store.commercial_registration_number %}
+				<div class="certificates">
+					<div class="maroof-icon">
+						{% if store.settings.general.tax_settings.is_certificate_visible %}
+							<div class="vat-icon">
+								<a {% if store.settings.general.tax_settings.tax_registration_certificate %} href="{{ store.settings.general.tax_settings.tax_registration_certificate }}" target="_blank" {% endif %} aria-label="tax_registration_certificate">
+									<img loading="lazy" class="lazy-img" data-src="{{ 'vat-certificate.png' | asset_url }}" alt="certificate" width="32" height="40">
+								</a>
+							</div>
+						{% endif %}
+						{% if store.settings.general.tax_settings.tax_number %}
+							<div class="text-certificate">
+								<p>{{ _('The VAT number') }}</p>
+								<span>{{ store.settings.general.tax_settings.tax_number }}</span>
+							</div>
+						{% endif %}
+					</div>
+
+					{% if store.settings.contact.business_center %}
+						<a href="{% if business_center %}{{ business_center }}{% else %}javascript:;{% endif %}" class="maroof-icon" {% if business_center %} target="_blank" {% endif %}>
+							<img loading="lazy" class="lazy-img" data-src="{{ 'business_center.png' | asset_url }}" alt="" width="32" height="40">
+							<div class="text-certificate">
+								<p>{{ _('Business certificate') }}</p>
+								<span>{{ store.settings.contact.business_center }}</span>
+							</div>
+						</a>
+					{% endif %}
+
+					{% if store.commercial_registration_number %}
+						<div class="maroof-icon">
+							<div class="text-certificate">
+								<p>{{ _('The commercial register number') }}</p>
+								<span>{{ store.commercial_registration_number }}</span>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+        {% endif %}
+				{% if store.shipping_methods or store.settings.checkout.payment_methods %}
+					<div class="tp-footer-payment">
+						{% if not shipping_icons %}
+							{% for shipping_method in store.shipping_methods %}
+								<a href="/shipping-and-payment" aria-label="shipping_method">
+									<img loading="lazy" class="lazy-img" data-src="{{ image_url(shipping_method.icon,{ h: 80, q: 100 }) }}" alt="shipping" width="26" height="26">
+								</a>
+							{% endfor %}
+						{% endif %}
+						{% for payment_method in store.settings.checkout.payment_methods %}
+							<a href="/shipping-and-payment" aria-label="payment_methods">
+								<img loading="lazy" class="lazy-img" data-src="{{ image_url(payment_method.icon,{ h: 80, q: 100 }) }}" alt="payment" width="26" height="26">
+							</a>
+						{% endfor %}
+					</div>
+				{% endif %}
+			</div>
+
+		</div>
+	</div>
+	<div class="tp-footer-bottom">
+		<div class="container">
+			<div class="tp-footer-bottom-wrapper">
+				<div class="tp-footer-copyright">
+					{{ store.settings.branding.copyrights | safe }}
+				</div>
+				<div class="language-currency-btn" onclick="zidOpenRegionSettingDialog()">
+      {% if session.lang == 'en' %}
+      {% set change_to_lang = 'ar' %}
+      {% set change_to_lang_name = 'العربية' %}
+      {% set country_name = session.country.names.en %}
+      {% else %}
+      {% set change_to_lang = 'en' %}
+      {% set change_to_lang_name = 'English' %}
+      {% set country_name = session.country.names.ar %}
+      {% endif %}
+						<div class="lang-currency-display">
+							<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewbox="0 0 15 16" fill="none">
+								<path d="M7.5 13.625C10.1204 13.625 12.3222 11.8333 12.9473 9.40809M7.5 13.625C4.87964 13.625 2.67776 11.8333 2.05269 9.40809M7.5 13.625C9.0533 13.625 10.3125 11.1066 10.3125 8C10.3125 4.8934 9.0533 2.375 7.5 2.375M7.5 13.625C5.9467 13.625 4.6875 11.1066 4.6875 8C4.6875 4.8934 5.9467 2.375 7.5 2.375M7.5 2.375C9.60324 2.375 11.4369 3.52934 12.4019 5.23903M7.5 2.375C5.39676 2.375 3.56312 3.52934 2.59808 5.23903M12.4019 5.23903C11.0873 6.37524 9.37392 7.0625 7.5 7.0625C5.62608 7.0625 3.91267 6.37524 2.59808 5.23903M12.4019 5.23903C12.8623 6.05464 13.125 6.99664 13.125 8C13.125 8.48624 13.0633 8.95807 12.9473 9.40809M12.9473 9.40809C11.3334 10.303 9.47618 10.8125 7.5 10.8125C5.52382 10.8125 3.66664 10.303 2.05269 9.40809M2.05269 9.40809C1.9367 8.95807 1.875 8.48624 1.875 8C1.875 6.99664 2.1377 6.05464 2.59808 5.23903" stroke="#0D0702" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+							<span>{{ change_to_lang_name }}</span>
+							<em>|</em>
+							<span>{{ country_name }}</span>
+						</div>
+					</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var footerImages = document.querySelectorAll('.tp-footer-area img.lazy-img[data-src]');
+  if (!footerImages.length) return;
+
+  function loadFooterImg(img) {
+    var src = img.getAttribute('data-src');
+    if (!src) return;
+    img.src = src;
+    img.removeAttribute('data-src');
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          loadFooterImg(entry.target);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    footerImages.forEach(function (img) {
+      observer.observe(img);
+    });
+  } else {
+    footerImages.forEach(loadFooterImg);
+  }
+});
+</script>

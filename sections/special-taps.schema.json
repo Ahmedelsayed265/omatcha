@@ -1,0 +1,118 @@
+{
+  "section_id": "uuid",
+  "template": "sections/special-taps.jinja",
+  "icon": "fal fa-box",
+  "name": {
+    "ar": "تبويبات مميزة",
+    "en": "Special tabs"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "display_two_rows",
+      "label": {
+        "ar": "عرض صفين في الشريط",
+        "en": "Display 2 rows in slider"
+      }
+    },
+    {
+      "type": "list",
+      "id": "tabs",
+      "label": {
+        "ar": "التبويبات",
+        "en": "Tabs"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": {
+            "ar": "اسم التبويب",
+            "en": "Tab Label"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "عنوان التبويب",
+            "en": "Tab Title"
+          }
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": {
+            "ar": "عنوان التبويب",
+            "en": "Tab Subtitle"
+          }
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": {
+            "ar": "نص زر التبويب",
+            "en": "Tab Button Text"
+          }
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": {
+            "ar": "رابط زر التبويب",
+            "en": "Tab Button URL"
+          }
+        },
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "صورة التبويب (ديسكتوب)",
+            "en": "Tab Image (Desktop)"
+          },
+          "info": {
+            "ar": "مقاس الصورة 1670 عرض * 670 طول",
+            "en": "Image size: 1670 width × 670 height"
+          }
+        },
+        {
+          "type": "image",
+          "id": "mobile_image",
+          "label": {
+            "ar": "صورة التبويب (موبايل)",
+            "en": "Tab Image (Mobile)"
+          },
+          "info": {
+            "ar": "مقاس الصورة 768 عرض * 566 طول",
+            "en": "Image size: 768 width × 566 height"
+          }
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": {
+            "ar": "الفيديو",
+            "en": "Video"
+          }
+        },
+        {
+          "type": "category_products",
+          "id": "category",
+          "label": {
+            "ar": "منتجات التبويب",
+            "en": "Tab Products"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{% if ab_settings.announcement_bar_display %}
+	{% if (ab_settings.announcement_bar_page_display | default('')) == ''
+        or (template == 'home' and ab_settings.announcement_bar_page_display == 'home')
+        or ab_settings.announcement_bar_page_display == 'all'
+    %}
+		<section class="tp-bar {{ 'stop-move' if ab_settings.announcement_bar_stop_move else '' }}" style="{% if ab_settings.announcement_bar_background_color %}background: {{ ab_settings.announcement_bar_background_color }} {% endif %}">
+			<div class="tp-mask">
+				<div class="tp-marquee" style="animation-duration:{{ ab_settings.announcement_bar_bar_speed | default(50) }}">
+					{% for ad in ab_settings.announcement_bar_advertisement_bar %}
+						<a href="{{ ad.url if ad.url else 'javascript:;' }}" style="{% if ad.text_color %}color: {{ ad.text_color }}{% endif %}">
+							{% if ad.image %}
+								<img loading="lazy" class="lazy-img" src="{{ image_url(ad.image) }}"  alt="image" width="26" height="26">
+							{% endif %}
+							{{ ad.text }}
+						</a>
+					{% endfor %}
+				</div>
+				<div class="tp-marquee" style="animation-duration:{{ ab_settings.announcement_bar_bar_speed | default(50) }}">
+					{% for ad in ab_settings.announcement_bar_advertisement_bar %}
+						<a href="{{ ad.url if ad.url else 'javascript:;' }}" style="{% if ad.text_color %}color: {{ ad.text_color }}{% endif %}">
+							{% if ad.image %}
+								<img loading="lazy" class="lazy-img" src="{{ image_url(ad.image) }}"  alt="image" width="26" height="26">
+							{% endif %}
+							{{ ad.text }}
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+			{# <span class="ab-close" onclick="hideAnnouncementBar()">
+							<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+								<path d="M19.0005 4.99988L5.00049 18.9999M5.00049 4.99988L19.0005 18.9999" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						</span> #}
+		</section>
+	{% endif %}
+{% endif %}

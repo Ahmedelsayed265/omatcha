@@ -1,0 +1,59 @@
+{
+  "name": {
+    "ar": "بانر",
+    "en": "Banner"
+  },
+  "icon": "fal fa-sparkles",
+  "template": "sections/banner.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_in_app_only",
+      "label": {
+        "ar": "إظهار في التطبيق فقط",
+        "en": "Show in app only"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "no_rounded",
+      "label": {
+        "ar": "بدون حواف دائرية",
+        "en": "No rounded edges"
+      }
+    },
+    {
+      "type": "image",
+      "id": "image",
+      "label": {
+        "ar": "الصورة",
+        "en": "Image"
+      },
+      "info": {
+        "ar": "مقاس الصورة 2881 عرض * 961 طول",
+        "en": "Image size: 2881 width * 961 height"
+      }
+    },
+    {
+      "type": "image",
+      "id": "mobile_image",
+      "label": {
+        "ar": "صورة الجوال",
+        "en": "Mobile Image"
+      },
+      "info": {
+        "ar": "مقاس الصورة 768 عرض * 983 طول",
+        "en": "Image size: 768 width * 983 height"
+      }
+    },
+    {
+      "type": "url",
+      "id": "url",
+      "label": {
+        "ar": "الرابط",
+        "en": "Link"
+      }
+    }
+  ]
+}

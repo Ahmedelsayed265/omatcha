@@ -1,0 +1,19 @@
+{% if features and features|length > 0 %}
+<ul class="features-product">
+	{% for item in features %}
+		<li>
+			{% if item.image_feature %}
+				<img loading="lazy" src="{{ image_url(item.image_feature) }}" loading="lazy" alt="{{ item.title_feature }}">
+			{% endif %}
+			<div class="content-features-product">
+				{% if item.title_feature %}
+					<h3>{{ item.title_feature }}</h3>
+				{% endif %}
+				{% if item.subtitle_feature %}
+					<p>{{ item.subtitle_feature }}</p>
+				{% endif %}
+			</div>
+		</li>
+	{% endfor %}
+</ul>
+{% endif %}

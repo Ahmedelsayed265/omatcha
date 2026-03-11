@@ -1,0 +1,22 @@
+<section
+  class="tp-banners s-block  {% if settings.show_in_app_only %}d-none{% endif %} {{ 'no-rounded' if settings.no_rounded else '' }}"
+  section-id="{{ sectionId }}">
+  <div class="tp-items tp-items-1">
+    <a href="{% if settings.url %}{{ settings.url }}{% else %}javascript:;{% endif %}" style="position: relative;">
+      {% if settings.image or settings.mobile_image %}
+      <picture>
+        {% if settings.mobile_image %}
+        <source media="(max-width: 767px)" srcset="{{ image_url(settings.mobile_image) }}">
+        {% endif %}
+        {% if settings.image %}
+        <source media="(min-width: 768px)" srcset="{{ image_url(settings.image) }}">
+        {% endif %}
+        <img loading="lazy" width="1800" height="450" class="lazy-img" data-src="{{ image_url(settings.image) }}"
+          alt="banner">
+      </picture>
+      {% endif %}
+
+      <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #00000066;"></div>
+    </a>
+  </div>
+</section>

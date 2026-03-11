@@ -1,0 +1,209 @@
+{% if not settings.hide_element %}
+{% block top_links %}
+<link href="
+https://cdn.jsdelivr.net/npm/image-compare-viewer@1.5.0/dist/image-compare-viewer.min.css
+" rel="stylesheet">
+{% endblock %}
+<section class="tp-benefits s-block" section-id="{{ sectionId }}">
+  <div class="container">
+    <div class="tp-title-section">
+      {% if settings.title %}
+      <h3>{{ settings.title }}</h3>
+      {% endif %}
+    </div>
+    <div class="tp-benefits-items">
+      {% for item in safeget(settings, 'benefits', []) %}
+      {% set product = item.product %}
+      <div class="swiper-slide">
+        <div class="benefit-box">
+          <div class="compare-box" data-before="{{ _('After') }}" data-after="{{ _('Before') }}">
+            <img loading="lazy" width="350" height="260" class="lazy-img" src="{{ image_url(item.image_after) }}"  alt="{{ _('After') }}"/>
+            <img loading="lazy" width="350" height="260" class="lazy-img" src="{{ image_url(item.image_before) }}"  alt="{{ _('Before') }}"/>
+          </div>
+          <div class="benefit-content">
+            <h4>
+              <a href="/products/{{ product.slug }}">
+                {{ item.title }}
+              </a>
+            </h4>
+            <p>{{ item.sub_title }}</p>
+            <div class="footer-benefit">
+              <a href="/products/{{ product.slug }}" class="benefit-product-img">
+                <img loading="lazy" class="lazy-img"
+                  {% if product.images %}
+                  src="{{ product.images[0]['image']['large'] }}" {% else %}
+                  src="{{ image_url('product-img.svg' | asset_url,{ w: 235, q: 100, f:'auto' }) }}" {% endif %}
+                  alt="{{ product.name }}" />
+              </a>
+              <div class="product-name-cart">
+                <h5>
+                  <a href="/products/{{ product.slug }}">
+                    {{ product.name }}
+                  </a>
+                </h5>
+                {% if product.is_infinite == false and product.quantity <= 0 %} <a class="btn-product-card-out-of-stock"
+                  disabled>
+                  {{ _('Out of stock') }}
+                  </a>
+                  {% elif ( product.has_options or product.has_fields ) %}
+                  <a class="btn-product-card-select-variant" href="/products/{{ product.slug }}">
+                    {{ _('Add to cart') }}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.25 12.0005C3.25 12.374 3.41565 12.7206 3.57252 12.9808C3.7418 13.2617 3.96944 13.5516 4.21918 13.8343C4.72018 14.4013 5.37387 15.0103 6.00824 15.5612C6.64633 16.1153 7.28222 16.6255 7.75725 16.9963C7.99516 17.182 8.19364 17.3334 8.33304 17.4387C8.40276 17.4914 8.45776 17.5326 8.49558 17.5607L8.53915 17.5931L8.55071 17.6017L8.55472 17.6046C8.88822 17.8503 9.35816 17.7794 9.60382 17.4459C9.84947 17.1124 9.77828 16.6429 9.44482 16.3973L9.43209 16.3879L9.39204 16.3581C9.35662 16.3317 9.3042 16.2925 9.2372 16.2418C9.10317 16.1406 8.91103 15.994 8.68019 15.8138C8.21772 15.4528 7.60363 14.96 6.99173 14.4286C6.37611 13.894 5.77981 13.3352 5.34331 12.8411C5.3157 12.8099 5.28899 12.7792 5.26316 12.749L20 12.749C20.4142 12.749 20.75 12.4132 20.75 11.999C20.75 11.5848 20.4142 11.249 20 11.249L5.2657 11.249C5.29073 11.2198 5.31661 11.1901 5.34331 11.1598C5.77981 10.6658 6.37611 10.1069 6.99173 9.57235C7.60363 9.04099 8.21772 8.5481 8.68019 8.18713C8.91102 8.00695 9.10317 7.86036 9.2372 7.75911C9.30419 7.7085 9.35662 7.66925 9.39203 7.64285L9.43208 7.61308L9.44481 7.60367C9.77828 7.358 9.84947 6.88852 9.60382 6.55503C9.35815 6.22153 8.88822 6.15064 8.55472 6.3963L8.55071 6.39926L8.53915 6.40782L8.49558 6.4402C8.45776 6.4684 8.40276 6.50957 8.33304 6.56224C8.19363 6.66755 7.99516 6.81899 7.75725 7.00468C7.28222 7.37546 6.64633 7.88567 6.00823 8.43977C5.37387 8.99064 4.72018 9.59962 4.21918 10.1667C3.96944 10.4494 3.7418 10.7393 3.57252 11.0201C3.4166 11.2788 3.25199 11.6228 3.25002 11.9938" fill="currentColor"/>
+                    </svg>
+                  </a>
+                  {% else %}
+                  <button type="button" class="product-card-add-to-cart"
+                    onclick="productCartAddToCart(this,'{{ product.id }}')" aria-label="AddToCart">
+                    <img loading="lazy" style="display: inline" class="add-to-cart-progress d-none"
+                      src="{{ 'spinner.gif' | asset_url }}" width="20" height="20" />
+                    {{ _('Add to cart') }}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.25 12.0005C3.25 12.374 3.41565 12.7206 3.57252 12.9808C3.7418 13.2617 3.96944 13.5516 4.21918 13.8343C4.72018 14.4013 5.37387 15.0103 6.00824 15.5612C6.64633 16.1153 7.28222 16.6255 7.75725 16.9963C7.99516 17.182 8.19364 17.3334 8.33304 17.4387C8.40276 17.4914 8.45776 17.5326 8.49558 17.5607L8.53915 17.5931L8.55071 17.6017L8.55472 17.6046C8.88822 17.8503 9.35816 17.7794 9.60382 17.4459C9.84947 17.1124 9.77828 16.6429 9.44482 16.3973L9.43209 16.3879L9.39204 16.3581C9.35662 16.3317 9.3042 16.2925 9.2372 16.2418C9.10317 16.1406 8.91103 15.994 8.68019 15.8138C8.21772 15.4528 7.60363 14.96 6.99173 14.4286C6.37611 13.894 5.77981 13.3352 5.34331 12.8411C5.3157 12.8099 5.28899 12.7792 5.26316 12.749L20 12.749C20.4142 12.749 20.75 12.4132 20.75 11.999C20.75 11.5848 20.4142 11.249 20 11.249L5.2657 11.249C5.29073 11.2198 5.31661 11.1901 5.34331 11.1598C5.77981 10.6658 6.37611 10.1069 6.99173 9.57235C7.60363 9.04099 8.21772 8.5481 8.68019 8.18713C8.91102 8.00695 9.10317 7.86036 9.2372 7.75911C9.30419 7.7085 9.35662 7.66925 9.39203 7.64285L9.43208 7.61308L9.44481 7.60367C9.77828 7.358 9.84947 6.88852 9.60382 6.55503C9.35815 6.22153 8.88822 6.15064 8.55472 6.3963L8.55071 6.39926L8.53915 6.40782L8.49558 6.4402C8.45776 6.4684 8.40276 6.50957 8.33304 6.56224C8.19363 6.66755 7.99516 6.81899 7.75725 7.00468C7.28222 7.37546 6.64633 7.88567 6.00823 8.43977C5.37387 8.99064 4.72018 9.59962 4.21918 10.1667C3.96944 10.4494 3.7418 10.7393 3.57252 11.0201C3.4166 11.2788 3.25199 11.6228 3.25002 11.9938" fill="currentColor"/>
+                    </svg>
+                  </button>
+                  {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <script src="
+https://cdn.jsdelivr.net/npm/image-compare-viewer@1.5.0/dist/image-compare-viewer.min.js
+"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+	const viewers = document.querySelectorAll(".compare-box");
+	viewers.forEach((element) => {
+		const beforeLabel = element.dataset.before;
+		const afterLabel = element.dataset.after;
+		const options = {
+			controlColor: "#fff",
+			addCircle: true,
+			addCircleBlur: true,
+			showLabels: true,
+      fluidMode: true,
+			labelOptions: {
+				before: beforeLabel,
+				after: afterLabel
+			},
+			startingPoint: 50
+		};
+		new ImageCompare(element, options).mount();
+	});
+  document.querySelectorAll('.compare-box').forEach(box => {
+    // منع تفاعل السحب بين المقارنة والسليك
+    box.addEventListener('mousedown', e => e.stopPropagation());
+    box.addEventListener('touchstart', e => e.stopPropagation());
+    box.addEventListener('touchmove', e => e.stopPropagation());
+
+    // 🧠 إيقاف autoplay مؤقتًا أثناء السحب
+    box.addEventListener('mousedown', () => {
+      const slickSlider = $(box).closest('.slick-slider');
+      slickSlider.slick('slickPause');
+    });
+
+    box.addEventListener('touchstart', () => {
+      const slickSlider = $(box).closest('.slick-slider');
+      slickSlider.slick('slickPause');
+    });
+
+    // 🟢 إعادة التشغيل بعد انتهاء السحب
+    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(evt => {
+      box.addEventListener(evt, () => {
+        const slickSlider = $(box).closest('.slick-slider');
+        slickSlider.slick('slickPlay');
+      });
+    });
+  });
+});
+</script>
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function(){
+    var section = document.querySelector('[section-id="{{ sectionId }}"]');
+    if (!section) return;
+
+    var arrowNextClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_right' : 'icon-keyboard_arrow_left';
+    var arrowPrevClass = (window.appDirection === 'ltr') ? 'icon-keyboard_arrow_left' : 'icon-keyboard_arrow_right';
+
+    function initSlider() {
+      var $slider = $('[section-id={{ sectionId }}] .tp-benefits-items');
+      if (!$slider.length || $slider.hasClass('slick-initialized')) return;
+
+      $slider.slick({
+        slidesToScroll: 4,
+        slidesToShow: 4,
+        infinite: false,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+        dots: true,
+        pauseOnHover: true,
+        pauseOnFocus: true,
+        rtl: !(window.appDirection === 'ltr'),
+        nextArrow: '<button class="slick-next slick-arrow" aria-label="Next" type="button"><span class="'+arrowNextClass+'"></span></button>',
+        prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="'+arrowPrevClass+'"></span></button>',
+        responsive: [
+          {
+            breakpoint: 1024,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3
+            }
+          },
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2
+            }
+          },
+          {
+            breakpoint: 576,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              variableWidth: true
+            }
+          }
+        ]
+      });
+
+      $slider.on('afterChange', function(event, slick, currentSlide){
+        const totalSlides = slick.slideCount;
+        const slidesToShow = slick.options.slidesToShow;
+
+        if (currentSlide >= totalSlides - slidesToShow) {
+          setTimeout(function () {
+            $slider.slick('slickGoTo', 0);
+          }, 3000);
+        }
+      });
+    }
+
+    var forceImmediate = {{ 'true' if store.editing_mode else 'false' }};
+
+    if (!forceImmediate && 'IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            initSlider();
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+
+      observer.observe(section);
+    } else {
+      initSlider();
+    }
+  });
+</script>
+
+</section>
+{% endif %}

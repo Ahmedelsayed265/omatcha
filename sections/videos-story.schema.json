@@ -1,0 +1,78 @@
+{
+  "name": {
+    "ar": "التقييمات والمراجعات",
+    "en": "Reviews & Ratings"
+  },
+  "icon": "fa fa-star",
+  "template": "sections/videos-story.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "videos",
+      "label": {
+        "ar": "الفيديو",
+        "en": "Video"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": {
+            "ar": "الاسم",
+            "en": "Name"
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "review",
+          "label": {
+            "ar": "نص التقييم",
+            "en": "Review text"
+          }
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": {
+            "ar": "الفيديو",
+            "en": "Video"
+          }
+        },
+        {
+          "type": "image",
+          "id": "poster",
+          "label": {
+            "ar": "صورة البوستر للفيديو",
+            "en": "Video poster image"
+          }
+        },
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة (لمن لا يحتوي على فيديو)",
+            "en": "Image (when no video)"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "name": {
+    "ar": "منتجات متحركة ",
+    "en": "Products | Bunches App"
+  },
+  "icon": "fal fa-box",
+  "template": "sections/products-section.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "show_in_app_only",
+      "label": {
+        "ar": "إظهار في التطبيق فقط",
+        "en": "Show in app only"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "display_two_rows",
+      "label": {
+        "ar": "عرض صفين في الشريط",
+        "en": "Display 2 rows in slider"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان الرئيسي",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "products",
+      "id": "products",
+      "label": {
+        "ar": "اختر قائمة المنتجات ",
+        "en": "Select category products"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "display_more",
+      "label": {
+        "ar": "عرض زر جميع منتجات التصنيف",
+        "en": "Display button more products"
+      }
+    },
+    {
+      "type": "text",
+      "id": "more_text",
+      "label": {
+        "ar": "نص زر المزيد  ",
+        "en": "More text"
+      }
+    }
+  ]
+}

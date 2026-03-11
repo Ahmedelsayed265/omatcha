@@ -1,0 +1,79 @@
+{% if not settings.hide_element %}
+<style>
+.tp-features-with-bg .bg-sec::after {
+  background: linear-gradient(90deg, {{settings.background_color}} 55%, transparent);
+}
+
+@media (max-width: 1200px) {
+  .tp-features-with-bg .bg-sec::after {
+    background: linear-gradient(0deg, {{settings.background_color}} 55%, transparent);
+  }
+}
+</style>
+	<section class="tp-features-with-bg s-block" section-id="{{ sectionId }}">
+		<div class="bg-sec" data-bg="{{ settings.background }}">
+			<div class="container">
+				<div class="features-container">
+					{% if settings.logo %}
+						<img loading="lazy" width="170" height="50" class="feature-logo lazy-img" data-src="{{ settings.logo }}" alt="logo">
+					{% endif %}
+					<div class="features-part">
+						{% for feature in safeget(settings, 'features', []) %}
+							{% if feature.image or feature.title or feature.desc %}
+								<div class="item-box">
+									{% if feature.image %}
+										<div class="icon">
+											<img loading="lazy" width="64" height="64" class="lazy-img" data-src="{{ image_url(feature.image) }}" alt="{{ feature.title }}">
+										</div>
+									{% endif %}
+									<div class="content">
+										{% if feature.title %}
+											<h3>{{ feature.title }}</h3>
+										{% endif %}
+										{% if feature.desc %}
+											<p>{{ feature.desc }}</p>
+										{% endif %}
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var section = document.querySelector('[section-id="{{ sectionId }}"]');
+  if (!section) return;
+
+  function loadBg() {
+    var bgEl = section.querySelector('.bg-sec[data-bg]');
+    if (!bgEl) return;
+    var bg = bgEl.getAttribute('data-bg');
+    if (bg) {
+      bgEl.style.backgroundImage = "url('" + bg + "')";
+      bgEl.removeAttribute('data-bg');
+    }
+  }
+
+  var forceImmediate = {{ 'true' if store.editing_mode else 'false' }};
+
+  if (!forceImmediate && 'IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          loadBg();
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    observer.observe(section);
+  } else {
+    loadBg();
+  }
+});
+</script>
+{% endif %}

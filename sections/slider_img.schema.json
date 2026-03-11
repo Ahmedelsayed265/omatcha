@@ -1,0 +1,174 @@
+{
+  "name": {
+    "ar": "سلايدر صور ",
+    "en": "Images Slider | Bunches App"
+  },
+  "icon": "fal fa-presentation",
+  "template": "sections/slider_img.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "show_in_app_only",
+      "label": {
+        "ar": "إظهار في التطبيق فقط",
+        "en": "Show in app only"
+      }
+    },
+    {
+      "type": "list",
+      "id": "slider",
+      "label": {
+        "ar": "الصورة",
+        "en": "Picture"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "image",
+          "id": "image",
+          "label": {
+            "ar": "الصورة",
+            "en": "Image"
+          },
+          "info": {
+            "ar": "مقاس الصورة 1670 عرض * 670 طول",
+            "en": "Image size: 1670 width * 670 height"
+          }
+        },
+        {
+          "type": "image",
+          "id": "image_mobile",
+          "label": {
+            "ar": "صورة الجوال",
+            "en": "Mobile Image"
+          },
+          "info": {
+            "ar": "مقاس الصورة 768 عرض * 566 طول",
+            "en": "Image size: 768 width * 566 height"
+          }
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": {
+            "ar": "الفيديو",
+            "en": "Video"
+          }
+        },
+        {
+          "type": "radio",
+          "id": "text_place",
+          "label": {
+            "ar": "مكان النص",
+            "en": "Text place"
+          },
+          "options": [
+            {
+              "value": "right",
+              "label": {
+                "ar": "علي اليمين",
+                "en": "Right"
+              }
+            },
+            {
+              "value": "center",
+              "label": {
+                "ar": "في المنتصف",
+                "en": "Center"
+              }
+            },
+            {
+              "value": "left",
+              "label": {
+                "ar": "علي اليسار",
+                "en": "Left"
+              }
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": {
+            "ar": "لون النص",
+            "en": "Text color"
+          }
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان الرئيسي",
+            "en": "Title"
+          }
+        },
+        {
+          "type": "text",
+          "id": "fsize_title",
+          "label": {
+            "ar": "حجم خط العنوان (ديسكتوب)",
+            "en": "Title font size (Desktop)"
+          }
+        },
+        {
+          "type": "text",
+          "id": "fsize_title_mobile",
+          "label": {
+            "ar": "حجم خط العنوان (جوال)",
+            "en": "Title font size (Mobile)"
+          }
+        },
+        {
+          "type": "textarea",
+          "id": "des",
+          "label": {
+            "ar": "نص فرعي",
+            "en": "Sub title"
+          }
+        },
+        {
+          "type": "text",
+          "id": "fsize_subtitle",
+          "label": {
+            "ar": "حجم خط النص الفرعي (ديسكتوب)",
+            "en": "Subtitle font size (Desktop)"
+          }
+        },
+        {
+          "type": "text",
+          "id": "fsize_subtitle_mobile",
+          "label": {
+            "ar": "حجم خط النص الفرعي (جوال)",
+            "en": "Subtitle font size (Mobile)"
+          }
+        },
+        {
+          "type": "text",
+          "id": "btn_text",
+          "label": {
+            "ar": "نص الزر",
+            "en": "Btn text"
+          }
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": {
+            "ar": "الرابط",
+            "en": "Link"
+          }
+        }
+      ]
+    }
+  ]
+}
