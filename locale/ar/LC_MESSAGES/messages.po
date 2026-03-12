@@ -926,3 +926,6 @@ msgstr "النقاط المكتسبة من شراء هذا المنتج"
 
 msgid "Points earned"
 msgstr "النقاط المكتسبة"
+
+msgid "Product Description"
+msgstr "وصف المنتج"

@@ -3,6 +3,31 @@ var sticky;
 var cart_products = [];
 
 
+function handleLoginAction(redirectTo = "", addToUrl = true) {
+  if (window.customerAuthState && window.customerAuthState.isAuthenticated) {
+    return;
+  }
+
+  if (
+    window.auth_dialog &&
+    window.auth_dialog.open &&
+    typeof window.auth_dialog.open === "function"
+  ) {
+    if (redirectTo && addToUrl) {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set("redirect_to", redirectTo);
+      window.history.replaceState({}, "", currentUrl.toString());
+    }
+
+    window.auth_dialog.open();
+  } else {
+    const redirectUrl = redirectTo
+      ? `/auth/login?redirect_to=${encodeURIComponent(redirectTo)}`
+      : "/auth/login";
+    window.location.href = redirectUrl;
+  }
+}
+
 window.addEventListener('scroll', fixed_header_to_top, { passive: true });
 
 function menuFiixedHeader() {

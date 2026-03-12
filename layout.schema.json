@@ -347,6 +347,128 @@
               }
             }
           ]
+        },
+        {
+          "id": "faqs",
+          "type": "fieldset",
+          "label": {
+            "ar": "الاسئلة الشائعة",
+            "en": "FAQs"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "details_title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "details_desc",
+              "label": {
+                "ar": "الوصف",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "list",
+              "id": "faqs_store_features",
+              "label": {
+                "ar": "السؤال",
+                "en": "Question"
+              },
+              "max_items": 100,
+              "settings": [
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": {
+                    "ar": "السؤال",
+                    "en": "Question"
+                  }
+                },
+                {
+                  "type": "textarea",
+                  "id": "answer",
+                  "label": {
+                    "ar": "الجواب",
+                    "en": "Answer"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "product_reels",
+          "type": "fieldset",
+          "label": {
+            "ar": "فيديوهات المنتج",
+            "en": "Product Reels"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "list",
+              "id": "videos",
+              "label": {
+                "ar": "الفيديو",
+                "en": "Video"
+              },
+              "max_items": 100,
+              "settings": [
+                {
+                  "type": "text",
+                  "id": "name",
+                  "label": {
+                    "ar": "الاسم",
+                    "en": "Name"
+                  }
+                },
+                {
+                  "type": "textarea",
+                  "id": "review",
+                  "label": {
+                    "ar": "نص التقييم",
+                    "en": "Review text"
+                  }
+                },
+                {
+                  "type": "video",
+                  "id": "video",
+                  "label": {
+                    "ar": "الفيديو",
+                    "en": "Video"
+                  }
+                },
+                {
+                  "type": "image",
+                  "id": "poster",
+                  "label": {
+                    "ar": "صورة البوستر للفيديو",
+                    "en": "Video poster image"
+                  }
+                },
+                {
+                  "type": "image",
+                  "id": "image",
+                  "label": {
+                    "ar": "الصورة (لمن لا يحتوي على فيديو)",
+                    "en": "Image (when no video)"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     },

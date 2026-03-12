@@ -213,13 +213,12 @@
             <span class="bundle-offer-title">{{ product.bundle_offer.name }}</span>
           </div>
           {% endif %}
-          {# {% if product.short_description %}
+          {% if product.short_description %}
           <div class="product-description">
             {{ product.short_description | safe }}
-            &nbsp;<a id="product-description-a" href="#nav-description" class="text-color-primary read-more-btn">{{
-              _('Read more') }}</a>
+            &nbsp;<a id="product-description-a" href="#nav-description" class="text-color-primary read-more-btn">{{_('Read more') }}</a>
           </div>
-          {% endif %} #}
+          {% endif %}
           {% include 'components/features-product.jinja' %}
           <div class="product-payments">
             {% include 'vitrin:products/payment_widgets.jinja' %}
@@ -342,13 +341,18 @@
             {% endif %}
 
           </div>
-          {# {% include 'vitrin:checkout/checkout_dialog.jinja' %}
+          {% include 'vitrin:checkout/checkout_dialog.jinja' %}
+                                     
           {% if not safeget(store, 'settings.general.availability.closed_now') %}
-          <button class="btn btn-buy-now d-none" type="button" onclick="zidProductBuyNow()">
+          <button class="btn btn-buy-now d-none" style="margin-top: 12px;" type="button" onclick="zidProductBuyNow()">
+            <div class="buy-now-icon" style="mask: url({{ 'buy-now.svg' | asset_url }}) no-repeat center;"></div>
+
             <img class="buy-now-progress d-none" src="{{ 'spinner.gif' | asset_url }}" width="25" height="25" />
-            <span>{{ _('Buy now') }}</span>
+
+            <span>{{ _("Buy now") }}</span>
           </button>
-          {% endif %} #}
+          {% endif %}
+
           <div class="apple-pay-button">
             {% include 'vitrin:checkout/apple-pay-quick-checkout.jinja' %}
           </div>
@@ -448,10 +452,14 @@
         <div class="tab-pane" id="nav-description" role="tabpanel"
           aria-labelledby="nav-description-tab">
           <div class="description-box">
+            <h2>{{ _('Product Description') }}</h2>
             {{ product.description | safe }}
           </div>
         </div>
       {% endif %}
+
+      {% include 'components/product-reels.jinja' %}
+
         <div class="videos-part">
           <div class="tp-title-section">
             <h3 class="videos-title"></h3>
@@ -540,13 +548,6 @@
         </div>
         {% endif %}
 
-        <div class="faqs-part">
-          <div class="tp-title-section">
-            <h3 class="faqs-title"></h3>
-          </div>
-          <div class="faqs-box" id="faqs-box"></div>
-        </div>
-
         {% if product.metafields %}
         <div class="tab-pane" id="nav-metafields" role="tabpanel" aria-labelledby="nav-metafields-tab" style="display: none;">
           <div class="tp-title-section">
@@ -633,6 +634,8 @@
       </div>
     </div>
   </div>
+
+  {%include 'components/product-faqs.jinja' %}
 
   <div class="tp-product-bottom">
     <div class="container">
@@ -853,6 +856,43 @@
         </script>
 
 <script>
+ $(window).on('load', function () {
+            if (window.checkout_dialog) {
+                $('.btn-buy-now').removeClass('d-none');
+            }
+        });
+
+        window.zidProductBuyNow = async () => {
+
+            const buyNowLoading = (isLoading) => {
+                const buttonElement = $('.btn-buy-now');
+                const loaderElement = $('.buy-now-progress');
+                const iconElement = $('.buy-now-icon');
+
+                buttonElement.prop('disabled', isLoading);
+                loaderElement.toggleClass('d-none', !isLoading);
+                iconElement.toggleClass('d-none', isLoading);
+            };
+            
+            const bundlePayload = window.bundleCartPayload;
+            const addProductOptions = bundlePayload ? { ...bundlePayload, form_id: 'product-form' } : { form_id: 'product-form' };
+
+            try {
+
+                buyNowLoading(true);
+
+                const response = await window.zid.cart.buyNow(addProductOptions, { showErrorNotification: true });
+
+                buyNowLoading(false);
+
+            } catch(error) {
+                console.error(error, 'Buy Now failed');
+            }
+
+            buyNowLoading(false);
+
+        }
+
 (function() {
   var productData = {{ product.selected_product | tojson }};
 
@@ -1728,7 +1768,6 @@
   });
 </script>
 
-
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const metafields = {{ product.metafields | tojson | safe }};
@@ -2096,8 +2135,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
-
 
 {% endblock %}
 
