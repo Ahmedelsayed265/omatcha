@@ -1,192 +1,238 @@
 {% extends "layout.jinja" %}
 
 {% block header %}
-	{% include 'header.jinja' %}
+{% include 'header.jinja' %}
 {% endblock %}
 
 {% block top_links %}
-	<link rel="stylesheet" type="text/css" href="{{ 'toastr.min.css' | asset_url }}"/>
+<link rel="stylesheet" type="text/css" href="{{ 'toastr.min.css' | asset_url }}" />
 {% endblock %}
 
 {% block main_content %}
+
+{%if category.slug == "store-one" %}
+  <section class="store-one-hero" {%- if settings.store_one_hero_image -%} style="background-image: url('{{ image_url(settings.store_one_hero_image) | trim }}')" {%- endif -%}>
+    <div class="container">
+      <div class="tp-hero-content">
+        {% if settings.store_one_hero_subtitle %}
+          <span>{{ settings.store_one_hero_subtitle }}</span>
+        {% endif %}
+
+        {% if settings.store_one_hero_title %}
+          <h1>{{ settings.store_one_hero_title }}</h1>
+        {% endif %}
+
+        {% if settings.store_one_hero_des %}
+          <p>{{ settings.store_one_hero_des }}</p>
+        {% endif %}
+  
+        {% if settings.store_one_hero_btn_text and settings.store_one_hero_url %}
+          <a href="{{ settings.store_one_hero_url }}" class="tp-btn">{{ settings.store_one_hero_btn_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+{%elif category.slug == "store-two" %}
+  <section class="tp-hero-section" {%- if settings.store_two_hero_image -%} style="background-image: url('{{ image_url(settings.store_two_hero_image) | trim }}')" {%- endif -%}>
+    <div class="container">
+      <div class="tp-hero-content">
+        {% if settings.store_two_hero_title %}
+          <h1>{{ settings.store_two_hero_title }}</h1>
+        {% endif %}
+        {% if settings.store_two_hero_des %}
+          <p>{{ settings.store_two_hero_des }}</p>
+        {% endif %}
+  
+        {% if settings.store_two_hero_btn_text and settings.store_two_hero_url %}
+          <a href="{{ settings.store_two_hero_url }}" class="tp-btn">{{ settings.store_two_hero_btn_text }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+{%else%}
   {% if category.cover_image %}
   <div class="container">
     <img loading="lazy" class="category-cover-img" src="{{ image_url(category.cover_image) }}" alt="cover_image"></img>
-    </div>
+  </div>
   {% endif %}
-<div class="breadcrumb-subtitle">
-	<section class="breadcrumb-section">
-		<nav aria-label="breadcrumb">
-				<div class="container">
-			    <ol class="breadcrumb">
-					<li class="breadcrumb-item" aria-current="page">
-						<a href="/">{{ _('Home') }}</a>
-					</li>
-					{% if category.parent_category.parent_category %}
-						<li class="breadcrumb-item" aria-current="page">
-							<a href="{{ category.parent_category.parent_category.url }}">{{ category.parent_category.parent_category.name }}</a>
-						</li>
-					{% endif %}
-					{% if category.parent_category %}
-						<li class="breadcrumb-item" aria-current="page">
-							<a href="{{ category.parent_category.url }}">{{ category.parent_category.name }}</a>
-						</li>
-					{% endif %}
-					<li class="breadcrumb-item active " aria-current="page">{{ category.name }}</li>
-			    </ol>
-				</div>
-		</nav>
-	</section>
-	{% set img = category.image %}
-	{% set title = category.name %}
-	{% set description = category.description %}
-	{% include 'components/breadcrumb-subTitle-detail.jinja' %}
-</div>
 
-	{% if category.sub_categories | length > 0 %}
-		<div class="container">
-			<div class="home-categories-section {% if fixed_on_mobile %}fixed-mobile{% endif %}">
-        <div class="tp-category-swiper swiper-container">
-        <div class="swiper-wrapper">
-            {% for categoryItem in category.sub_categories %}
-              <div class="swiper-slide">
-                <div class="tp-product-category-item">
-                {% if categoryItem.image %}
-                  <div class="tp-product-category-thumb fix">
-                    <a href="/categories/{{ categoryItem.id }}/{{ categoryItem.slug }}">
-                      <img loading="lazy" src="{{ image_url(categoryItem.image, { w: 235, q: 100, f:'auto' }) }}" alt="{{ categoryItem.name }}">
-                    </a>
-                  </div>
-                  {% endif %} 
-                  <div class="tp-product-category-content">
-                    <h2 class="tp-product-category-title">
-                      <a href="/categories/{{ categoryItem.id }}/{{ categoryItem.slug }}">{{ categoryItem.name }}</a>
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            {% endfor %}
+  <div class="breadcrumb-subtitle">
+    <section class="breadcrumb-section">
+      <nav aria-label="breadcrumb">
+        <div class="container">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page">
+              <a href="/">{{ _('Home') }}</a>
+            </li>
+            {% if category.parent_category.parent_category %}
+            <li class="breadcrumb-item" aria-current="page">
+              <a href="{{ category.parent_category.parent_category.url }}">{{
+                category.parent_category.parent_category.name }}</a>
+            </li>
+            {% endif %}
+            {% if category.parent_category %}
+            <li class="breadcrumb-item" aria-current="page">
+              <a href="{{ category.parent_category.url }}">{{ category.parent_category.name }}</a>
+            </li>
+            {% endif %}
+            <li class="breadcrumb-item active " aria-current="page">{{ category.name }}</li>
+          </ol>
         </div>
-        </div> 
-			</div>
-      <script>
-          document.addEventListener("DOMContentLoaded", function () {
-          const isMobile = window.innerWidth <= 768;
-          const fixedMode = {{ 'true' if fixed_on_mobile else 'false' }};
-          if (!(isMobile && fixedMode)) {
-            var catgSlider = new Swiper(".tp-category-swiper", {
-              slidesPerView: "auto",
-              spaceBetween: 16,
-              freeMode: true,
-              autoplay: {
-                delay: 3000,
-              },
-              navigation: {
-                nextEl: ".tp-slider-button-next",
-                prevEl: ".tp-slider-button-prev",
-              },
-              breakpoints: {
-                0: {
-                  spaceBetween: 10,
-                  slidesPerView: "auto",
-                },
-                768: {
-                  slidesPerView: "auto",
-                  spaceBetween: 16,
-                },
-              },
-            });
-          }
-        });
-      </script>
-		</div>
-	{% endif %}
+      </nav>
+    </section>
+    {% set img = category.image %}
+    {% set title = category.name %}
+    {% set description = category.description %}
+    {% include 'components/breadcrumb-subTitle-detail.jinja' %}
+  </div>
 
-     <div class="container">
-        <div class="products-filters-box">
-             {% if  products.filters|length > 0 %}
-            {% set async=true %} {% include 'vitrin:products/filters.jinja' %}
-        {% endif %}
-            <div class="products-container">
-              <div>
-                {% set count=products.count %}{% set has_products_filtration=(products.filters|length > 0) %}{% include 'components/products-filter.jinja' %}
+  {% if category.sub_categories | length > 0 %}
+  <div class="container">
+    <div class="home-categories-section {% if fixed_on_mobile %}fixed-mobile{% endif %}">
+      <div class="tp-category-swiper swiper-container">
+        <div class="swiper-wrapper">
+          {% for categoryItem in category.sub_categories %}
+          <div class="swiper-slide">
+            <div class="tp-product-category-item">
+              {% if categoryItem.image %}
+              <div class="tp-product-category-thumb fix">
+                <a href="/categories/{{ categoryItem.id }}/{{ categoryItem.slug }}">
+                  <img loading="lazy" src="{{ image_url(categoryItem.image, { w: 235, q: 100, f:'auto' }) }}"
+                    alt="{{ categoryItem.name }}">
+                </a>
               </div>
-              <div id="products-list" class="products-grid">
-                {% for product in products.results %}
-                    {% set product=product %}{% set index=key %}{% include 'components/product-card.jinja' %}
-                {% endfor %}
+              {% endif %}
+              <div class="tp-product-category-content">
+                <h2 class="tp-product-category-title">
+                  <a href="/categories/{{ categoryItem.id }}/{{ categoryItem.slug }}">{{ categoryItem.name }}</a>
+                </h2>
               </div>
             </div>
           </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const isMobile = window.innerWidth <= 768;
+        const fixedMode = {{ 'true' if fixed_on_mobile else 'false' }};
+      if (!(isMobile && fixedMode)) {
+        var catgSlider = new Swiper(".tp-category-swiper", {
+          slidesPerView: "auto",
+          spaceBetween: 16,
+          freeMode: true,
+          autoplay: {
+            delay: 3000,
+          },
+          navigation: {
+            nextEl: ".tp-slider-button-next",
+            prevEl: ".tp-slider-button-prev",
+          },
+          breakpoints: {
+            0: {
+              spaceBetween: 10,
+              slidesPerView: "auto",
+            },
+            768: {
+              slidesPerView: "auto",
+              spaceBetween: 16,
+            },
+          },
+        });
+      }
+            });
+    </script>
+  </div>
+  {% endif %}
 
+  <div class="container">
+    <div class="products-filters-box">
+      {% if products.filters|length > 0 %}
+      {% set async=true %} {% include 'vitrin:products/filters.jinja' %}
+      {% endif %}
+      <div class="products-container">
+        <div>
+          {% set count=products.count %}{% set has_products_filtration=(products.filters|length > 0) %}{% include
+          'components/products-filter.jinja' %}
+        </div>
+        <div id="products-list" class="products-grid">
+          {% for product in products.results %}
+          {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 
-          <button id="load-more-button" class="load-more-button tp-btn tp-btn-primary" data-pages="{{ products.pages_count }}">
-            <span class="btn-loader d-none">
-                <span class="loader-more"></span>
-            </span>
-            <span class="btn-label">{{ _('Load more') }}</span>
-          </button>
+  <button id="load-more-button" class="load-more-button tp-btn tp-btn-primary" data-pages="{{ products.pages_count }}">
+    <span class="btn-loader d-none">
+      <span class="loader-more"></span>
+    </span>
+    <span class="btn-label">{{ _('Load more') }}</span>
+  </button>
 
-	<div class="container">
-		{% set entity = category %}
-      {% include 'vitrin:shared/metafields.jinja' %}
-	</div>
+  <div class="container">
+    {% set entity = category %}
+    {% include 'vitrin:shared/metafields.jinja' %}
+  </div>
+{% endif %}
 
 {% endblock %}
 
 {% block footer %}
-	{% include 'footer.jinja' %}
+{% include 'footer.jinja' %}
 {% endblock %}
 
 
 {% block footer_scripts %}
 <script type="text/javascript" src="{{ 'toastr.min.js' | asset_url }}"></script>
-	<script>
-		window.onProductAttributesTriggered = function () {
-$('#products-list').css('opacity', '0.4');
-$('#product-pagination').css('opacity', '0');
+<script>
+  window.onProductAttributesTriggered = function () {
+    $('#products-list').css('opacity', '0.4');
+    $('#product-pagination').css('opacity', '0');
 
-}
+  }
 
-window.onProductAttributesChanged = function (htmlStr) {
-var html = $.parseHTML(htmlStr);
-$('#products-list').html($('#products-list', html).html());
-$('#products-list').css('opacity', '1');
-$('#product-filter-count').html($('#product-filter-count', html).html());
-$('#product-filter-count').css('opacity', '1');
-if ($('#product-pagination', html).length > 0) {
-$('#product-pagination').html($('#product-pagination', html).html());
-$('#product-pagination').css('opacity', '1');
-}
-}
-	</script>
+  window.onProductAttributesChanged = function (htmlStr) {
+    var html = $.parseHTML(htmlStr);
+    $('#products-list').html($('#products-list', html).html());
+    $('#products-list').css('opacity', '1');
+    $('#product-filter-count').html($('#product-filter-count', html).html());
+    $('#product-filter-count').css('opacity', '1');
+    if ($('#product-pagination', html).length > 0) {
+      $('#product-pagination').html($('#product-pagination', html).html());
+      $('#product-pagination').css('opacity', '1');
+    }
+  }
+</script>
 
-  <script type="text/javascript" src="{{ 'load-more.js' | asset_url }}"></script>
+<script type="text/javascript" src="{{ 'load-more.js' | asset_url }}"></script>
 
 <script>
-window.addEventListener('DOMContentLoaded', (event) => {
+  window.addEventListener('DOMContentLoaded', (event) => {
     // الحصول على القيم من الحقول المخفية
     var fromPriceInput = document.querySelector("input[name='from_price'][type='hidden']");
     var toPriceInput = document.querySelector("input[name='to_price'][type='hidden']");
 
     if (fromPriceInput && toPriceInput) {
-        var fromPrice = fromPriceInput.value;
-        var toPrice = toPriceInput.value;
+      var fromPrice = fromPriceInput.value;
+      var toPrice = toPriceInput.value;
 
-        // تعيين القيم في الحقول "من" و "إلى"
-        var fromPriceField = document.querySelector(".attribute-price-body input[name='from_price']");
-        var toPriceField = document.querySelector(".attribute-price-body input[name='to_price']");
+      // تعيين القيم في الحقول "من" و "إلى"
+      var fromPriceField = document.querySelector(".attribute-price-body input[name='from_price']");
+      var toPriceField = document.querySelector(".attribute-price-body input[name='to_price']");
 
-        if (fromPriceField && toPriceField) {
-            fromPriceField.value = fromPrice;
-            toPriceField.value = toPrice;
-        }
+      if (fromPriceField && toPriceField) {
+        fromPriceField.value = fromPrice;
+        toPriceField.value = toPrice;
+      }
     }
-});
+  });
 
-// إضافة مكتبة noUiSlider ديناميكيًا
-function loadNoUiSlider(callback) {
+  // إضافة مكتبة noUiSlider ديناميكيًا
+  function loadNoUiSlider(callback) {
     let link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.css";
@@ -196,16 +242,16 @@ function loadNoUiSlider(callback) {
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.1/nouislider.min.js";
     script.onload = callback;
     document.body.appendChild(script);
-}
+  }
 
-// إضافة الشريط بعد تحميل المكتبة
-loadNoUiSlider(() => {
+  // إضافة الشريط بعد تحميل المكتبة
+  loadNoUiSlider(() => {
     // حدد العنصر الذي تريد إضافة شريط التمرير إليه
     const priceContainer = document.querySelector(".attribute-price-body .form-row");
 
     // تحقق من وجود العنصر قبل المتابعة
     if (!priceContainer) {
-        return;
+      return;
     }
 
     // إنشاء عنصر جديد لشريط التمرير
@@ -217,14 +263,14 @@ loadNoUiSlider(() => {
 
     // إعداد شريط التمرير مع دعم RTL
     noUiSlider.create(sliderContainer, {
-        start: [0, 5000], // القيم الافتراضية
-        connect: true,
-        direction: "{{ 'rtl' if session.lang == 'ar' else 'ltr' }}",
-        range: {
-            min: 0,
-            max: 9000,
-        },
-        step: 10,
+      start: [0, 5000], // القيم الافتراضية
+      connect: true,
+      direction: "{{ 'rtl' if session.lang == 'ar' else 'ltr' }}",
+      range: {
+        min: 0,
+        max: 9000,
+      },
+      step: 10,
     });
 
     // الحقول الخاصة بالسعر
@@ -233,85 +279,85 @@ loadNoUiSlider(() => {
 
     // تحقق من وجود الحقول قبل المتابعة
     if (!fromPriceInput || !toPriceInput) {
-        console.error("لم يتم العثور على الحقول الخاصة بالسعر.");
-        return;
+      console.error("لم يتم العثور على الحقول الخاصة بالسعر.");
+      return;
     }
 
     // تحديث الحقول عند تحريك الشريط
     sliderContainer.noUiSlider.on("update", (values) => {
-        fromPriceInput.value = Math.round(values[0]); // تحديث حقل "من"
-        toPriceInput.value = Math.round(values[1]); // تحديث حقل "إلى"
+      fromPriceInput.value = Math.round(values[0]); // تحديث حقل "من"
+      toPriceInput.value = Math.round(values[1]); // تحديث حقل "إلى"
     });
 
     // تحديث الشريط عند تغيير القيم يدويًا في الحقول
     fromPriceInput.addEventListener("change", () => {
-        // الحصول على القيمة الحالية من الحقل "من"
-        const fromValue = parseFloat(fromPriceInput.value) || 0;
-        const toValue = parseFloat(toPriceInput.value) || 5000; // إذا لم تكن هناك قيمة، اجعل "إلى" 5000 كقيمة افتراضية
+      // الحصول على القيمة الحالية من الحقل "من"
+      const fromValue = parseFloat(fromPriceInput.value) || 0;
+      const toValue = parseFloat(toPriceInput.value) || 5000; // إذا لم تكن هناك قيمة، اجعل "إلى" 5000 كقيمة افتراضية
 
-        // تحديث الشريط باستخدام القيمة المدخلة
-        sliderContainer.noUiSlider.set([fromValue, toValue]);
+      // تحديث الشريط باستخدام القيمة المدخلة
+      sliderContainer.noUiSlider.set([fromValue, toValue]);
     });
 
     toPriceInput.addEventListener("change", () => {
-        // الحصول على القيمة الحالية من الحقل "إلى"
-        const fromValue = parseFloat(fromPriceInput.value) || 0; // استخدام القيمة المدخلة في "من" أو الافتراضية
-        const toValue = parseFloat(toPriceInput.value) || 5000; // استخدام القيمة المدخلة في "إلى" أو الافتراضية
+      // الحصول على القيمة الحالية من الحقل "إلى"
+      const fromValue = parseFloat(fromPriceInput.value) || 0; // استخدام القيمة المدخلة في "من" أو الافتراضية
+      const toValue = parseFloat(toPriceInput.value) || 5000; // استخدام القيمة المدخلة في "إلى" أو الافتراضية
 
-        // تحديث الشريط باستخدام القيمة المدخلة
-        sliderContainer.noUiSlider.set([fromValue, toValue]);
+      // تحديث الشريط باستخدام القيمة المدخلة
+      sliderContainer.noUiSlider.set([fromValue, toValue]);
     });
-});
+  });
 
-const attributeFooter = document.querySelector('.attribute-footer');
+  const attributeFooter = document.querySelector('.attribute-footer');
 
-if (attributeFooter) {
+  if (attributeFooter) {
     // النص الديناميكي الذي تم استبداله من القالب (مثلاً أثناء التصيير في الخلفية)
     const clearText = '{{ _('Clear') }}'; // سيتم استبداله أثناء توليد HTML
 
     // إضافة الزر الجديد بعد زر "حفظ"
     attributeFooter.insertAdjacentHTML(
-        'beforeend', // الإضافة في نهاية الحاوية
-        `<button id="products-list-filter-form-clear" type="button" class="tp-btn tp-btn-primary-outline" onclick="clearFilters()">
+      'beforeend', // الإضافة في نهاية الحاوية
+      `<button id="products-list-filter-form-clear" type="button" class="tp-btn tp-btn-primary-outline" onclick="clearFilters()">
             <span>${clearText}</span>
         </button>`
     );
-}
+  }
 
-const filterButton = document.querySelector('.open-close-filter');
-const productAttributes = document.querySelector('.product-attributes');
-const overlayFilter = document.querySelector('.overlay-filter');
-const filtrationHeader = document.querySelector('.filtration-header'); // البحث عن العنصر
+  const filterButton = document.querySelector('.open-close-filter');
+  const productAttributes = document.querySelector('.product-attributes');
+  const overlayFilter = document.querySelector('.overlay-filter');
+  const filtrationHeader = document.querySelector('.filtration-header'); // البحث عن العنصر
 
-// إضافة event listener للزر
-filterButton.addEventListener('click', () => {
+  // إضافة event listener للزر
+  filterButton.addEventListener('click', () => {
     // تبديل الكلاس للفلتر
     productAttributes.classList.toggle('hide-filter');
 
     // إذا كانت الشاشة أقل من أو تساوي 1200px
     if (window.innerWidth <= 1200) {
-        overlayFilter.classList.toggle('active');
+      overlayFilter.classList.toggle('active');
 
-        // التحقق مما إذا كان العنصر filtration-header موجودًا
-        if (filtrationHeader) {
-            // البحث عن العنصر <em> داخل filtration-header، وإذا لم يكن موجودًا، إضافته
-            if (!filtrationHeader.querySelector('em')) {
-                const emElement = document.createElement('em');
-                filtrationHeader.appendChild(emElement);
-                 emElement.addEventListener('click', () => {
-                    productAttributes.classList.remove('hide-filter');
-                    overlayFilter.classList.remove('active'); // إزالة كلاس active أيضًا عند الإغلاق
-                });
-            }
+      // التحقق مما إذا كان العنصر filtration-header موجودًا
+      if (filtrationHeader) {
+        // البحث عن العنصر <em> داخل filtration-header، وإذا لم يكن موجودًا، إضافته
+        if (!filtrationHeader.querySelector('em')) {
+          const emElement = document.createElement('em');
+          filtrationHeader.appendChild(emElement);
+          emElement.addEventListener('click', () => {
+            productAttributes.classList.remove('hide-filter');
+            overlayFilter.classList.remove('active'); // إزالة كلاس active أيضًا عند الإغلاق
+          });
         }
+      }
     }
-});
+  });
 
-// إضافة event listener لـ overlayFilter لإزالة كلاس hide-filter عند النقر عليه
-overlayFilter.addEventListener('click', () => {
+  // إضافة event listener لـ overlayFilter لإزالة كلاس hide-filter عند النقر عليه
+  overlayFilter.addEventListener('click', () => {
     productAttributes.classList.remove('hide-filter');
     overlayFilter.classList.remove('active'); // إزالة كلاس active أيضًا عند الإغلاق
-});
+  });
 
 </script>
 

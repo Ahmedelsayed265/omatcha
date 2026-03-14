@@ -784,6 +784,135 @@
           ]
         }
       ]
+    },
+    {
+      "id": "store_one",
+      "icon": "fa fa-cog",
+      "expandable": true,
+      "name": {
+        "ar": "متجر واحد",
+        "en": "Store one"
+      },
+      "settings": [
+        {
+          "id": "hero",
+          "type": "fieldset",
+          "label": {
+            "ar": "الرئيسية",
+            "en": "Hero"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "subtitle",
+              "label": {
+                "ar": "العنوان الفرعي",
+                "en": "Subtitle"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "des",
+              "label": {
+                "ar": "نص توضيحي",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "text",
+              "id": "btn_text",
+              "label": {
+                "ar": "نص الزر",
+                "en": "Btn text"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store_two",
+      "icon": "fa fa-cog",
+      "name": {
+        "ar": "متجر اثنين",
+        "en": "Store two"
+      },
+      "settings": [
+        {
+          "id": "hero",
+          "type": "fieldset",
+          "label": {
+            "ar": "الرئيسية",
+            "en": "Hero"
+          },
+          "settings": [
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "des",
+              "label": {
+                "ar": "نص توضيحي",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "text",
+              "id": "btn_text",
+              "label": {
+                "ar": "نص الزر",
+                "en": "Btn text"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

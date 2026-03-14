@@ -10,17 +10,17 @@
         <p>{{ settings.details_desc }}</p>
       {% endif %}
     </div>
-    <div class="faqs-box" id="faqs-box">
+    <div class="faqs-box" id="faqs-box-{{ sectionId }}">
       {% if settings.faqs_store_features %}
         {% for faq in settings.faqs_store_features %}
           <div class="accordion-item" >
             <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ key }}" aria-expanded="false" aria-controls="collapse-{{ key }}">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ sectionId }}-{{ loop.index }}" aria-expanded="false" aria-controls="collapse-{{ sectionId }}-{{ loop.index }}">
                 <span>{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>
                 {{ faq.title }}
               </button>
             </h2>
-            <div id="collapse-{{ key }}" class="accordion-collapse collapse" data-bs-parent="#faqs-box">
+            <div id="collapse-{{ sectionId }}-{{ loop.index }}" class="accordion-collapse collapse" data-bs-parent="#faqs-box-{{ sectionId }}">
               <div class="accordion-body">
                 {{ faq.answer }}
               </div>

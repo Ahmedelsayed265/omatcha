@@ -35,7 +35,7 @@
             </div>
             <div id="products-list" class="products-grid">
                 {% for product in safeget(products, "results", []) %}
-                    {% set product=product %}{% set index=key %}{% include 'components/product-card.jinja' %}
+                    {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
                 {% endfor %}
             </div>
         </div>

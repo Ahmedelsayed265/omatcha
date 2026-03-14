@@ -53,6 +53,9 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+  const sectionId = "{{ sectionId }}";
+  const section = document.querySelector(`[section-id="${sectionId}"]`);
+  if (!section) return;
 
   function ensureVideoSource(video) {
     if (!video) return;
@@ -64,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function pauseAllVideos() {
+    // Pause all videos on the entire page to ensure only one plays at a time
     document.querySelectorAll('.video-story').forEach(story => {
       const video = story.querySelector('video');
       const playBtn = story.querySelector('.play-video');
@@ -78,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // تشغيل الفيديو عند الضغط على زر التشغيل
-  document.querySelectorAll('.play-video').forEach((btn) => {
+  section.querySelectorAll('.play-video').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       const parent = btn.closest('.video-story');
@@ -98,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // عند الضغط على الفيديو نفسه: تشغيل/إيقاف
-  document.querySelectorAll('.video-story').forEach((container) => {
+  section.querySelectorAll('.video-story').forEach((container) => {
     const video = container.querySelector('video');
     const playBtn = container.querySelector('.play-video');
     const volumeToggle = container.querySelector('.volume-toggle');
@@ -124,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // زر الصوت
-  document.querySelectorAll('.volume-toggle').forEach((toggle) => {
+  section.querySelectorAll('.volume-toggle').forEach((toggle) => {
     const video = toggle.closest('.video-story').querySelector('video');
     const muteIcon = toggle.querySelector('.mute-video');
     const unmuteIcon = toggle.querySelector('.unmute-video');
@@ -148,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   window.addEventListener("scroll", () => {
-    document.querySelectorAll('.video-story').forEach((story) => {
+    section.querySelectorAll('.video-story').forEach((story) => {
       const video = story.querySelector('video');
       const playBtn = story.querySelector('.play-video');
       const volumeToggle = story.querySelector('.volume-toggle');
