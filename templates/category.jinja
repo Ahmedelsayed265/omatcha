@@ -68,18 +68,48 @@
   </section>
 
   {# products section #}
-  <section class="store-one-categories s-block">
+  <section class="store-one-products s-block" section-id="store-one-products">
     <div class="container">
       <div class="tp-section-title-wrapper mb-4">
         <h2 class="tp-section-title">{{ settings.store_one_products_section_title }}</h2>
       </div>
 
-      <div id="products-list" class="products-grid">
-        {% for product in products.results %}
-        {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
-        {% endfor %}
+      <div class="products_swiper swiper">
+        <div class="swiper-wrapper">
+          {% for product in products.results %}
+          <div class="swiper-slide">
+            {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
+          </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof Swiper !== 'undefined') {
+          new Swiper('.products_swiper', {
+            slidesPerView: 1.5,
+            spaceBetween: 16,
+            loop: true,
+            breakpoints: {
+              576: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+              },
+            },
+          });
+        }
+      });
+    </script>
   </section>
 
   {# banner with features section #}
@@ -159,6 +189,96 @@
         </div>
       </div>
     </div>
+  </section>
+
+  {# influencers experiences section #}
+  <section class="s-block influencers_experiences" section-id="influencers_experiences">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_one_influencers_experiences_title }}</h2>
+      </div>
+
+      <div class="influencers_swiper swiper">
+        <div class="swiper-wrapper">
+          {% for influencer in safeget(settings, 'store_one_influencers_experiences_influencers', []) %}
+          <div class="swiper-slide">
+            <div class="video-story">
+              {% if influencer.video %}
+                <video width="100%" loop muted playsinline>
+                  <source src="{{ influencer.video }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              {% else %}
+                <img loading="lazy" width="100%" height="550" src="{{ image_url(influencer.image) }}" alt="{{ influencer.name }}">
+              {% endif %}
+              
+              <div class="review-box">
+                <h3>{{ influencer.name }}</h3>
+                <div class="rating-stars mb-2">
+                  {% for i in range(5) %}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#F39C12"><path d="M12 1.7L14.5 9.2H22.4L16 13.8L18.5 21.3L12 16.7L5.5 21.3L8 13.8L1.6 9.2H9.5L12 1.7Z"/></svg>
+                  {% endfor %}
+                </div>
+                {% if influencer.product %}
+                  <a href="/products/{{ influencer.product.slug }}" class="btn-order-product">
+                    {{ _('Order Product') }}
+                  </a>
+                {% endif %}
+              </div>
+
+              <div class="play-video" title="play-video">
+                <svg width="17" height="23" viewBox="0 0 17 23" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.4324 9.7218C16.4657 10.5225 16.4657 12.083 15.4324 12.8837L3.93296 21.7942C2.61872 22.8125 0.707951 21.8758 0.707951 20.2132L0.707952 2.39223C0.707952 0.729617 2.61872 -0.207059 3.93296 0.8113L15.4324 9.7218Z" fill="white" fill-opacity="0.8"></path></svg>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof Swiper !== 'undefined') {
+          const influSwiper = new Swiper('.influencers_swiper', {
+            slidesPerView: 1.2,
+            spaceBetween: 15,
+            loop: false,
+            breakpoints: {
+              576: { slidesPerView: 2, spaceBetween: 20 },
+              768: { slidesPerView: 3, spaceBetween: 24 },
+              1024: { slidesPerView: 4, spaceBetween: 30 }
+            }
+          });
+
+          // Video handling
+          const videoItems = document.querySelectorAll('.influencers_experiences .video-story');
+          videoItems.forEach(item => {
+            const video = item.querySelector('video');
+            const playIcon = item.querySelector('.play-video');
+            if (video) {
+              item.addEventListener('mouseenter', () => {
+                video.play();
+                if (playIcon) playIcon.style.opacity = '0';
+              });
+              item.addEventListener('mouseleave', () => {
+                video.pause();
+                if (playIcon) playIcon.style.opacity = '1';
+              });
+              // Simple mobile toggle
+              item.addEventListener('click', () => {
+                if (video.paused) {
+                  video.play();
+                  if (playIcon) playIcon.style.opacity = '0';
+                } else {
+                  video.pause();
+                  if (playIcon) playIcon.style.opacity = '1';
+                }
+              });
+            }
+          });
+        }
+      });
+    </script>
   </section>
 
 {%elif category.slug == "store-two" %}

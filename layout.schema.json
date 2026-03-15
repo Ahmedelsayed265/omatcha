@@ -1100,6 +1100,60 @@
               }
             }
           ]
+        },
+        {
+          "id": "influencers_experiences",
+          "type": "fieldset",
+          "expandable": true,
+          "label": {
+            "ar": "تجارب المؤثرين",
+            "en": "Influencers experiences"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "list",
+              "id": "influencers",
+              "label": {
+                "ar": "المؤثرين",
+                "en": "Influencers"
+              },
+              "max_items": 6,
+              "settings": [
+                {
+                  "type": "text",
+                  "id": "name",
+                  "label": {
+                    "ar": "الاسم",
+                    "en": "Name"
+                  }
+                },
+                {
+                  "type": "product",
+                  "id": "product",
+                  "label": {
+                    "ar": "المنتج",
+                    "en": "Product"
+                  }
+                },
+                {
+                  "type": "video",
+                  "id": "video",
+                  "label": {
+                    "ar": "الفيديو",
+                    "en": "Video"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     },
