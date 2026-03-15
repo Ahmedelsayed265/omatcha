@@ -11,7 +11,8 @@
 {% block main_content %}
 
 {%if category.slug == "store-one" %}
-  <section class="store-one-hero" {%- if settings.store_one_hero_image -%} style="background-image: url('{{ image_url(settings.store_one_hero_image) | trim }}')" {%- endif -%}>
+  {# Store One Hero Section #}
+  <section class="store-one-hero" {%- if settings.store_one_hero_image -%} style="background-size: cover;background-position: center;background-image: url('{{ image_url(settings.store_one_hero_image) | trim }}')" {%- endif -%}>
     <div class="container">
       <div class="tp-hero-content">
         {% if settings.store_one_hero_subtitle %}
@@ -33,20 +34,199 @@
     </div>
   </section>
 
+  {# Store One categories Section #}
+  <section class="store-one-categories s-block">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_one_cat_section_title }}</h2>
+      </div>
+
+      <div class="store-one-cat-slider swiper-container">
+        <div class="swiper-wrapper">
+          {% for categoryItem in safeget(settings, 'store_one_cat_section_categories', []) %}
+          <div class="swiper-slide">
+            <div class="store-one-cat-item">
+              {% if categoryItem.image %}
+              <div class="cat-thumb">
+                <a href="{{ categoryItem.url }}">
+                  <img loading="lazy" src="{{ image_url(categoryItem.image, { w: 235, q: 100, f:'auto' }) }}"
+                    alt="{{ categoryItem.title }}">
+                </a>
+              </div>
+              {% endif %}
+              <div class="cat-content">
+                <h3 class="cat-title">
+                  <a href="{{ categoryItem.url }}">{{ categoryItem.title }}</a>
+                </h3>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# products section #}
+  <section class="store-one-categories s-block">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_one_products_section_title }}</h2>
+      </div>
+
+      <div id="products-list" class="products-grid">
+        {% for product in products.results %}
+        {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# banner with features section #}
+  <section class="s-block banner_with_features">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 p-2">
+          <div class="banner_with_features_content">
+            <h2>{{ settings.store_one_banner_with_features_title }}</h2>
+            <p>{{ settings.store_one_banner_with_features_des }}</p>
+
+            <div class="grid_features">
+              {% for feature in safeget(settings, 'store_one_banner_with_features_features', []) %}
+              <div class="feature-item">
+                <img src="{{ image_url(feature.icon) }}" loading="lazy" alt="">
+                <h6>{{ feature.title }}</h6>
+                <p>{{ feature.description }}</p>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5 p-2">
+          <div class="banner_with_features_image">
+            <img src="{{ image_url(settings.store_one_banner_with_features_image) }}" loading="lazy" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# store features #}
+  <section class="s-block store_features">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_one_features_title }}</h2>
+      </div>
+
+      <div class="features_wrapper">
+        {% for feature in settings.store_one_features_features %}
+        <div class="feature_item">
+          <div class="feature_icon">
+            <img src="{{ image_url(feature.icon) }}" loading="lazy" alt="">
+          </div>
+
+          <div class="feature_content">
+            <h6>{{ feature.title }}</h6>
+            <p>{{ feature.description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# banner with content #}
+  <section class="s-block banner_with_content">
+    <div class="container">
+      <div class="banner_with_content_image">
+        <img src="{{ image_url(settings.store_one_banner_with_content_image) }}" loading="lazy" alt="">
+        
+        <div class="banner_with_content_content">
+          <h2>{{ settings.store_one_banner_with_content_title }}</h2>
+          <p>{{ settings.store_one_banner_with_content_des }}</p>
+
+          {% if settings.store_one_banner_with_content_btn_text %}
+            <a href="{{ settings.store_one_banner_with_content_btn_url }}" class="tp-btn">
+              {{ settings.store_one_banner_with_content_btn_text }}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.99984 14.6666C4.31794 14.6666 1.33317 11.6818 1.33317 7.99992C1.33317 4.31802 4.31794 1.33325 7.99984 1.33325C11.6817 1.33325 14.6665 4.31802 14.6665 7.99992C14.6665 11.6818 11.6817 14.6666 7.99984 14.6666Z" stroke="#131313" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10.3335 8H6.3335" stroke="#131313" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7.6665 10L5.6665 8L7.6665 6" stroke="#131313" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
 {%elif category.slug == "store-two" %}
-  <section class="tp-hero-section" {%- if settings.store_two_hero_image -%} style="background-image: url('{{ image_url(settings.store_two_hero_image) | trim }}')" {%- endif -%}>
+  <section class="store-one-two">
+    {% if settings.store_two_hero_video %}
+      <video autoplay muted loop playsinline>
+        <source src="{{ image_url(settings.store_two_hero_video) | trim }}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    {% endif %}
+
     <div class="container">
       <div class="tp-hero-content">
+        {% if settings.store_two_hero_subtitle %}
+          <span>{{ settings.store_two_hero_subtitle }}</span>
+        {% endif %}
+
         {% if settings.store_two_hero_title %}
           <h1>{{ settings.store_two_hero_title }}</h1>
         {% endif %}
+
         {% if settings.store_two_hero_des %}
           <p>{{ settings.store_two_hero_des }}</p>
         {% endif %}
   
         {% if settings.store_two_hero_btn_text and settings.store_two_hero_url %}
-          <a href="{{ settings.store_two_hero_url }}" class="tp-btn">{{ settings.store_two_hero_btn_text }}</a>
+          <a href="{{ settings.store_two_hero_url }}">
+            {{ settings.store_two_hero_btn_text }}
+            <span class="icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 12H4M4 12L10 6M4 12L10 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
         {% endif %}
+      </div>
+    </div>
+  </section>
+
+  {# Store Two categories Section #}
+  <section class="store-two-categories s-block">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_two_cat_section_title }}</h2>
+      </div>
+
+      <div class="store-two-cat-slider swiper-container">
+        <div class="swiper-wrapper">
+          {% for categoryItem in safeget(settings, 'store_two_cat_section_categories', []) %}
+          <div class="swiper-slide">
+            <div class="store-two-cat-item">
+              {% if categoryItem.image %}
+              <div class="cat-thumb">
+                <a href="{{ categoryItem.url }}">
+                  <img loading="lazy" src="{{ image_url(categoryItem.image, { w: 235, q: 100, f:'auto' }) }}"
+                    alt="{{ categoryItem.title }}">
+                </a>
+              </div>
+              {% endif %}
+              <div class="cat-content">
+                <h3 class="cat-title">
+                  <a href="{{ categoryItem.url }}">{{ categoryItem.title }}</a>
+                </h3>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </section>
@@ -188,6 +368,36 @@
 
 {% block footer_scripts %}
 <script type="text/javascript" src="{{ 'toastr.min.js' | asset_url }}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (document.querySelector('.store-one-cat-slider')) {
+            new Swiper('.store-one-cat-slider', {
+                slidesPerView: 2,
+                spaceBetween: 16,
+                breakpoints: {
+                    576: { slidesPerView: 3, spaceBetween: 20 },
+                    768: { slidesPerView: 4, spaceBetween: 24 },
+                    992: { slidesPerView: 5, spaceBetween: 30 },
+                    1200: { slidesPerView: 6, spaceBetween: 30 }
+                }
+            });
+        }
+        if (document.querySelector('.store-two-cat-slider')) {
+            new Swiper('.store-two-cat-slider', {
+                slidesPerView: 2,
+                spaceBetween: 16,
+                breakpoints: {
+                    576: { slidesPerView: 3, spaceBetween: 20 },
+                    768: { slidesPerView: 4, spaceBetween: 24 },
+                    992: { slidesPerView: 5, spaceBetween: 30 },
+                    1200: { slidesPerView: 6, spaceBetween: 30 }
+                }
+            });
+        }
+    });
+</script>
+  
 <script>
   window.onProductAttributesTriggered = function () {
     $('#products-list').css('opacity', '0.4');

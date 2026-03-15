@@ -877,7 +877,7 @@ msgid "After"
 msgstr "بعد"
 
 msgid "Welcome to Shift Store"
-msgstr "مرحبا بك في متجر شيفت"
+msgstr "مرحبا بك في متجر اوماتشا "
 
 msgid "Log in or create an account"
 msgstr "تسجيل الدخول / انشاء حساب"
