@@ -12,24 +12,39 @@
 
 {%if category.slug == "store-one" %}
   {# Store One Hero Section #}
-  <section class="store-one-hero" {%- if settings.store_one_hero_image -%} style="background-size: cover;background-position: center;background-image: url('{{ image_url(settings.store_one_hero_image) | trim }}')" {%- endif -%}>
-    <div class="container">
-      <div class="tp-hero-content">
-        {% if settings.store_one_hero_subtitle %}
-          <span>{{ settings.store_one_hero_subtitle }}</span>
+  <section class="store-one-hero">
+    {% if settings.store_one_hero_image or settings.store_one_hero_mobile_image %}
+      <picture>
+        {% if settings.store_one_hero_mobile_image %}
+        <source media="(max-width: 767px)" srcset="{{ image_url(settings.store_one_hero_mobile_image) }}">
         {% endif %}
+        {% if settings.store_one_hero_image %}
+        <source media="(min-width: 768px)" srcset="{{ image_url(settings.store_one_hero_image) }}">
+        {% endif %}
+        <img loading="lazy" width="1800" height="450" class="lazy-img" data-src="{{ image_url(settings.store_one_hero_image) }}"
+          alt="banner">
+      </picture>
+    {% endif %}
 
-        {% if settings.store_one_hero_title %}
-          <h1>{{ settings.store_one_hero_title }}</h1>
-        {% endif %}
+    <div class="store-one-hero-overlay">
+      <div class="container">
+        <div class="tp-hero-content">
+          {% if settings.store_one_hero_subtitle %}
+            <span>{{ settings.store_one_hero_subtitle }}</span>
+          {% endif %}
 
-        {% if settings.store_one_hero_des %}
-          <p>{{ settings.store_one_hero_des }}</p>
-        {% endif %}
-  
-        {% if settings.store_one_hero_btn_text and settings.store_one_hero_url %}
-          <a href="{{ settings.store_one_hero_url }}" class="tp-btn">{{ settings.store_one_hero_btn_text }}</a>
-        {% endif %}
+          {% if settings.store_one_hero_title %}
+            <h1>{{ settings.store_one_hero_title }}</h1>
+          {% endif %}
+
+          {% if settings.store_one_hero_des %}
+            <p>{{ settings.store_one_hero_des }}</p>
+          {% endif %}
+    
+          {% if settings.store_one_hero_btn_text and settings.store_one_hero_url %}
+            <a href="{{ settings.store_one_hero_url }}" class="tp-btn">{{ settings.store_one_hero_btn_text }}</a>
+          {% endif %}
+        </div>
       </div>
     </div>
   </section>
@@ -214,15 +229,21 @@
               
               <div class="review-box">
                 <h3>{{ influencer.name }}</h3>
-                <div class="rating-stars mb-2">
-                  {% for i in range(5) %}
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="#F39C12"><path d="M12 1.7L14.5 9.2H22.4L16 13.8L18.5 21.3L12 16.7L5.5 21.3L8 13.8L1.6 9.2H9.5L12 1.7Z"/></svg>
-                  {% endfor %}
-                </div>
+                
                 {% if influencer.product %}
-                  <a href="/products/{{ influencer.product.slug }}" class="btn-order-product">
-                    {{ _('Order Product') }}
-                  </a>
+                  {% if influencer.product.is_infinite == false and influencer.product.quantity <= 0 %} 
+                    <a class="btn-order-product" disabled>
+                      {{ _('Out of Stock') }}
+                    </a>
+                  {% elif ( influencer.product.has_options or influencer.product.has_fields ) %}
+                    <a class="btn-order-product" href="/products/{{ influencer.product.slug }}">
+                      {{ _('Order Product') }}
+                    </a>
+                  {% else %}
+                    <button type="button" class="btn-order-product" onclick="productCartAddToCart(this,'{{ influencer.product.id }}')" aria-label="AddToCart">
+                      {{ _('Order Product') }}
+                    </button>
+                  {% endif %}
                 {% endif %}
               </div>
 
@@ -349,6 +370,206 @@
         </div>
       </div>
     </div>
+  </section>
+
+  {# store collage #}
+  <section class="s-block banners_section">
+    <div class="d-flex">
+      {% for banner in settings.store_two_banners_section_banners %}
+        <div class="banner_item" style="flex: 1;">
+          <a href="{{ banner.url }}">
+            <img src="{{ image_url(banner.image, { w: 235, q: 100, f:'auto' }) }}" style="width: 100%;" loading="lazy" alt="{{ banner.title }}">
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  {# store features #}
+  <section class="s-block store_two_features">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_two_features_title }}</h2>
+      </div>
+
+      <div class="features_wrapper">
+        {% for feature in settings.store_two_features_features %}
+        <div class="feature_item">
+          <div class="feature_icon">
+            <img src="{{ image_url(feature.icon) }}" loading="lazy" alt="">
+          </div>
+
+          <div class="feature_content">
+            <h6>{{ feature.title }}</h6>
+            <p>{{ feature.description }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# brands section #}
+  <section class="s-block store_two_brands">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-5">
+        <h2 class="tp-section-title">{{ settings.store_two_brands_section_title }}</h2>
+      </div>
+
+      <div class="brands_swiper swiper">
+        <div class="swiper-wrapper">
+          {% for brand in safeget(settings, 'store_two_brands_section_brands', []) %}
+          <div class="swiper-slide">
+            <div class="brand_item">
+              <a href="{{ brand.url }}">
+                <img src="{{ image_url(brand.image, { w: 235, q: 100, f:'auto' }) }}" style="width: 100%;" loading="lazy" alt="{{ brand.title }}">
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          if (typeof Swiper !== 'undefined') {
+            new Swiper('.brands_swiper', {
+              slidesPerView: 3,
+              spaceBetween: 16,
+              loop: true,
+              breakpoints: {
+                576: {
+                  slidesPerView: 3,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 4,
+                  spaceBetween: 24,
+                },
+                1024: {
+                  slidesPerView: 5,
+                  spaceBetween: 30,
+                },
+              },
+            });
+          }
+        });
+      </script>
+    </div>
+  </section>
+
+  {# products section #}
+  <section class="store-one-products s-block" section-id="store-one-products">
+    <div class="container">
+      <div class="tp-section-title-wrapper mb-4">
+        <h2 class="tp-section-title">{{ settings.store_two_products_section_title }}</h2>
+      </div>
+
+      <div class="products_swiper swiper">
+        <div class="swiper-wrapper">
+          {% for product in products.results %}
+          <div class="swiper-slide">
+            {% set product=product %}{% set index=loop.index0 %}{% include 'components/product-card.jinja' %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof Swiper !== 'undefined') {
+          new Swiper('.products_swiper', {
+            slidesPerView: 1.5,
+            spaceBetween: 16,
+            loop: true,
+            breakpoints: {
+              576: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 3,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 30,
+              },
+            },
+          });
+        }
+      });
+    </script>
+  </section>
+
+  {# banner with content #}
+  <section class="s-block banner_with_content">
+    <div class="container">
+      <div class="banner_with_content_image">
+        <img src="{{ image_url(settings.store_two_banner_with_content_image) }}" loading="lazy" alt="">
+        
+        <div class="banner_with_content_content">
+          <h2>{{ settings.store_two_banner_with_content_title }}</h2>
+          <p>{{ settings.store_two_banner_with_content_des }}</p>
+
+          {% if settings.store_two_banner_with_content_btn_text %}
+            <a href="{{ settings.store_two_banner_with_content_btn_url }}" class="tp-btn">
+              {{ settings.store_two_banner_with_content_btn_text }}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.99984 14.6666C4.31794 14.6666 1.33317 11.6818 1.33317 7.99992C1.33317 4.31802 4.31794 1.33325 7.99984 1.33325C11.6817 1.33325 14.6665 4.31802 14.6665 7.99992C14.6665 11.6818 11.6817 14.6666 7.99984 14.6666Z" stroke="#131313" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10.3335 8H6.3335" stroke="#131313" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7.6665 10L5.6665 8L7.6665 6" stroke="#131313" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# dark banner #}
+  <section class="s-block store_two_dark_banner">
+    <div class="store_two_dark_banner_wrapper">
+      <div class="store_two_dark_banner_content">
+        <h2>{{ settings.store_two_dark_banner_title }}</h2>
+        <p>{{ settings.store_two_dark_banner_des }}</p>
+
+        {% if settings.store_two_dark_banner_btn_text %}
+          <a href="{{ settings.store_two_dark_banner_url }}" class="tp-btn">
+            {{ settings.store_two_dark_banner_btn_text }}
+          </a>
+        {% endif %}
+      </div>
+      
+      <div class="store_two_dark_banner_image">
+        <img src="{{ image_url(settings.store_two_dark_banner_image) }}" loading="lazy" alt="">
+      </div>
+    </div>
+  </section>
+
+  {# collage section #}
+  <section class="s-block store_two_collage">
+      <div class="store_two_collage_wrapper">
+        <div class="store_two_collage_image">
+          <img src="{{ image_url(settings.store_two_collage_section_img) }}" loading="lazy" alt="">
+        </div>
+        
+        <div class="store_two_collage_content">
+          <span class="subtitle">{{ settings.store_two_collage_section_subtitle }}</span>
+          <h2>{{ settings.store_two_collage_section_title }}</h2>
+          <p>{{ settings.store_two_collage_section_des }}</p>
+
+          {% if settings.store_two_collage_section_btn_text %}
+            <a href="{{ settings.store_two_collage_section_btn_url }}" class="tp-btn-link">
+              {{ settings.store_two_collage_section_btn_text }}
+              <svg width="39" height="13" viewBox="0 0 39 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M38.3906 6.04307H0.890648M0.890648 6.04307C0.890648 6.04307 5.37868 3.09149 6.29065 0.643066M0.890648 6.04307C0.890648 6.04307 4.85822 8.81644 6.29065 11.4431" stroke="#333333" stroke-linecap="square"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
   </section>
 {%else%}
   {% if category.cover_image %}
@@ -493,7 +714,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         if (document.querySelector('.store-one-cat-slider')) {
             new Swiper('.store-one-cat-slider', {
-                slidesPerView: 2,
+                slidesPerView: 3,
                 spaceBetween: 16,
                 breakpoints: {
                     576: { slidesPerView: 3, spaceBetween: 20 },
@@ -505,7 +726,7 @@
         }
         if (document.querySelector('.store-two-cat-slider')) {
             new Swiper('.store-two-cat-slider', {
-                slidesPerView: 2,
+                slidesPerView: 3,
                 spaceBetween: 16,
                 breakpoints: {
                     576: { slidesPerView: 3, spaceBetween: 20 },

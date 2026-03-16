@@ -812,6 +812,14 @@
               }
             },
             {
+              "type": "image",
+              "id": "mobile_image",
+              "label": {
+                "ar": "صورة الموبايل",
+                "en": "Mobile image"
+              }
+            },
+            {
               "type": "text",
               "id": "subtitle",
               "label": {
@@ -1275,6 +1283,316 @@
                   }
                 }
               ]
+            }
+          ]
+        },
+        {
+          "id": "banners_section",
+          "expandable": true,
+          "type": "fieldset",
+          "label": {
+            "ar": "قسم البانرات",
+            "en": "Banners section"
+          },
+          "settings": [
+            {
+              "type": "list",
+              "id": "banners",
+              "label": {
+                "ar": "البانرات",
+                "en": "Banners"
+              },
+              "max_items": 10,
+              "settings": [
+                {
+                  "type": "image",
+                  "id": "image",
+                  "label": {
+                    "ar": "الصورة",
+                    "en": "Image"
+                  }
+                },
+                {
+                  "type": "url",
+                  "id": "url",
+                  "label": {
+                    "ar": "الرابط",
+                    "en": "Link"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "brands_section",
+          "expandable": true,
+          "type": "fieldset",
+          "label": {
+            "ar": "قسم العلامات التجارية",
+            "en": "Brands section"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "list",
+              "id": "brands",
+              "label": {
+                "ar": "العلامات التجارية",
+                "en": "Brands"
+              },
+              "max_items": 10,
+              "settings": [
+                {
+                  "type": "image",
+                  "id": "image",
+                  "label": {
+                    "ar": "الصورة",
+                    "en": "Image"
+                  }
+                },
+                {
+                  "type": "url",
+                  "id": "url",
+                  "label": {
+                    "ar": "الرابط",
+                    "en": "Link"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "products_section",
+          "type": "fieldset",
+          "expandable": true,
+          "label": {
+            "ar": "قسم المنتجات",
+            "en": "Products section"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            }
+          ]
+        },
+        {
+          "id": "features",
+          "type": "fieldset",
+          "expandable": true,
+          "label": {
+            "ar": "قسم مميزات",
+            "en": "Features"
+          },
+          "settings": [
+            {
+              "type": "list",
+              "id": "features",
+              "label": {
+                "ar": "الميزات",
+                "en": "Features"
+              },
+              "max_items": 10,
+              "settings": [
+                {
+                  "type": "image",
+                  "id": "icon",
+                  "label": {
+                    "ar": "الصورة",
+                    "en": "Image"
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "title",
+                  "label": {
+                    "ar": "العنوان الرئيسي",
+                    "en": "Title"
+                  }
+                },
+                {
+                  "type": "textarea",
+                  "id": "description",
+                  "label": {
+                    "ar": "الوصف",
+                    "en": "Description"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "banner_with_content",
+          "type": "fieldset",
+          "expandable": true,
+          "label": {
+            "ar": "قسم مميزات",
+            "en": "Features"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "des",
+              "label": {
+                "ar": "نص توضيحي",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "btn_text",
+              "label": {
+                "ar": "نص الزر",
+                "en": "Btn text"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        },
+        {
+          "id": "dark_banner",
+          "type": "fieldset",
+          "expandable": true,
+          "label": {
+            "ar": "البانر الغامق (2)",
+            "en": "Dark banner (2)"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "des",
+              "label": {
+                "ar": "نص توضيحي",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "image",
+              "id": "image",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
+            },
+            {
+              "type": "text",
+              "id": "btn_text",
+              "label": {
+                "ar": "نص الزر",
+                "en": "Btn text"
+              }
+            },
+            {
+              "type": "url",
+              "id": "url",
+              "label": {
+                "ar": "الرابط",
+                "en": "Link"
+              }
+            }
+          ]
+        },
+        {
+          "id": "collage_section",
+          "type": "fieldset",
+          "expandable": true,
+          "label": {
+            "ar": "مجموعة نصوص وصور",
+            "en": "Image & Text Collage"
+          },
+          "settings": [
+            {
+              "type": "text",
+              "id": "subtitle",
+              "label": {
+                "ar": "العنوان الفرعي",
+                "en": "Subtitle"
+              }
+            },
+            {
+              "type": "text",
+              "id": "title",
+              "label": {
+                "ar": "العنوان الرئيسي",
+                "en": "Title"
+              }
+            },
+            {
+              "type": "textarea",
+              "id": "des",
+              "label": {
+                "ar": "نص توضيحي",
+                "en": "Description"
+              }
+            },
+            {
+              "type": "text",
+              "id": "btn_text",
+              "label": {
+                "ar": "نص الزر",
+                "en": "Button Text"
+              }
+            },
+            {
+              "type": "url",
+              "id": "btn_url",
+              "label": {
+                "ar": "رابط الزر",
+                "en": "Button Link"
+              }
+            },
+            {
+              "type": "image",
+              "id": "img",
+              "label": {
+                "ar": "الصورة",
+                "en": "Image"
+              }
             }
           ]
         }
