@@ -3885,6 +3885,7 @@ body:has(.tp-slider-banners + .tp-slider-banners) .tp-slider-banners {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  align-items: flex-start;
 }
 
 .faqs-box .accordion-item {
@@ -5468,7 +5469,6 @@ body:has(.tp-slider-banners + .tp-slider-banners) .tp-slider-banners {
 }
 
 .product-box {
-  width: 280px;
   height: 100%;
   overflow: hidden;
   border: 1px solid #dedede;
@@ -8809,8 +8809,6 @@ ul.list-menu.mm-listview {
     }
   }
 }
-
-.
 
 .store-one-cat-slider {
   position: relative;

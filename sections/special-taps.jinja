@@ -95,6 +95,30 @@
   display: block;
   opacity: 1;
 }
+
+@media (max-width: 991px) {
+  .tp-special-tabs-products .tp-products-swiper {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+    padding: 0;
+  }
+  .tp-special-tabs-products .tp-products-swiper .swiper-slide {
+    width: 100% !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+  .tp-special-tabs-products .slick-dots {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .tp-special-tabs-products .tp-products-swiper {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+}
 </style>
 
 <script>
@@ -130,8 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
       prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><span class="' + arrowPrevClass + '"></span></button>',
       responsive: [
         { breakpoint: 1024, settings: { slidesToShow: 3, slidesToScroll: 3 } },
-        { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 2, rows: twoRows ? 2 : 1 } },
-        { breakpoint: 350, settings: { slidesToShow: 1, slidesToScroll: 1, rows: twoRows ? 2 : 1} }
+        { breakpoint: 992, settings: "unslick" }
       ]
     });
   }
