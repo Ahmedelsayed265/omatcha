@@ -1,0 +1,102 @@
+{% if not settings.hide_element %}
+<section class="tp-feature-area s-block" section-id="{{ sectionId }}" id="counter-section-{{ sectionId }}">
+  {# هذه الخانة مخفية فقط للتأكد من البيانات التي تصل من زد #}
+  <script type="application/json" id="debug-data-{{ sectionId }}">
+    {{ settings.counters | json }}
+  </script>
+
+  <div class="container overflow-hidden">
+    {% if settings.title %}
+    <h3 class="section-title" style="text-align: start;">{{ settings.title }}</h3>
+    {% endif %}
+
+    <div class="row">
+      {% for counter in safeget(settings, 'counters', []) %}
+      {% set target_val = counter.number | default(counter.count) | default(counter.num) | default(0) %}
+      <div class="col-md-3 col-6 p-2">
+        <div class="counter-card">
+          <div class="counter-number" 
+               style="color: red !important;" 
+               data-target="{{ target_val }}" 
+               data-debug='{{ counter | json }}'>
+            <span class="count-suffix">+</span>
+            <span class="count-val">0</span>
+          </div>
+          <div class="counter-info">
+            {% if counter.title %}
+              <div class="counter-title">{{ counter.title }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    #counter-section-{{ sectionId }} { padding: 40px 0; background-color: #fff; }
+    #counter-section-{{ sectionId }} .section-title { margin-bottom: 20px; font-weight: 700; color: #1a1a1a; text-align: start; }
+    #counter-section-{{ sectionId }} .counter-card { background: #ffffff; border: 1px solid #ebebeb; border-radius: 20px; padding: 32px; height: 100%; transition: all 0.4s ease; display: flex; flex-direction: column; text-align: right; }
+    #counter-section-{{ sectionId }} .counter-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    #counter-section-{{ sectionId }} .counter-number { font-weight: 800; font-size: 4rem; line-height: 1.2; margin-bottom: 10px; display: flex; flex-direction: row; align-items: center; gap: 10px; justify-content: center; direction: ltr; }
+    #counter-section-{{ sectionId }} .counter-title { font-weight: 600; font-size: 1.2rem; color: #777; text-align: center; }
+  </style>
+
+<script>
+  (function () {
+    const id = '{{ sectionId }}';
+    console.log('--- LATEST VERSION LOADED [' + id + '] ---');
+
+    const section = document.querySelector('#counter-section-' + id) || 
+                    (document.currentScript && document.currentScript.closest('section'));
+    
+    if (!section) return;
+
+    // طباعة كل ما وصل من زد في مصفوفة العدادات
+    try {
+      const debugEl = document.getElementById('debug-data-' + id);
+      if (debugEl) {
+        const allData = JSON.parse(debugEl.textContent);
+        console.log('ALL COUNTERS DATA FROM ZID:', allData);
+      }
+    } catch(e) { console.error('Could not parse debug data'); }
+
+    const startAnimate = () => {
+      section.querySelectorAll('.counter-number').forEach((el, i) => {
+        if (!el || el.dataset.done) return;
+        el.dataset.done = 'true';
+        
+        const valEl = el.querySelector('.count-val');
+        const raw = el.getAttribute('data-target') || '0';
+        const target = parseInt(raw.toString().replace(/\D/g, '')) || 0;
+        
+        console.log('Counter ' + i + ' animating to:', target);
+
+        let start = null;
+        const duration = 2000;
+        function step(timestamp) {
+          if (!start) start = timestamp;
+          const progress = Math.min((timestamp - start) / duration, 1);
+          valEl.innerText = Math.floor(progress * target).toLocaleString('en-US');
+          if (progress < 1) window.requestAnimationFrame(step);
+          else valEl.innerText = target.toLocaleString('en-US');
+        }
+        window.requestAnimationFrame(step);
+      });
+    };
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          startAnimate();
+          observer.disconnect();
+        }
+      }, { threshold: 0.1 });
+      observer.observe(section);
+    } else {
+      startAnimate();
+    }
+  })();
+</script>
+</section>
+{% endif %}

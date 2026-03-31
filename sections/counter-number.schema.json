@@ -1,0 +1,54 @@
+{
+  "name": {
+    "ar": "عداد الارقام",
+    "en": "Counter Number"
+  },
+  "icon": "fal fa-images",
+  "template": "sections/counter-number.jinja",
+  "section_id": "uuid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "hide_element",
+      "label": {
+        "ar": "إخفاء العنصر من الصفحة",
+        "en": "Hide element from page"
+      }
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": {
+        "ar": "العنوان",
+        "en": "Title"
+      }
+    },
+    {
+      "type": "list",
+      "id": "counters",
+      "label": {
+        "ar": "عداد",
+        "en": "Counter"
+      },
+      "max_items": 100,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "ar": "العنوان",
+            "en": "Title"
+          }
+        },
+        {
+          "type": "text",
+          "id": "number",
+          "label": {
+            "ar": "الرقم",
+            "en": "Number"
+          }
+        }
+      ]
+    }
+  ]
+}

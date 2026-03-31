@@ -1,25 +1,133 @@
 {% if not settings.hide_element %}
 <section class="tp-feature-area s-block" section-id="{{ sectionId }}">
-  <div class="container">
+  <div class="container overflow-hidden">
     <div class="tp-title-section">
       {% if settings.title %}
-        <h3 >{{ settings.title }}</h3>
+      <h3>{{ settings.title }}</h3>
       {% endif %}
     </div>
-    <div class="tp-feature-items">
-    {% set features = safeget(settings, 'store_features', []) %}
-      {% for feature in features %}
-        <div class="feature-box" >
+    <div class="tp-feature-swiper swiper">
+      <div class="tp-feature-items swiper-wrapper">
+        {% set features = safeget(settings, 'store_features', []) %}
+        {% for feature in features %}
+        <div class="feature-box swiper-slide">
           <div class="icon">
-            <img loading="lazy" width="64" height="65" class="lazy-img" data-src="{{ image_url(feature.image) }}"  alt="">
+            <img loading="lazy" width="64" height="65" class="lazy-img" data-src="{{ image_url(feature.image) }}"
+              alt="">
           </div>
           <div class="content">
             <h3 class="title">{{ feature.title }}</h3>
-            <p>{{ feature.sub_title or feature.desc}}</p>
+            <p>{{ feature.sub_title or feature.desc }}</p>
           </div>
         </div>
         {% endfor %}
+      </div>
     </div>
   </div>
-</section> 
+
+  <style>
+    [section-id="{{ sectionId }}"] .tp-feature-items.swiper-wrapper {
+      @media (max-width: 768px) {
+        display: flex !important;
+        justify-content: flex-start !important;
+        gap: 0 !important;
+      }
+    }
+
+    @media (min-width: 992px) {
+      [section-id="{{ sectionId }}"] .tp-feature-swiper.swiper {
+        overflow: visible;
+      }
+
+      [section-id="{{ sectionId }}"] .tp-feature-swiper .swiper-wrapper {
+        justify-content: center !important;
+        gap: 20px !important;
+        flex-wrap: nowrap;
+        transform: none !important;
+      }
+
+      [section-id="{{ sectionId }}"] .feature-box {
+        width: calc(100% / {
+              {
+              features | length or 1
+            }
+          }) !important;
+        margin-right: 0 !important;
+      }
+    }
+
+    @media (max-width: 991px) {
+      [section-id="{{ sectionId }}"] .tp-feature-swiper.swiper {
+        padding-bottom: 30px;
+      }
+
+      [section-id="{{ sectionId }}"] .tp-feature-items {
+        padding-bottom: 0px;
+      }
+
+      [section-id="{{ sectionId }}"] .feature-box {
+        height: auto;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var sectionId = "{{ sectionId }}";
+      var section = document.querySelector(`[section-id="${sectionId}"]`);
+      if (!section) return;
+
+      var swiperContainer = section.querySelector('.tp-feature-swiper');
+      if (!swiperContainer) return;
+
+      var mySwiper;
+
+      function initFeatureSwiper() {
+        var isMobile = window.innerWidth < 992;
+        var appDirection = window.appDirection || (document.documentElement.dir === 'rtl' ? 'rtl' : 'ltr');
+        var isRTL = (appDirection === 'rtl');
+
+        if (isMobile) {
+          if (!mySwiper) {
+            mySwiper = new Swiper(swiperContainer, {
+              slidesPerView: 2.5,
+              spaceBetween: 10,
+              initialSlide: 0,
+              centeredSlides: false,
+              watchOverflow: true,
+              loop: false,
+              rtl: isRTL,
+              breakpoints: {
+                576: {
+                  slidesPerView: 2.5,
+                  spaceBetween: 15
+                },
+                768: {
+                  slidesPerView: 2.5,
+                  spaceBetween: 15
+                }
+              }
+            });
+          }
+        } else {
+          if (mySwiper) {
+            mySwiper.destroy(true, true);
+            mySwiper = undefined;
+          }
+        }
+      }
+
+      initFeatureSwiper();
+
+      window.addEventListener('resize', function () {
+        initFeatureSwiper();
+      });
+
+      // Re-init on window load to ensure all assets are ready and dimensions are correct
+      window.addEventListener('load', function () {
+        initFeatureSwiper();
+      });
+    });
+  </script>
+</section>
 {% endif %}

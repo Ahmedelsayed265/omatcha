@@ -3038,7 +3038,7 @@
 
   .feature-box {
     gap: 6px;
-    padding: 0 8px;
+    padding: 10px 8px;
   }
 
   .feature-box .icon {
@@ -3047,7 +3047,7 @@
   }
 
   .feature-box .title {
-    font-size: 17px;
+    font-size: 14px;
     margin-bottom: 2px
   }
 

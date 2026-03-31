@@ -71,6 +71,14 @@
             "ar": "الصورة (لمن لا يحتوي على فيديو)",
             "en": "Image (when no video)"
           }
+        },
+        {
+          "id": "product",
+          "type": "product",
+          "label": {
+            "ar": "المنتج",
+            "en": "Product"
+          }
         }
       ]
     }
