@@ -10706,6 +10706,7 @@ body:has(.tp-slider-banners + .tp-slider-banners) .tp-slider-banners {
 .features-container .features-part {
   display: flex;
   gap: 10px;
+  width: 100%;
   text-align: center;
 }
 
@@ -10713,6 +10714,7 @@ body:has(.tp-slider-banners + .tp-slider-banners) .tp-slider-banners {
   background: #fff;
   padding: 16px;
   width: 210px;
+  flex: 1;
   border-radius: 16px;
   -webkit-border-radius: 16px;
   -moz-border-radius: 16px;

@@ -11,8 +11,8 @@
 				<div class="swiper-slide">
 					<div class="video-story">
           {% if item.video %}
-            <video width="100%" loop muted playsinline{% if item.poster %} poster="{{ image_url(item.poster) }}"{% endif %}>
-              <source data-src="{{ item.video }}" type="video/mp4">
+            <video width="100%" loop muted playsinline autoplay{% if item.poster %} poster="{{ image_url(item.poster) }}"{% endif %}>
+              <source src="{{ item.video }}" type="video/mp4">
               Your browser does not support the video tag.
             </video>
             {% else %}
@@ -75,52 +75,58 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function pauseAllVideos() {
-    // Pause all videos on the entire page to ensure only one plays at a time
     document.querySelectorAll('.video-story').forEach(story => {
       const video = story.querySelector('video');
-      const playBtn = story.querySelector('.play-video');
-      const volumeToggle = story.querySelector('.volume-toggle');
-      const reviewBox = story.querySelector('.review-box');
-      
-      if (video) video.pause();
-      if (playBtn) playBtn.classList.remove('hidden');
-      if (volumeToggle) volumeToggle.style.display = 'none';
-      if (reviewBox) reviewBox.style.display = 'block';
+      if (video && !video.paused) {
+        video.pause();
+        story.querySelector('.play-video')?.classList.remove('hidden');
+        story.querySelector('.volume-toggle').style.display = 'none';
+        const reviewBox = story.querySelector('.review-box');
+        if (reviewBox) reviewBox.style.display = 'block';
+      }
     });
   }
 
-  // تشغيل الفيديو عند الضغط على زر التشغيل
-  section.querySelectorAll('.play-video').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const parent = btn.closest('.video-story');
-      const video = parent.querySelector('video');
-      const reviewBox = parent.querySelector('.review-box');
-
-      pauseAllVideos();
-
-      if (video) {
-        ensureVideoSource(video);
-        video.play();
-      }
-      btn.classList.add('hidden');
-      parent.querySelector('.volume-toggle').style.display = 'flex';
-      if (reviewBox) reviewBox.style.display = 'none';
-    });
-  });
-
-  // عند الضغط على الفيديو نفسه: تشغيل/إيقاف
+  // تهيئة الفيديوهات للتشغيل التلقائي وكتم الصوت عند التحميل
   section.querySelectorAll('.video-story').forEach((container) => {
     const video = container.querySelector('video');
     const playBtn = container.querySelector('.play-video');
     const volumeToggle = container.querySelector('.volume-toggle');
     const reviewBox = container.querySelector('.review-box');
+    const muteIcon = container.querySelector('.mute-video');
+    const unmuteIcon = container.querySelector('.unmute-video');
 
     if (video) {
-      video.addEventListener('click', () => {
+      ensureVideoSource(video);
+      video.muted = true;
+      video.play().catch(e => console.log("Autoplay blocked:", e));
+
+      // تحديث الواجهة لتناسب حالة التشغيل التلقائي
+      if (playBtn) playBtn.classList.add('hidden');
+      if (volumeToggle) volumeToggle.style.display = 'flex';
+      if (reviewBox) reviewBox.style.display = 'none';
+
+      // تشغيل الصوت عند التمرير (Hover)
+      container.addEventListener('mouseenter', () => {
+        if (!video.paused) {
+          video.muted = false;
+          if (muteIcon) muteIcon.style.display = 'none';
+          if (unmuteIcon) unmuteIcon.style.display = 'block';
+        }
+      });
+
+      // كتم الصوت عند الخروج بالماوس
+      container.addEventListener('mouseleave', () => {
+        video.muted = true;
+        if (muteIcon) muteIcon.style.display = 'block';
+        if (unmuteIcon) unmuteIcon.style.display = 'none';
+      });
+
+      // عند الضغط على الفيديو: تشغيل/إيقاف
+      video.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (video.paused) {
           pauseAllVideos();
-          ensureVideoSource(video);
           video.play();
           playBtn.classList.add('hidden');
           volumeToggle.style.display = 'flex';
@@ -133,27 +139,30 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
     }
-  });
 
-  // زر الصوت
-  section.querySelectorAll('.volume-toggle').forEach((toggle) => {
-    const video = toggle.closest('.video-story').querySelector('video');
-    const muteIcon = toggle.querySelector('.mute-video');
-    const unmuteIcon = toggle.querySelector('.unmute-video');
+    // زر التشغيل اليدوي
+    if (playBtn) {
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        pauseAllVideos();
+        video.play();
+        playBtn.classList.add('hidden');
+        volumeToggle.style.display = 'flex';
+        if (reviewBox) reviewBox.style.display = 'none';
+      });
+    }
 
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (video) {
+    // زر التحكم بالصوت
+    if (volumeToggle) {
+      volumeToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         video.muted = !video.muted;
-        muteIcon.style.display = video.muted ? 'block' : 'none';
-        unmuteIcon.style.display = video.muted ? 'none' : 'block';
-      }
-    });
-
-    toggle.style.display = 'none';
+        if (muteIcon) muteIcon.style.display = video.muted ? 'block' : 'none';
+        if (unmuteIcon) unmuteIcon.style.display = video.muted ? 'none' : 'block';
+      });
+    }
   });
 
-  // التحقق من ظهور الفيديو داخل الشاشة
   function isInViewport(element) {
     const rect = element.getBoundingClientRect();
     return rect.top < window.innerHeight && rect.bottom > 0;
@@ -162,19 +171,15 @@ document.addEventListener("DOMContentLoaded", function () {
   window.addEventListener("scroll", () => {
     section.querySelectorAll('.video-story').forEach((story) => {
       const video = story.querySelector('video');
-      const playBtn = story.querySelector('.play-video');
-      const volumeToggle = story.querySelector('.volume-toggle');
-      const reviewBox = story.querySelector('.review-box');
-
       if (video && !isInViewport(video) && !video.paused) {
         video.pause();
-        playBtn.classList.remove('hidden');
-        volumeToggle.style.display = 'none';
+        story.querySelector('.play-video')?.classList.remove('hidden');
+        story.querySelector('.volume-toggle').style.display = 'none';
+        const reviewBox = story.querySelector('.review-box');
         if (reviewBox) reviewBox.style.display = 'block';
       }
     });
   });
-
 });
 </script>
 

@@ -2,7 +2,7 @@
 <section class="tp-feature-area s-block" section-id="{{ sectionId }}" id="counter-section-{{ sectionId }}">
   {# هذه الخانة مخفية فقط للتأكد من البيانات التي تصل من زد #}
   <script type="application/json" id="debug-data-{{ sectionId }}">
-    {{ settings.counters | json }}
+    {{ settings.counters | tojson }}
   </script>
 
   <div class="container overflow-hidden">
@@ -15,12 +15,9 @@
       {% set target_val = counter.number | default(counter.count) | default(counter.num) | default(0) %}
       <div class="col-md-3 col-6 p-2">
         <div class="counter-card">
-          <div class="counter-number" 
-               style="color: red !important;" 
-               data-target="{{ target_val }}" 
-               data-debug='{{ counter | json }}'>
-            <span class="count-suffix">+</span>
+          <div class="counter-number" data-target="{{ target_val }}">
             <span class="count-val">0</span>
+            <span class="count-suffix">+</span>
           </div>
           <div class="counter-info">
             {% if counter.title %}
@@ -42,61 +39,61 @@
     #counter-section-{{ sectionId }} .counter-title { font-weight: 600; font-size: 1.2rem; color: #777; text-align: center; }
   </style>
 
-<script>
-  (function () {
-    const id = '{{ sectionId }}';
-    console.log('--- LATEST VERSION LOADED [' + id + '] ---');
+ <script>
+    (function () {
+      const section = document.getElementById("counter-section-{{ sectionId }}");
+      if (!section) return;
 
-    const section = document.querySelector('#counter-section-' + id) || 
-                    (document.currentScript && document.currentScript.closest('section'));
-    
-    if (!section) return;
+      const counters = section.querySelectorAll(".counter-number");
 
-    // طباعة كل ما وصل من زد في مصفوفة العدادات
-    try {
-      const debugEl = document.getElementById('debug-data-' + id);
-      if (debugEl) {
-        const allData = JSON.parse(debugEl.textContent);
-        console.log('ALL COUNTERS DATA FROM ZID:', allData);
-      }
-    } catch(e) { console.error('Could not parse debug data'); }
+      function animate(el) {
+        if (el.dataset.done) return;
+        el.dataset.done = "true";
 
-    const startAnimate = () => {
-      section.querySelectorAll('.counter-number').forEach((el, i) => {
-        if (!el || el.dataset.done) return;
-        el.dataset.done = 'true';
-        
-        const valEl = el.querySelector('.count-val');
-        const raw = el.getAttribute('data-target') || '0';
-        const target = parseInt(raw.toString().replace(/\D/g, '')) || 0;
-        
-        console.log('Counter ' + i + ' animating to:', target);
+        // ✅ FIX يدعم target + bsTarget + أي نص
+        const target = parseInt(
+          (el.dataset.target || el.dataset.bsTarget || "0").replace(/\D/g, '')
+        ) || 0;
 
-        let start = null;
-        const duration = 2000;
+        const valEl = el.querySelector(".count-val");
+
+        let start = 0;
+        const duration = 1500;
+
         function step(timestamp) {
           if (!start) start = timestamp;
-          const progress = Math.min((timestamp - start) / duration, 1);
-          valEl.innerText = Math.floor(progress * target).toLocaleString('en-US');
-          if (progress < 1) window.requestAnimationFrame(step);
-          else valEl.innerText = target.toLocaleString('en-US');
-        }
-        window.requestAnimationFrame(step);
-      });
-    };
 
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          startAnimate();
-          observer.disconnect();
+          const progress = Math.min((timestamp - start) / duration, 1);
+          const value = Math.floor(progress * target);
+
+          valEl.textContent = value.toLocaleString();
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            valEl.textContent = target.toLocaleString();
+          }
         }
-      }, { threshold: 0.1 });
+
+        requestAnimationFrame(step);
+      }
+
+      function startCounters() {
+        counters.forEach(animate);
+      }
+
+      // trigger on scroll
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startCounters();
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+
       observer.observe(section);
-    } else {
-      startAnimate();
-    }
-  })();
-</script>
+    })();
+  </script>
 </section>
 {% endif %}

@@ -335,39 +335,7 @@ function shareWishlist() {
   });
 }
 
-function sendCoupon(element) {
-    const $form = $(element).closest('.coupon-form');
-    const $input = $form.find('.send-coupon');
-    const $spinner = $form.find('.send-coupon-progress');
 
-    if (!$spinner.hasClass('d-none')) return;
-    $spinner.removeClass('d-none');
-
-    zid.cart.applyCoupon({ coupon_code: $input.val() }, { showErrorNotification: true })
-        .then(function () {
-            $spinner.addClass('d-none');
-            toastr.success('{{ _("Send Successfully") }}', null)
-            window.location.href = '/cart/view';
-        })
-        .catch(function (err) {
-            $spinner.addClass('d-none');
-        });
-}
-
-// function deleteCoupon(element) {
-//     const $form = $(element).closest('.coupon-form');
-//     const $spinner = $form.find('.delete-coupon-progress');
-
-//     if (!$spinner.hasClass('d-none')) return;
-//     $spinner.removeClass('d-none');
-
-//     zid.cart.removeCoupons({ showErrorNotification: true })
-//         .then(function () {
-//             $spinner.addClass('d-none');
-//             toastr.success('تم حذف الكوبون');
-//             window.location.href = '/cart/view';
-//         });
-// }
 
 /*
     Initialize Cart
@@ -694,28 +662,6 @@ function addToCartAnimation(cart,imgtodrag) {
     }
 }
 
-// function sendCoupon(element) {
-//   const $form = $(element).closest('.coupon-form');
-//   const $input = $form.find('.send-coupon');
-//   const $spinner = $form.find('.send-coupon-progress');
-
-//   if (!$spinner.hasClass('d-none')) return;
-
-//   $spinner.removeClass('d-none');
-
-//   zid.store.cart.redeemCoupon($input.val())
-//       .then(function (response) {
-//           if (response.status === 'success') {
-//               toastr.success("success");
-//               window.location.href = '/cart/view';
-//           } else {
-//               toastr.error("error");
-//           }
-//           $spinner.addClass('d-none');
-//       }).catch(function (err) {
-//           $spinner.addClass('d-none');
-//       });
-// }
 
 function sendCoupon(element) {
   const $form = $(element).closest('.coupon-form');
@@ -725,42 +671,83 @@ function sendCoupon(element) {
   if (!$spinner.hasClass('d-none')) return;
   $spinner.removeClass('d-none');
 
+  const couponCode = $input.val();
+
   window.loadToasterScriptIfNotLoaded(function () {
-    zid.store.cart.redeemCoupon($input.val())
-      .then(function (response) {
-        if (response.status === 'success') {
-          toastr.success(window.i18n.success);
+    const zidObj = window.zid || (typeof zid !== 'undefined' ? zid : null);
+    
+    // Try modern API first
+    if (zidObj && zidObj.cart && typeof zidObj.cart.applyCoupon === 'function') {
+      zidObj.cart.applyCoupon({ coupon_code: couponCode }, { showErrorNotification: true })
+        .then(function () {
+          $spinner.addClass('d-none');
+          if (typeof toastr !== 'undefined') toastr.success(window.i18n ? window.i18n.success : 'Success');
           window.location.href = '/cart/view';
-        } else {
-          toastr.error(window.i18n.error);
-        }
-        $spinner.addClass('d-none');
-      }).catch(function () {
-        $spinner.addClass('d-none');
-      });
+        })
+        .catch(function () {
+          $spinner.addClass('d-none');
+        });
+    } 
+    // Fallback to legacy API
+    else if (zidObj && zidObj.store && zidObj.store.cart && typeof zidObj.store.cart.redeemCoupon === 'function') {
+      zidObj.store.cart.redeemCoupon(couponCode)
+        .then(function (response) {
+          if (response.status === 'success') {
+            if (typeof toastr !== 'undefined') toastr.success(window.i18n ? window.i18n.success : 'Success');
+            window.location.href = '/cart/view';
+          } else {
+            if (typeof toastr !== 'undefined') toastr.error(response.data && response.data.message ? response.data.message : (window.i18n ? window.i18n.error : 'Error'));
+          }
+          $spinner.addClass('d-none');
+        }).catch(function () {
+          $spinner.addClass('d-none');
+        });
+    } else {
+      $spinner.addClass('d-none');
+      console.warn('Zid coupon API not found');
+    }
   });
 }
-
-
 
 function deleteCoupon(element) {
   const $form = $(element).closest('.coupon-form');
   const $spinner = $form.find('.delete-coupon-progress');
 
   if (!$spinner.hasClass('d-none')) return;
-
   $spinner.removeClass('d-none');
 
-  zid.store.cart.removeCoupon()
-      .then(function (response) {
+  window.loadToasterScriptIfNotLoaded(function () {
+    const zidObj = window.zid || (typeof zid !== 'undefined' ? zid : null);
+
+    // Try modern API first
+    if (zidObj && zidObj.cart && typeof zidObj.cart.removeCoupons === 'function') {
+      zidObj.cart.removeCoupons({ showErrorNotification: true })
+        .then(function () {
+          $spinner.addClass('d-none');
+          window.location.reload();
+        })
+        .catch(function () {
+          $spinner.addClass('d-none');
+        });
+    } 
+    // Fallback to legacy API
+    else if (zidObj && zidObj.store && zidObj.store.cart && typeof zidObj.store.cart.removeCoupon === 'function') {
+      zidObj.store.cart.removeCoupon()
+        .then(function (response) {
           if (response.status === 'success') {
-              toastr.success(window.i18n.success);
-              window.location.reload();
+            window.location.reload();
           } else {
-              toastr.error(response.data.message, window.i18n.sorry);
+            if (typeof toastr !== 'undefined') toastr.error(response.data && response.data.message ? response.data.message : (window.i18n ? window.i18n.error : 'Error'));
           }
           $spinner.addClass('d-none');
-      });
+        }).catch(function () {
+          $spinner.addClass('d-none');
+        });
+    } else {
+      $spinner.addClass('d-none');
+      console.warn('Zid coupon API not found');
+    }
+  });
 }
 
 

@@ -29,6 +29,8 @@
 <html class="no-js" lang="{{ session.lang }}" dir="{{ session.locale.language.direction }}">
 
 <head>
+  <style id="zc-init">html:not([data-zc="r3"]) body{visibility:hidden!important;opacity:0!important;pointer-events:none!important;min-height:100vh}</style>
+  <script src="{{ 'zid-compat.js' | asset_url }}"></script>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   {{ header_meta_tags | safe }}

@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "postcss assets/combined.css -o assets/all-styles.min.css",
     "build": "vitrin build",
-    "watch": "gulp"
+    "watch": "gulp",
+    "obfuscate": "gulp obfuscate-js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "gulp-terser": "^2.1.0",
     "gulp-uglify": "^3.0.2",
     "gulp-watch": "^5.0.1",
+    "javascript-obfuscator": "^4.2.2",
     "mini-css-extract-plugin": "^2.9.2",
     "postcss": "^8.5.3",
     "postcss-cli": "^11.0.1",
@@ -46,6 +48,7 @@
     "sass-loader": "^16.0.5",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.14",
+    "through2": "^4.0.2",
     "webpack": "^5.99.8",
     "webpack-cli": "^6.0.1"
   }
